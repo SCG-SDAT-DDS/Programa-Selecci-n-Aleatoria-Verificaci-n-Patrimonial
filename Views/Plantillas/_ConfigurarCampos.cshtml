@@ -1,0 +1,113 @@
+﻿@model List<Transparencia.Models.CampoViewModel>
+@{
+    Layout = null;
+    var lstCamposTabla = Model ?? new List<Transparencia.Models.CampoViewModel>();
+    string sMessage = TempData["MessageCampoRelacion"] == null ? "" : TempData["MessageCampoRelacion"].ToString();
+    string sMensajeC = TempData["Mensaje"] == null ? "" : TempData["Mensaje"].ToString();
+    TempData["MessageCampoRelacion"] = null;
+    TempData["Mensaje"] = null;
+}
+
+
+
+<div class="table-responsive">
+    <table class="table table-striped" id="tCamposTableroTabla">
+        <thead>
+            <tr>
+                <th style="display:none;"></th>
+                <th>
+                    <label>Tipo de Campo</label>
+                </th>
+                <th>
+                    <label>Nombre Campo</label>
+                </th>
+                <th>
+                    <label>Orden</label>
+                </th>
+                <th class="text-center">
+                    <label>Acciones</label>
+                </th>
+            </tr>
+
+        </thead>
+        <tbody>
+
+            @for (int i = 0; i < lstCamposTabla.Count; i++)
+            {
+                int iOrden = i + 1;
+
+            <tr>
+                <td style="display:none;" class="datos-campos">
+                    @Html.HiddenFor(model => lstCamposTabla[i].CampoId, htmlAttributes: new { @Value = lstCamposTabla[i].CampoId, data_val = "false", @class = "" })
+                    @Html.HiddenFor(model => lstCamposTabla[i].Activo, htmlAttributes: new { @class = "activo-campo", @Value = lstCamposTabla[i].Activo, data_val = "false" })
+                    @Html.HiddenFor(model => lstCamposTabla[i].Ayuda, htmlAttributes: new { @Value = lstCamposTabla[i].Ayuda, data_val = "false" })
+                    @Html.HiddenFor(model => lstCamposTabla[i].Nombre, htmlAttributes: new { @Value = lstCamposTabla[i].Nombre, data_val = "false" })
+                    @Html.HiddenFor(model => lstCamposTabla[i].PlantillaId, htmlAttributes: new { @Value = lstCamposTabla[i].PlantillaId, data_val = "false" })
+                    @Html.HiddenFor(model => lstCamposTabla[i].Requerido, htmlAttributes: new { @Value = lstCamposTabla[i].Requerido, data_val = "false" })
+                    @Html.HiddenFor(model => lstCamposTabla[i].CatalogoId, htmlAttributes: new { @Value = lstCamposTabla[i].CatalogoId, data_val = "false" })
+                    @Html.HiddenFor(model => lstCamposTabla[i].ConDecimales, htmlAttributes: new { @Value = lstCamposTabla[i].ConDecimales, data_val = "false" })
+                    @Html.HiddenFor(model => lstCamposTabla[i].Etiqueta, htmlAttributes: new { @Value = lstCamposTabla[i].Etiqueta, data_val = "false" })
+                    @Html.HiddenFor(model => lstCamposTabla[i].GrupoExtensionId, htmlAttributes: new { @Value = lstCamposTabla[i].GrupoExtensionId, data_val = "false" })
+                    @Html.HiddenFor(model => lstCamposTabla[i].Longitud, htmlAttributes: new { @Value = lstCamposTabla[i].Longitud, data_val = "false" })
+                    @Html.HiddenFor(model => lstCamposTabla[i].Size, htmlAttributes: new { @Value = lstCamposTabla[i].Size, data_val = "false" })
+                    @Html.HiddenFor(model => lstCamposTabla[i].TipoCampo, htmlAttributes: new { @Value = lstCamposTabla[i].TipoCampo, data_val = "false" })
+                    @Html.HiddenFor(model => lstCamposTabla[i].TipoFecha, htmlAttributes: new { @Value = lstCamposTabla[i].TipoFecha, data_val = "false" })
+                    @Html.HiddenFor(model => lstCamposTabla[i].Orden, htmlAttributes: new { @Value = iOrden, @class = "orden-campo", data_val = "false" })
+                    @Html.HiddenFor(model => lstCamposTabla[i]._TipoFecha, htmlAttributes: new { @Value = lstCamposTabla[i]._TipoFecha, data_val = "false" })
+                    @Html.HiddenFor(model => lstCamposTabla[i]._ConDecimales, htmlAttributes: new { @Value = lstCamposTabla[i]._ConDecimales, data_val = "false" })
+                    @Html.HiddenFor(model => lstCamposTabla[i]._GrupoExtensionId, htmlAttributes: new { @Value = lstCamposTabla[i]._GrupoExtensionId, data_val = "false" })
+                    @Html.HiddenFor(model => lstCamposTabla[i]._Size, htmlAttributes: new { @Value = lstCamposTabla[i]._Size, data_val = "false" })
+                    @Html.HiddenFor(model => lstCamposTabla[i].OrdenSeleccionPublico, htmlAttributes: new { @Value = lstCamposTabla[i].OrdenSeleccionPublico, data_val = "false" })
+                </td>
+                <td>@lstCamposTabla[i].TipoCampo</td>
+                <td>@lstCamposTabla[i].Nombre</td>
+                <td class="td-orden">
+                    @{
+                        bool bShowOrder = iOrden != 1;
+                        if (bShowOrder)
+                        {
+                            <a href="#" onclick="GoUpOrden(this, event)"><i class="fa fa-arrow-up"></i></a>
+                        }
+                        @iOrden
+                        bShowOrder = iOrden != lstCamposTabla.Count;
+
+                        if (bShowOrder)
+                        {
+                            <a href="#" onclick="GoDownOrden(this, event)"><i class="fa fa-arrow-down"></i></a>
+                        }
+                    }
+                </td>
+                <td>@lstCamposTabla[i].sOrdenSeleccionPublico</td>
+                @*<td class="text-center">
+            <a href="#" class="btn btn-icon btn-danger btn-circle" onclick="EliminarCampo(event, this)" indice="@i" title="Eliminar"><i class="fa fa-trash"></i></a>
+        </td>*@
+                <td class="text-center">
+                    @if (lstCamposTabla[i].Activo == true)
+                    {
+                        <span class="label label-primary BadgeStatus" onclick="changeStatus(this,'@Url.Action("CambiarStatusCampo", "Catalogos")',@lstCamposTabla[i].CampoId)">Activo</span>
+                    }
+                    else
+                    {
+                        <span class="label label-danger BadgeStatus" onclick="changeStatus(this,'@Url.Action("CambiarStatusCampo", "Catalogos")',@lstCamposTabla[i].CampoId)">Inactivo</span>
+                    }
+                </td>
+
+
+            </tr>
+            }
+        </tbody>
+    </table>
+</div>
+
+<input type="hidden" id="errorCampos" value="@ViewBag.Error" />
+
+<script>
+    var vMessage = "@sMessage";
+
+
+    //if (vMessage.length > 0) {
+    //    Swal.fire('Aviso',vMessage,'error');
+    //}
+
+   
+</script>

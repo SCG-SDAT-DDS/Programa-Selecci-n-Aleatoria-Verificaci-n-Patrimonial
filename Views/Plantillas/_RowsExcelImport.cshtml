@@ -1,0 +1,117 @@
+﻿@model List<Transparencia.Helpers.AuxErroresEcxel>
+
+@{
+    Layout = null;
+
+    //var ColumnsNames = ViewBag.ColumnsNames != null ? ViewBag.ColumnsNames as List<string> :  new List<string>();
+}
+
+<style>
+    .td-error {
+        background: #ff6666;
+        color: #fff;
+    }
+</style>
+
+@if (Model.Any())
+{
+    <div class="col-md-12">
+        <hr />
+    </div>
+    <h4 class="text-danger">Documento con observaciones por favor verifica la siguiente linea y corrigalo conforme a la instrucción.</h4>
+
+    <div class="table-responsive">
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>Renglon</th>
+                    @foreach (var item in Model)
+                    {
+                        foreach (var item2 in item.Campo)
+                        {
+                            <th>@item2.Etiqueta</th>
+                        }
+                        break;
+                    }
+                </tr>
+
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                    <tr>
+                        <td>@item.NoRenglon</td>
+                        @foreach (var campo in item.Campo)
+                        {
+                            string sError = "";
+                            string sClass = "";
+                            if (campo.ExcelValidacion)
+                            {
+                                sError = campo.ExcelErrorTxt;//"Es de tipo "+campo.TipoCampo.GetDisplayName()+"  y en el formato de excel no cumple con el formato";
+                                sClass = "td-error";
+                            }
+                            <td data-container="body" data-toggle="tooltip" data-placement="bottom" title="@sError" class="@sClass">@campo.ExcelValor</td>
+
+                        }
+                    </tr>
+                }
+
+                @*@for (int i = 0; i < lstRows.Count; i++)
+                    {
+                        string[] sCampos = lstRows[i].Split(new string[] { "|||" }, StringSplitOptions.None);
+                        int iCountCampo = 0;
+
+                        iCountCampo = 0;
+                        <tr>
+                            <td>@(i + 1)</td>
+                            @foreach (var item in sCampos)
+                            {
+                                var vCampo = LstCampo[iCountCampo];
+                                string sError = "";
+                                string sClass = "";
+
+                                switch (vCampo.TipoCampo)
+                                {
+                                    case Transparencia.Models.TipoCampo.Decimal:
+                                        decimal dValue = 0;
+                                        bool bIsNumber = decimal.TryParse(item, out dValue);
+                                        if (!bIsNumber)
+                                        {
+
+                                        }
+
+                                        break;
+                                    case TiposCampoTablero.Entero:
+                                        int iValue = 0;
+                                        bool bIsInt = int.TryParse(item, out iValue);
+                                        if (!bIsInt)
+                                        {
+                                            sError = "Es de tipo " + vCampo.TipoCampoName + " y en el formato de excel no cumple con el formato";
+                                            sClass = "td-error";
+                                        }
+
+                                        break;
+                                    case TiposCampoTablero.Fecha:
+                                        DateTime dtValue = new DateTime();
+                                        bool bIsDate = DateTime.TryParse(item, out dtValue);
+                                        if (!bIsDate)
+                                        {
+                                            sError = "Es de tipo " + vCampo.TipoCampoName + " y en el formato de excel no cumple con el formato";
+                                            sClass = "td-error";
+                                        }
+
+                                        break;
+                                    default:
+
+                                        break;
+                                }
+                                <td data-container="body" title="@sError" class="@sClass">@item</td>
+
+                                iCountCampo++;
+                            }
+                        </tr>
+                    }*@
+            </tbody>
+        </table>
+    </div>
+}

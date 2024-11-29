@@ -1,0 +1,355 @@
+﻿@model IEnumerable<Transparencia.Helpers.AuxPlantillas>
+
+@{
+    ViewBag.Title = "Listado de Plantillas";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    FiltrosPlantilla filtros = ViewBag.Filtros != null ? ViewBag.Filtros as FiltrosPlantilla : new FiltrosPlantilla();
+    string show = ((int)ViewBag.PerPage).ToString();
+}
+
+
+@using (Ajax.BeginForm(
+    new AjaxOptions
+    {
+        HttpMethod = "get",
+        InsertionMode = InsertionMode.Replace,
+        UpdateTargetId = "lista",
+        OnBegin = "BeginClient",
+        OnComplete = "CompleteClient"
+    }))
+{
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-lg-10">
+            <h2>@ViewBag.Title</h2>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="@Url.Action("Index", "Home")">Inicio</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="@Url.Action("Index", "Plantillas")">Plantillas</a>
+                </li>
+                <li class="active breadcrumb-item">
+                    <strong>@ViewBag.Title</strong>
+                </li>
+            </ol>
+        </div>
+    </div>
+    <br />
+
+    @*<div class="col-lg-12">
+        <div class="ibox">*@
+    <div class="wrapper wrapper-content animated fadeInRight ecommerce">
+
+        <div class="ibox-content m-b-sm border-bottom">
+            <div class="row">
+                @*<div class="col-sm-4">
+                        <div class="form-group">
+                            @Html.LabelFor(m => m.FirstOrDefault().Plantillas.NombreCorto)
+                            <div class="input-group m-b">
+                                @Html.TextBoxFor(model => filtros.NombreCorto, htmlAttributes: new { @class = "form-control", @placeholder = "Nombre Corto", autocomplete = "off" })
+                            </div>
+                        </div>
+                    </div>*@
+
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        @Html.Label("Nombre de la plantilla")
+                        <div class="input-group m-b">
+                            @Html.TextBoxFor(model => filtros.NombreLargo, htmlAttributes: new { @class = "form-control", @placeholder = "Nombre de la fracción", autocomplete = "off" })
+                        </div>
+                    </div>
+                </div>
+                @*<div class="col-sm-4">
+                        <div class="form-group">
+                            @Html.Label("Activo")
+                            <div class="input-group m-b">
+                                @Html.DropDownListFor(model => filtros.ActivoNull, new SelectList(ViewBag.CmbActivo, "Value", "Text"), "Seleccione...", new { @class = "form-control m-b" })
+                            </div>
+                        </div>
+                    </div>*@
+                @*<div class="col-sm-4">
+                        <div class="form-group">
+
+                            @Html.LabelFor(m => m.FirstOrDefault().Plantillas.Activo)
+                            <div class="input-group m-b">
+                                @Html.DropDownListFor(model => filtros.EstatusNull, new SelectList(ViewBag.CmbEstado, "Value", "Text"), "Seleccione...", new { @class = "form-control m-b" })
+                            </div>
+                        </div>
+                    </div>*@
+                @*aqui empieza Leyes*@
+                @*<div class="col-sm-4">
+                    <div class="form-group">
+
+                        @Html.Label("Módulo")
+                        <div class="input-group m-b">
+                            @Html.DropDownListFor(model => filtros.LeyId, new SelectList(ViewBag.LeyId, "LeyId", "Nombre", ViewBag.LeyIds), "Seleccione...", htmlAttributes: new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>*@
+                @*<div class="col-sm-4">
+                    <div class="form-group">
+                        @Html.Label("Sub Módulo")
+                        <div class="input-group m-b">
+                            @Html.DropDownListFor(model => filtros.ArticuloId, new SelectList(ViewBag.ArticuloId, "ArticuloId", "Nombre", ViewBag.ArticuloIds), "Seleccione...", htmlAttributes: new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>*@
+                @*<div class="col-sm-4">
+                    <div class="form-group">
+
+                        @Html.Label("Actividades sustantibles")
+                        <div class="input-group m-b">
+                            @Html.DropDownListFor(model => filtros.FraccionId, new SelectList(ViewBag.FraccionId, "FraccionId", "Nombre", ViewBag.FraccionIds), "Seleccione...", htmlAttributes: new { @class = "form-control" })
+                        </div>
+                    </div>
+                </div>*@
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        @Html.Label("Ejercicio")
+                        <div class="input-group m-b">
+                            @Html.DropDownListFor(model => filtros.PeriodoId, new SelectList(ViewBag.LstPeriodo, "Value", "Text"), "Seleccione...", new { @class = "form-control m-b" })
+                        </div>
+                    </div>
+                </div>
+                @*<div class="col-sm-4">
+                    <div class="form-group">
+
+                        @Html.Label("Período desde")
+                        <div class="input-group m-b">
+                            @Html.EditorFor(model => filtros.PeriodoDesde, new { htmlAttributes = new { @class = "form-control datefield", @placeholder = "Período Desde", @readonly = "readonly" } })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        @Html.Label("Período hasta")
+                        <div class="input-group m-b">
+                            @Html.EditorFor(model => filtros.PeriodoHasta, new { htmlAttributes = new { @class = "form-control datefield", @placeholder = "Período Desde", @readonly = "readonly" } })
+                        </div>
+                    </div>
+                </div>*@
+            </div>
+            <br />
+
+            <div class="row justify-content-end">
+                <div class="col-sm-4 text-right">
+                    <a class="btn btn-w-m btn-secondary" href="@Url.Action("IndexPlantillas")"><i class="fa fa-filter"></i> Limpiar</a>
+                    <button class="btn btn-w-m btn-success" type="submit"><i class="fa fa-search"></i> Buscar</button>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox">
+                    <div class="ibox-content">
+                        <div class="form-group row">
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                @Html.Partial("_listaPlantilla", Model)
+                                @Html.Hidden("sOrder")
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @*<div class="ibox-title">
+                <p>
+                    @Html.ActionLink("Nueva Plantilla", "Create", null, new { @class = "btn btn-w-m btn-primary" })
+                </p>
+            </div>*@
+
+        @*<div class="ibox-content">*@
+
+    </div>
+    <br />
+}
+
+
+<!--Modal para el campo -->
+<div class="modal fade bd-example-modal-lg" id="modalDescargar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Descargar Información <b id="ModalDetailCampo"></b> </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="listadoDatosDescargar">
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Regresar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @*@Scripts.Render("~/bundles/jqueryval")
+    <script src="@Url.Content("~/Scripts/jquery.form.min.js")"></script>*@
+    <script src="~/Scripts/PaginadorOrder.js"></script>
+    @Scripts.Render("~/bundles/jqueryUI")
+    <script src="~/Scripts/DatePickerReady.js"></script>
+
+
+
+    @*<script src="~/Scripts/PaginadorOrder.js"></script>*@
+
+    <script>
+        $(function () {
+            $('[data-toggle="popover"]').popover();
+        });
+
+
+         //$("#ExcelDatos").submit(function () {
+         //   var vSubmit = $(this).valid();
+
+         //   return vSubmit;
+         //});
+
+         //$('#ExcelDatos').validate({
+         //   rules:{
+         //       Tipo:{ required: true }
+         //   },
+         //   messages: {
+         //       nombre: {
+         //           Tipo: "Este campo es obligatorio."
+         //       }
+         //   }
+         // });
+
+        $("#filtros_LeyId").change(function () {
+                //sub
+            ShowLoading();
+            $('#filtros_FraccionId').empty();
+            $('#filtros_FraccionId').append($('<option value>Seleccione...</option>'));
+                var ComboCnanged = $(this).val();
+                var Sub = $('#filtros_ArticuloId');
+                if (ComboCnanged.length > 0) {
+                    $.ajax({
+                        url: "@Url.Action("GetArticulosByLeyId", "Plantillas")",
+                        dataType: "json",
+                        type: "GET",
+                        data: {
+                            'iId': ComboCnanged
+                        },
+                        cache: false,
+                        contentType: 'application/json; charset=utf-8',
+                        success: function (data) {
+                            if (data.Encontro) {
+                                Sub.empty(); // remove any existing options
+                                Sub.append($('<option value>Seleccione...</option>'));
+                                $.each(data.data, function (index, item) {
+                                    Sub.append($('<option></option>').text(item.Nombre).val(item.ArticuloId));
+                                });
+                                //ComboActivo.val(iiActivoId);
+                                 HideLoading();
+
+                            } else {
+
+                                Sub.empty(); // remove any existing options
+                                Sub.append($('<option value>Seleccione...</option>'));
+                                 HideLoading();
+                            }
+                        },
+                        error: function (error) {
+                            console.log(error);
+                              HideLoading();
+                        }
+                    });
+                } else {
+                   // ComboActivo.empty(); // remove any existing options
+                    Sub.append($('<option value>Seleccione...</option>'));
+                    Sub.attr("title", "Sin datos seleccionados");
+                    HideLoading();
+                }
+
+        });
+        $("#filtros_ArticuloId").change(function () {
+                //sub
+                ShowLoading();
+                var ComboCnanged = $(this).val();
+                var Sub = $('#filtros_FraccionId');
+                if (ComboCnanged.length > 0) {
+                    $.ajax({
+                        url: "@Url.Action("GetFraccionByArticulosId", "Plantillas")",
+                        dataType: "json",
+                        type: "GET",
+                        data: {
+                            'iId': ComboCnanged
+                        },
+                        cache: false,
+                        contentType: 'application/json; charset=utf-8',
+                        success: function (data) {
+                             console.log(data);
+                            if (data.Encontro) {
+                                Sub.empty(); // remove any existing options
+                                Sub.append($('<option value>Seleccione...</option>'));
+                                $.each(data.data, function (index, item) {
+                                    Sub.append($('<option></option>').text(item.Nombre).val(item.FraccionId));
+                                });
+                                //ComboActivo.val(iiActivoId);
+                                 HideLoading();
+
+                            } else {
+
+                                Sub.empty(); // remove any existing options
+                                Sub.append($('<option value>Seleccione...</option>'));
+                                 HideLoading();
+                            }
+                        },
+                        error: function (error) {
+                            console.log(error);
+                              HideLoading();
+                        }
+                    });
+                } else {
+                    //ComboActivo.empty(); // remove any existing options
+                    Sub.append($('<option value>Seleccione...</option>'));
+                    Sub.attr("title", "Sin datos seleccionados");
+                    HideLoading();
+                }
+
+        });
+
+        function descargarDatos(iPlantillaId,sFraccion) {
+                ShowLoading();
+                $('#modalDescargar').modal('hide');
+                //listadoDatos
+                $('#ModalDetailCampo').html("Fracción:" + sFraccion);
+
+
+
+                $.ajax({
+                    url: "@Url.Action("GeListDownload")",
+                    dataType: "json",
+                    type: "POST",
+                    data: {
+                        PlantillaId: iPlantillaId
+                    },
+                    cache: false,
+                    success: function (data) {
+                        if (data.Hecho) {
+                            $("#listadoDatosDescargar").html(data.Partial);
+                            $('#modalDescargar').modal('show');
+                        } else {
+                            Swal.fire('Error', data.Mensaje, 'error');
+                        }
+                        HideLoading();
+                    },
+                    error: function (error) {
+                        Swal.fire('Error', 'Ocurrio un error al momento de eliminar el campo - ' + error.responseText, 'error');
+                        HideLoading();
+                    }
+                });
+
+        }
+
+    </script>
+}
+

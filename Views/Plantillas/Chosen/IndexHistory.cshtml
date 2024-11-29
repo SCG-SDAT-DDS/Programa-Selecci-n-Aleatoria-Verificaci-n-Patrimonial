@@ -1,0 +1,153 @@
+﻿@model PagedList<Transparencia.Models.PlantillaHistory>
+
+
+    @{
+        ViewBag.Title = "Listado de historial de selección";
+        Layout = "~/Views/Shared/_Layout.cshtml";
+        var Enlace = HMTLHelperExtensions.GetRoles(User.Identity.Name, "Enlace");
+
+    }
+
+
+    @using (Ajax.BeginForm(
+        new AjaxOptions
+        {
+            HttpMethod = "get",
+            InsertionMode = InsertionMode.Replace,
+            UpdateTargetId = "lista",
+            OnBegin = "BeginClient",
+            OnComplete = "CompleteClient"
+        }))
+    {
+        <div class="row wrapper border-bottom white-bg page-heading">
+            <div class="col-lg-10">
+                <h2>@ViewBag.Title</h2>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="@Url.Action("Index", "Home")">Inicio</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="@Url.Action("Index", "Plantillas")">Plantillas</a>
+                    </li>
+                    <li class="active breadcrumb-item">
+                        <strong>@ViewBag.Title</strong>
+                    </li>
+                </ol>
+            </div>
+        </div>
+        <br />
+
+        <div class="wrapper wrapper-content animated fadeInRight ecommerce">
+
+            <div class="ibox-content m-b-sm border-bottom">
+                <div class="row">
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            @Html.Label("Ejercicio")
+                            <div class="input-group m-b">
+                                @Html.DropDownList("PeriodoId", new SelectList(ViewBag.LstPeriodo, "Value", "Text"), "Seleccione...", new { @class = "form-control select2" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            @Html.Label("Tipo de Frecuencia")
+                            <div class="input-group m-b">
+                                @Html.DropDownList("sysFrecuencia", new SelectList(ViewBag.AllFrecuencias, "Value", "Text"), "Seleccione...", new { @class = "form-control select2" })
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-sm-4">
+                        <div class="form-group">
+                            @Html.Label("Frecuencia")
+                            <div class="input-group m-b">
+                                @Html.DropDownList("sysNumFrecuencia", new SelectList(ViewBag.AllSubFrecuencia, "Value", "Text"), new { @class = "form-control select2" })
+                            </div>
+                        </div>
+                    </div>
+
+                    @if (!Enlace)
+                    {
+                        <div class="col-sm-8">
+                            <div class="form-group">
+                                @Html.Label("Dependencia")
+                                <div class="input-group m-b">
+                                    @Html.DropDownList("OrganismoId", new SelectList(ViewBag.LstDependencias, "Id", "Nombre"), "Seleccione...", htmlAttributes: new { @class = "form-control select2" })
+                                </div>
+                            </div>
+                        </div>
+                    }
+
+                </div>
+                <br />
+                <div class="row justify-content-end">
+                    <div class="col-sm-6 text-right">
+                        <a class="btn btn-w-m btn-secondary" href="@Url.Action("IndexHistory",new { plantillaId = ViewBag.plantillaId })"><i class="fa fa-filter"></i> Limpiar</a>
+                        <button class="btn btn-w-m btn-primary" type="submit"><i class="fa fa-search"></i> Buscar</button>
+                    </div>
+                </div>
+            </div>
+
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ibox">
+                        <div class="ibox-content">
+                            <div class="form-group row">
+                                <div class="col-md-12 col-sm-12 col-xs-12">
+                                    <div class="row justify-content-end pb-3">
+                                        <div class="col-sm-6 text-right">
+                                            <a class="btn btn-w-m btn-warning click-loading" href="@Url.Action("GenerateChosen",new { plantillaId = ViewBag.plantillaId })"><i class="fa fa-cube"></i> Generar nueva selección</a>
+                                        </div>
+                                    </div>
+                                    @Html.Partial("Chosen/_listaHistory", Model)
+                                    @Html.Hidden("sOrder")
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <br />
+    }
+
+
+    <!--Modal para el campo -->
+    <div class="modal fade bd-example-modal-lg" id="modalDescargar" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog modal-lg" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLabel">Descargar Información <b id="ModalDetailCampo"></b> </h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div id="listadoDatosDescargar">
+
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Regresar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    @section Scripts {
+        <script src="~/Scripts/PaginadorOrder.js"></script>
+        @Scripts.Render("~/bundles/jqueryUI")
+        <script src="~/Scripts/DatePickerReady.js"></script>
+        <script>
+        $(function () {
+            $('[data-toggle="popover"]').popover();
+            $('.select2').select2();
+        });
+
+        </script>
+    }
+

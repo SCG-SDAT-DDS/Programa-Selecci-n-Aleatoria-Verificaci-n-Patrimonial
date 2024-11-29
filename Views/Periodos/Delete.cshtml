@@ -1,0 +1,48 @@
+﻿@model Transparencia.Models.Pais
+
+@{
+    ViewBag.Title = "Eliminar País";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<h3>¿Está seguro de querer eliminar este País?</h3>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.NombrePais)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NombrePais)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Orden)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Orden)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Activo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Activo)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+    <div class="form-actions no-color">
+        <input type="submit" value="Eliminar" class="btn btn-danger" /> 
+        @Html.ActionLink("Regresar", "Index", null, new { @class = "btn btn-secondary" })
+    </div>
+    }
+</div>

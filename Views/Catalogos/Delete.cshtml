@@ -1,0 +1,64 @@
+﻿@model Transparencia.Models.Catalogo
+
+@{
+    ViewBag.Title = "Eliminar";
+}
+
+<h2>Eliminando el tag: @Html.DisplayFor(model => model.Nombre)</h2>
+
+<h3>¿Esta seguro que desea eliminar el registro?</h3>
+<div>
+    <h4>Catalogo</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Nombre)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Nombre)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Descripcion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Descripcion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.orden)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.orden)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.dinamico)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.dinamico)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Activo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Activo)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+    <div class="form-actions no-color">
+        <input type="submit" value="Eliminar" class="btn btn-danger" />
+        @Html.ActionLink("Regresar", "Index", null, new { @class = "btn btn-default" })
+    </div>
+    }
+</div>

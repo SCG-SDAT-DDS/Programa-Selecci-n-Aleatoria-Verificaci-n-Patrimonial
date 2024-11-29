@@ -1,0 +1,17 @@
+﻿@{
+    ViewBag.Title = "Index";
+}
+
+
+
+@section Scripts{
+    <script>
+        $(function () {
+            var vMensaje = "@Html.Raw(TempData["MensajePermiso"])";
+            if (vMensaje.length > 0) {
+                Swal.fire('Error', vMensaje, 'error');
+            }
+        });
+
+    </script>
+}

@@ -1,0 +1,86 @@
+﻿@model Transparencia.Models.vmChosenPuiblic
+@{
+    Layout = "app.cshtml";
+    ViewBag.Title = "Sorteo";
+}
+
+@using (Html.BeginForm("GenerateChosenPublic", "Plantillas", FormMethod.Post, htmlAttributes: new { @id = "submitChoosenPublic", @enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.Hidden("plantillaId", Model.plantillaId)
+    @Html.Hidden("PeriodoId", Model.PeriodoId)
+    @Html.Hidden("sysFrecuencia", Model.sysFrecuencia)
+    @Html.Hidden("sysNumFrecuencia", Model.sysNumFrecuencia)
+    @Html.Hidden("organismoId", Model.organismoId)
+    @Html.Hidden("isPublic", true)
+
+    <header>
+        <div class="container">
+            <div class="row g-2 g-sm-3 justify-content-center">
+                <div class="col-sm-6">
+                    <div class="">
+                        <a href="@Url.Action("GenerateChosen","Plantillas",new { plantillaId = Model.plantillaId })" class="link-light"><span class="mdi mdi-arrow-left"></span>Regresar</a>
+                    </div>
+                </div>
+                <div class="col-sm-6">
+
+                </div>
+
+
+                <div class="col-sm-12">
+                    <a class="brand filter-white" href="@Url.Action("GenerateChosen","Plantillas",new { plantillaId = Model.plantillaId })" title="PROVEP | Programa de Selección Aleatoria para la Verificación Patrimonial">
+
+                        <h1 class="text-center">
+                            <img src="~/Content/images/imagePublic/SVG/logo-full-scg-provep.svg">
+                        </h1>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </header>
+    <div class="container" id="init">
+        <div class="row g-5 justify-content-center">
+            <div class="col-sm-6">
+                <div class="text-center">
+                    <h2 class="text-light mb-5">@Model.textPlantilla</h2>
+                    @*<h4 class="text-light mb-5">@Model.Descripcion</h4>*@
+                    <p>
+                        <a href="#" class="btn btn-warning btn-lg px-5 py-3 link-light btn-rounded" data-bs-toggle="modal" data-bs-target="#loadDataModal">
+                            Iniciar Proceso <span class="mdi mdi-arrow-right"></span>
+                        </a>
+                    </p>
+                </div>
+
+            </div>
+
+        </div>
+    </div>
+
+}
+
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="@Url.Content("~/Scripts/jquery.form.min.js")"></script>
+    <script>
+
+        const errors = "@Model.Errors";
+        if (errors.length > 0) {
+            Swal.fire({
+                title: 'Alerta',
+                text: errors,
+                icon: 'warning',
+                showCancelButton: false,
+                confirmButtonText: 'Aceptar'
+            }).then((result) => {
+                if (result.value) {
+                    //TODO
+                    //    $("#listRowsExcel").html(data.Partial);
+                }
+
+            });
+        }
+
+    </script>
+}

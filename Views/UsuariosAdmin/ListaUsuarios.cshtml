@@ -1,0 +1,114 @@
+﻿@model IEnumerable<Transparencia.Models.ApplicationUser>
+
+@{
+    ViewBag.Title = "Lista de Usuarios";
+    FiltrosUsuarios filtros = ViewBag.Filtros != null ? ViewBag.Filtros as FiltrosUsuarios : new FiltrosUsuarios();
+    string show = ((int)ViewBag.PerPage).ToString();
+}
+
+@using (Ajax.BeginForm(
+    new AjaxOptions
+    {
+        HttpMethod = "get",
+        InsertionMode = InsertionMode.Replace,
+        UpdateTargetId = "listaUsuarios",
+        OnBegin = "BeginClient",
+        OnComplete = "CompleteClient"
+    }))
+{
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-lg-10">
+            <h2>@ViewBag.Title</h2>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="@Url.Action("Index", "Home")">Inicio</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="@Url.Action("ListaUsuarios", "UsuariosAdmin")">Lista de Usuarios</a>
+                </li>
+                <li class="active breadcrumb-item">
+                    <strong>@ViewBag.Title</strong>
+                </li>
+            </ol>
+        </div>
+    </div>
+    <br />
+
+    <div class="wrapper wrapper-content animated fadeInRight ecommerce">
+        <div class="ibox-content m-b-sm border-bottom">
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label>Nombre completo</label>
+                        <div class="input-group m-b">
+                            @Html.TextBoxFor(model => filtros.Nombre, htmlAttributes: new { @class = "form-control", @placeholder = "Nombre Completo", autocomplete = "off" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label>Nombre de usuario</label>
+                        <div class="input-group m-b">
+                            @Html.TextBoxFor(model => filtros.Usuario, htmlAttributes: new { @class = "form-control", @placeholder = "Nombre de usuario", autocomplete = "off" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label>Correo electrónico</label>
+                        <div class="input-group m-b">
+                            @Html.TextBoxFor(model => filtros.email, htmlAttributes: new { @class = "form-control", @placeholder = "Correo Electrónico", autocomplete = "off" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br />
+
+            <div class="row justify-content-end">
+                <div class="col-sm-4 text-right">
+                    <div class="form-group">
+                        <a class="btn btn-w-m btn-secondary" href="@Url.Action("ListaUsuarios")">Limpiar</a>
+                        <button class="btn btn-w-m btn-success" type="submit">Buscar</button>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox">
+                    <div class="ibox-content">
+                        <div class="form-group row">
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                @Html.Partial("_listaUsuarios", Model)
+                                @Html.Hidden("sOrder")
+                            </div>
+                        </div>
+
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+@section Styles {
+    @Styles.Render("~/plugins/footableStyles")
+}
+
+@section Scripts {
+    <script src="~/Scripts/PaginadorOrder.js"></script>
+    @Scripts.Render("~/plugins/footable")
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+            $('.footable').footable();
+            
+            $('#mostrar option[value="'+@show+'"]').attr("selected", "selected");
+        });
+    </script>
+}

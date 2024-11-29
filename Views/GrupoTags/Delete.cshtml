@@ -1,0 +1,59 @@
+﻿@model Transparencia.Models.GrupoTag
+
+@{
+    ViewBag.Title = "Eliminar";
+}
+
+<h2>Eliminar el grupo de tags: @Html.DisplayFor(model => model.Nombre) </h2>
+
+<h3>¿Esta seguro que desea eliminar el registro?</h3>
+<div>
+    <h4>Grupo Tag</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Nombre)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Nombre)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Descripcion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Descripcion)
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Tags)
+        </dt>
+
+        <dd>
+            <ul>
+                @foreach (var tags in Model.Tags)
+                {
+                    <li>@Html.DisplayFor(model => tags.Nombre)</li>
+                }
+            </ul>
+        </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Activo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Activo)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+    <div class="form-actions no-color">
+        <input type="submit" value="Eliminar" class="btn btn-danger" /> 
+        @Html.ActionLink("Regresar", "Index", null, new { @class = "btn btn-default" })
+    </div>
+    }
+</div>

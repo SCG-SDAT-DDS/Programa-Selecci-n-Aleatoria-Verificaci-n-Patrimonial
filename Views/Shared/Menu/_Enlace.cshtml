@@ -1,0 +1,29 @@
+﻿<li class="@Html.IsSelected(controller: "Home")">
+    <a href="@Url.Action("Index", "Home")"><i class="fa fa-home"></i> <span class="nav-label" data-i18n="nav.Inicio">Inicio</span> </a>
+</li>
+<li class="@Html.IsSelected(controller: "Configuracion")">
+
+
+<li class="@Html.IsSelected(controller: "Configuracion")">
+    <a href="#"><i class="fa fa-sliders"></i> <span class="nav-label" data-i18n="nav.organismos">Configuración</span><span class="fa arrow"></span></a>
+    <ul class="nav nav-second-level collapse @Html.IsSelected(controller: "Configuracion", cssClass: "in")">
+        @*<li class="@Html.IsSelected(action: "Index")"><a href="@Url.Action("Index", "OtraInformacion")">Otra Información</a></li>*@
+        <li class="@Html.IsSelected(action: "Index")"><a href="@Url.Action("ListaUsuarios", "UsuariosAdmin")">Usuarios</a></li>
+
+    </ul>
+</li>
+
+<li class="@Html.IsSelected(controller: "Estructura")">
+    <a href="#"><i class="fa fa-list-ul"></i> <span class="nav-label" data-i18n="nav.organismos">Estructura</span><span class="fa arrow"></span></a>
+    <ul class="nav nav-second-level collapse @Html.IsSelected(controller: "Estructura", cssClass: "in")">
+        @*<li class="@Html.IsSelected(action: "Index")"><a href="@Url.Action("Index", "TipoLeyes")">Tipo de leyes</a></li>
+        <li class="@Html.IsSelected(action: "Index")"><a href="@Url.Action("Index", "Leyes")">Leyes</a></li>
+        <li class="@Html.IsSelected(action: "Index")"><a href="@Url.Action("Index", "Articulos")">Artículos</a></li>
+        <li class="@Html.IsSelected(action: "Index")"><a href="@Url.Action("Index", "Fracciones")">Fracciones</a></li>*@
+        <li class="@Html.IsSelected(action: "Index")"><a href="@Url.Action("Index", "Plantillas")">Plantillas</a></li>
+        <li class="@Html.IsSelected(action: "AsignarObligacionesPorOrganismos")"><a href="@Url.Action("AsignarObligacionesPorOrganismos", "Plantillas")">Asignación de plantillas</a></li>
+        @*<li class="@Html.IsSelected(action: "Index")"><a href="@Url.Action("Index", "Catalogos")">Catálogos</a></li>*@
+    </ul>
+</li>
+
+

@@ -1,0 +1,16 @@
+﻿
+@model Nullable<DateTime>
+
+@{
+    DateTime dt;
+    if (Model != null)
+    {
+        dt = (System.DateTime)Model;
+        @Html.TextBox("", String.Format("{0:dd/MM/yyyy}", dt.ToShortDateString()),
+            new { autocomplete = "off",  @class = "form-control datefield", type = "string" })
+    }
+    else
+    {
+        @Html.TextBox("", "", new { autocomplete = "off", @class = "form-control datefield", type = "string" })
+    }
+}

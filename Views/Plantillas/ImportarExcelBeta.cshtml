@@ -1,0 +1,429 @@
+﻿@model Transparencia.Models.Plantilla
+
+@{
+    ViewBag.Title = "Importar datos a Plantilla Beta";
+    var UnidadAdministrativa = HMTLHelperExtensions.GetRoles(User.Identity.Name, "Unidad Administrativa");
+}
+
+<input type="hidden" id="error" value="@ViewBag.Error" />
+
+@using (Html.BeginForm("ReadExcel", "TablerosDinamicos", FormMethod.Post, htmlAttributes: new { @id = "frmReadExcel", @enctype = "multipart/form-data" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.Hidden("iId", Model.PlantillaId)
+
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-lg-10">
+            <h2>@ViewBag.Title</h2>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="@Url.Action("Index", "Home")">Inicio</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="@Url.Action("Index", "Plantillas")">Plantillas</a>
+                </li>
+                <li class="active breadcrumb-item">
+                    <strong>@ViewBag.Title</strong>
+                </li>
+            </ol>
+        </div>
+    </div>
+    <br />
+
+    <div class="col-lg-12">
+        <div class="ibox">
+            <div class="ibox-title">
+                <p>
+                    <h2>@ViewBag.Title</h2>
+                </p>
+            </div>
+
+            <div class="ibox-content">
+                <div class="form-horizontal">
+                    <div class="row">
+
+                        <div class="col-md-12 col-sm-6 col-xs-12">
+                            <h3>
+                                Obligación:
+                                <small class="text-muted"> @ViewBag.NombrePlantilla </small>
+                            </h3>
+                        </div>
+
+                        @*<div class="col-md-112 col-sm-12 col-xs-12">
+                <label class="font-bold">@Html.DisplayNameFor(model => model.NombreCorto):</label> @Html.DisplayFor(model => model.NombreCorto)
+            </div>
+
+            <div class="col-md-12 col-sm-6 col-xs-12">
+                <label class="font-bold">@Html.DisplayNameFor(model => model.Ayuda):</label> @Html.DisplayFor(model => model.Ayuda)
+            </div>*@
+                    </div>
+
+                    <div class="alert alert-primary" role="alert">
+                        <h4 class="alert-heading"> <i class="fa fa-info"></i> ¡Instrucciones!</h4>
+                        <p>
+                            <ul>
+                                <li>Solo se lee la primer hoja del excel y conforme a la innfomaión se leera las pestañas que sean tablas si es el caso.</li>
+                                <li>Los primeros 3 renglones es para los encabezados (sin contar con la información oculta que tienen los formatos), el resto de la información es lo que se desea importar.</li>
+                                <li>Verifique que el documento tenga la información acomodada en cada uno de sus columnas y que las tablas estén ordenadas conforme aparece en la pestaña principal del documento.	</li>
+                            </ul>
+
+                        </p>
+                        <hr>
+                        <p class="mb-0"><i class="fa fa-eye"></i> El sistema validará el documento, si existe algún contratiempo con el documento, el sistema le mostrara el error y una descripción de este, si considera que el problema es porque falta información en el sistema o es algún impedimento fuera de su poder favor de ponerse en contacto con los administradores del sistema.</p>
+                    </div>
+
+
+                    <h4>Seleccione los datos para su subida</h4>
+                    <hr/>
+                    <div class="row" id="dOpcionesImportacion">
+                        <div class="form-group col-md-12">
+                            <div class="alert alert-warning" role="alert">
+                                <h4><i class="fa fa-info-circle"></i> Por favor seleccione el ejercicio donde se guardará esta información.</h4>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label for="sysPeriodo">Ejercicio</label>
+                                <div class="input-group m-b">
+                                    @Html.DropDownList("PeriodoId", new SelectList(ViewBag.AllPeriodos, "Value", "Text"), new { @class = "form-control" })
+                                    <label for='sysPeriodo' generated='true' class='error'></label><div class='input-group mb-0'></div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-sm-4">
+                            <div class="form-group">
+                                <label for="sysPeriodo">Tipo de Frecuecia</label>
+                                <div class="input-group m-b">
+                                    @Html.DropDownList("sysFrecuencia", new SelectList(ViewBag.AllFrecuencias, "Value", "Text"), new { @class = "form-control" })
+                                    <label for='sysPeriodo' generated='true' class='error'></label><div class='input-group mb-0'></div>
+                                </div>
+                            </div>
+                        </div>
+                        @*<div class="col-sm-4">
+                            <div class="form-group">
+                                <label for="sysPeriodo">Frecuencia</label>
+                                <div class="input-group m-b">
+                                @Html.DropDownList("sysNumFrecuencia", new SelectList(ViewBag.AllSubFrecuencia, "Value", "Text"), new { @class = "form-control" })
+                                </div>
+                                <label for='sysNumFrecuencia' generated='true' class='error'></label><div class='input-group mb-0'></div>
+                            </div>
+                        </div>*@
+                        <div class="col-md-12">
+                            <h3>Opciones de importación:</h3>
+                        </div>
+                        <div class="col-md-12">
+                            <div class="checkbox checkbox-circle">
+                                <input id="cbReemplazar" value="true" name="bReemplazar" type="checkbox" class="bOpcionImportacion">
+                                <label for="cbReemplazar">
+                                    Reemplazar información
+                                </label>
+                            </div>
+                            <div class="checkbox checkbox-circle">
+                                <input id="cbAgregar" value="false" name="bReemplazar" type="checkbox" class="bOpcionImportacion" checked>
+                                <label for="cbAgregar">
+                                    Agregar información adicional
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row m-t-lg" id="divExcel">
+                        <div class="col-md-4 col-sm-6 col-xs-12 div-size">
+                            @Html.Label("Archivo excel", htmlAttributes: new { @class = "control-label" }) *
+                            @*@Html.TextBox("ExcelFile", null, htmlAttributes: new { @, @type = "file", @accept = "application/vnd.openxmlformats-officedocument.spreadsheetml.sheet", @onchange = "ValidarArchivoExcel(this)" })*@
+                            <input type="file" id="ExcelFile" name="ExcelFile" class="form-control" onchange="ValidarArchivoExcel(this)" />
+
+                        </div>
+
+                    </div>
+                
+                    <div class="row m-t-lg col-md-12" id="listRowsExcel">
+
+                    </div>
+
+                    <br />
+
+                    <hr />
+                    <div class="form-group text-right">
+                        <div class="col-md-offset-2 col-md-12">
+                            <a style="display:none;" id="aCancelar" href="@Url.Action("ImportarExcelBeta", new { iId = Model.PlantillaId })" class="btn btn-sm btn-default"><i class="fa fa-refresh"></i> Cancelar</a>
+                            @if (!UnidadAdministrativa)
+                            {
+                                <a id="aRegresar" href="@Url.Action("Index")" class="btn btn-sm btn-secondary"><i class="fa fa-arrow-left"></i> Regresar</a>
+                            }
+                            else
+                            {
+                                <a id="aRegresar" href="@Url.Action("IndexPlantillas")" class="btn btn-sm btn-secondary"><i class="fa fa-arrow-left"></i> Regresar</a>
+                            }
+
+                            <button type="button" class="btn btn-sm btn-primary" id="btnLoadExcel"><i class="fa fa-floppy-o"></i> inspeccionar excel</button>
+                            <button style="display:none;" type="button" class="btn btn-sm btn-warning" id="btnGuardarExcel"><i class="fa fa-edit"></i> Cargar excel</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="@Url.Content("~/Scripts/jquery.form.min.js")"></script>
+    <script src="~/Scripts/PaginadorOrder.js"></script>
+    <script>
+
+
+
+        $(function () {
+           
+            if ($("#error").val().length > 0) {
+                Swal.fire('Aviso', $("#error").val(), 'error');
+            }
+
+            $(".bOpcionImportacion").click(function () {
+                $(".bOpcionImportacion").prop("checked", false);
+                $(this).prop("checked", true);
+            });
+
+            $('#frmReadExcel').validate({
+                errorElement: "span",
+                errorClass: "text-danger",
+                errorLabelContainer: '.text-danger',
+                validateHiddenInputs: false,
+                rules: {
+                    ExcelFile: {
+                        required: true
+                    },
+                    bReemplazar: {
+                        required: true
+                    },
+                    sysNumFrecuencia: {
+                        notEqual: "0"
+                    }
+                },
+                messages: {
+                    ExcelFile: {
+                        required: "El archivo es un campo obligatorio."
+                    },
+                    bReemplazar: {
+                        required: "Campo obligatorio"
+                    }
+
+                },
+                submitHandler: function (form) {
+
+                    var vSubmit = $(form).valid();
+
+                    if (vSubmit) {
+                        $('button[type=submit], input[type=submit]').prop('disabled', true);
+                    }
+
+                    return vSubmit;
+                }
+            });
+
+            jQuery.validator.addMethod("notEqual", function (value, element, param) {
+                return this.optional(element) || value != param;
+            }, "El  tiempo de la frecuencia es obligatorio");
+
+            var options = {
+                beforeSubmit: function (arr, $form, options) {
+                    var vSubmit = $($form).valid();
+                  
+                    if (vSubmit) {
+                        $('button[type=submit], input[type=submit]').prop('disabled', true);
+                    }
+
+                    return vSubmit;
+                },
+                success: function (result) {
+                    console.log(result);
+                    if (result.length == 0) {
+
+                        swal({
+                            title: "Aviso",
+                            text: "Se guardo Exitosamente",
+                            type: "warning",
+                            showCancelButton: false,
+                            confirmButtonColor: "#DD6B55",
+                            confirmButtonText: "Aceptar",
+                            closeOnConfirm: true
+                        },
+                            function () {
+                                ShowLoading();
+                                location.reload();
+                            });
+                    }
+                    else {
+                        //$("#divExcel, #aRegresar").hide();
+                        //$("#aCancelar, #dOpcionesImportacion").show();
+
+                        $("#listRowsExcel").html(result);
+                        $(".td-error").tooltip();
+                        $('button[type=submit], input[type=submit]').prop('disabled', false);
+                        $("#btnLoadExcel").attr("disabled", $(".td-error").length > 0);
+
+                        $("#frmReadExcel").attr("action", "@Url.Action("InsertExcel")");
+                    }
+
+                }, error: function (data) {
+                    console.log(data);
+                    Swal.fire('Aviso', 'Ocurrio un error al intentar leer el archivo, verifique que no este dañado y sea un formato valido de excel.', 'warning');
+                    $('button[type=submit], input[type=submit]').prop('disabled', false);
+                }
+            };
+
+            $('#frmReadExcel').ajaxForm(options);
+
+        });
+
+        function ConErrores() {
+            $("#aRegresar").hide();
+            // $("#divExcel, #aRegresar").hide();
+            //$("#dOpcionesImportacion").show();
+            //$("#listRowsExcel").html(result);
+            $("#aCancelar").show();
+            //$('button[type=submit], input[type=submit]').prop('disabled', false);
+            $("#btnLoadExcel").attr("disabled",true);
+
+            @*$("#frmReadExcel").attr("action", "@Url.Action("InsertExcel")");*@
+        }
+
+         function SinErrorees() {
+            //$("#divExcel, #aRegresar,#btnLoadExcel").hide();
+             //$("#aCancelar, #dOpcionesImportacion,#btnGuardarExcel").show();
+             
+             
+            //$("#listRowsExcel").html(result);
+
+            //$('button[type=submit], input[type=submit]').prop('disabled', false);
+            //$("#btnLoadExcel").attr("disabled", $(".td-error").length > 0);
+
+            @*$("#frmReadExcel").attr("action", "@Url.Action("InsertExcel")");*@
+        }
+
+        $("#btnLoadExcel").click(function () {
+
+           
+                var Validar = $("#frmReadExcel").valid();
+                if (Validar) {
+                    ShowLoading();
+                    var formElement = document.getElementById("frmReadExcel");
+                    $.ajax({
+                        url: "@Url.Action("ProcesarExcel")",
+                        dataType: "json",
+                        type: "POST",
+                         data: new FormData(formElement),
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        success: function (data) {
+                            console.log(data.Hecho);
+                            console.log(data.ConErrores);
+                            if (data.Hecho) {
+                                if (data.ConErrores) {
+                                    ConErrores();
+                                    $("#listRowsExcel").html(data.Partial);
+                                }
+                                if (!data.ConErrores) {
+                                    Swal.fire({
+                                        title: 'Datos guardados',
+                                        text: data.Mensaje,
+                                        icon: 'success',
+                                        showCancelButton: false,
+                                        confirmButtonText: 'Aceptar',
+                                        cancelButtonText: 'Cancelar'
+                                    }).then((result) => {
+                                        if (result.value) {
+                                            ShowLoading();
+                                            location.reload();
+                                        }
+
+                                    });
+                                }
+                                
+                                
+                            } else {
+                                Swal.fire('Error', data.Mensaje, 'error');
+                            }
+                            HideLoading();
+                        },
+                        error: function (error) {
+                            Swal.fire('Error', 'Ocurrio un error al momento de eliminar el campo - ' + error.responseText, 'error');
+                            HideLoading();
+                        }
+                    });
+                }
+         });
+        $("#btnGuardarExcel").click(function () {
+                var Validar = $("#frmReadExcel").valid();
+                if (Validar) {
+                    ShowLoading();
+                    var formElement = document.getElementById("frmReadExcel");
+                    $.ajax({
+                        url: "@Url.Action("InsertExcel")",
+                        dataType: "json",
+                        type: "POST",
+                         data: new FormData(formElement),
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        success: function (data) {
+                            console.log(data.Hecho);
+                            console.log(data.ConErrores);
+                            if (data.Hecho) {
+                                HideLoading();
+                                Swal.fire({
+                                    title: 'Datos guardados',
+                                    text: data.Mensaje,
+                                    icon: 'success',
+                                    showCancelButton: false,
+                                    confirmButtonText: 'Aceptar',
+                                    cancelButtonText: 'Cancelar'
+                                }).then((result) => {
+                                    if (result.value) {
+                                        ShowLoading();
+                                        location.reload();
+                                    }
+
+                                });
+                                
+                            } else {
+                                Swal.fire('Error', data.Mensaje, 'error');
+                            }
+                            HideLoading();
+                        },
+                        error: function (error) {
+                            Swal.fire('Error', 'Ocurrio un error al momento de procesar el excel - ' + error.responseText, 'error');
+                            HideLoading();
+                        }
+                    });
+                }
+            });
+        function ValidarArchivoExcel(vElemento) {
+            const MAXIMO_TAMANIO_BYTES = 12500000;
+            if ($(vElemento).val().length > 0) {
+                var vExtensionsAllowed = ["xls", "xlsx"];
+                var vSplitFile = $(vElemento).val().split(".");
+                var vExtensionFile = vSplitFile[vSplitFile.length - 1].toLowerCase();
+                //console.log(vExtensionFile);
+
+                if (vExtensionsAllowed.indexOf(vExtensionFile) == -1) {
+                    Swal.fire('Aviso', 'Archivo no permitido, debe de ser excel.', 'warning');
+                    $(vElemento).val("");
+                }
+                var sizeByte = vElemento.files[0].size;
+                var sizekiloBytes = parseInt(sizeByte / 1024);
+                //console.log("aqui las cosas");
+                //console.log(sizeByte);
+                //console.log(sizekiloBytes);
+                if (sizeByte > MAXIMO_TAMANIO_BYTES) {
+                    Swal.fire('Error', 'El archivo excede el tamaño permitido, Tamaño permitido es de 12.5 MB', 'error');
+                    $(vElemento).val("");
+                }
+            }
+
+        }
+    </script>
+}

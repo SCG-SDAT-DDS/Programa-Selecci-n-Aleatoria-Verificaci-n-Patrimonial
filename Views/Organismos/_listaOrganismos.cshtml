@@ -1,0 +1,108 @@
+﻿@model PagedList<Transparencia.Models.Organismo>
+
+@{
+    FiltrosUnidades filtros = ViewBag.Filtros != null ? ViewBag.Filtros as FiltrosUnidades : new FiltrosUnidades();
+}
+
+    <div id="listaOrganismos">
+        <p>
+            @Html.ActionLink("Nuevo Organismo", "Create", null, new { @class = "btn btn-w-m btn-primary" })
+        </p>
+
+        <table class="table table-striped ">
+            <thead>
+                <tr>
+                    <th>
+                        <label onclick="OrderBy(this)" order="@ViewBag.OrderNombre"> Organismo <i class="fa fa-sort"></i> </label>
+                    </th>
+                    <th>
+                        <label onclick="OrderBy(this)" order="@ViewBag.OrderSiglas"> Siglas <i class="fa fa-sort"></i> </label>
+                    </th>
+                    <th>
+                        <label onclick="OrderBy(this)" order="@ViewBag.OrderActivo"> Activo <i class="fa fa-sort"></i> </label>
+                    </th>
+                    <th>
+                        Acciones
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.NombreOrganismo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Siglas)
+                    </td>
+                    <td>
+                        @if (item.Activo)
+                        {
+                            <span class="label label-primary BadgeStatus" onclick="changeStatus(this,'@Url.Action("changeStatus", "Organismos")',@item.OrganismoID)">Activo</span>
+                        }
+                        else
+                        {
+                            <span class="label label-danger BadgeStatus" onclick="changeStatus(this,'@Url.Action("changeStatus", "Organismos")',@item.OrganismoID)">Inactivo</span>
+                        }
+                    </td>
+                    <td>
+                        <div class="btn-group">
+                            @Html.ActionLink("Modificar", "Edit", new { id = item.OrganismoID }, new { @class = "btn-white btn btn-xs" })
+                            @Html.ActionLink("Detalles", "Details", new { id = item.OrganismoID }, new { @class = "btn-white btn btn-xs" })
+                        </div>
+                    </td>
+                </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td>
+                        <div class="form-group row">
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <label>
+                                    Mostrar
+                                    <select class="input-sm filtrar" name="PerPage" id="mostrar">
+                                        <option value="10">10</option>
+                                        <option value="25">25</option>
+                                        <option value="50">50</option>
+                                        <option value="100">100</option>
+                                    </select>
+                                    Registros
+                                </label>
+                            </div>
+                        </div>
+                    </td>
+                    <td colspan="7">
+                        <div class="pagination float-right">
+                            <label style="padding: 5px 10px;">@(Model.LastItemOnPage > 0 ? Model.FirstItemOnPage : 0) - @Model.LastItemOnPage de @Model.TotalItemCount Registros</label>
+                            <br />
+                            <div id="pagedList" class="pagedList" data-otf-target="#listaOrganismos">
+
+                                @Html.PagedListPager(Model, iPagina => Url.Action("Index", new
+                                {
+                                    iPagina,
+                                    PerPage = ViewBag.PerPage,
+                                    sOrder = ViewBag.Order,
+                                    Nombre = filtros.Nombre,
+                                    Descripcion = filtros.Descripcion,
+                                    Activo = filtros.Activo,
+                                    Siglas = filtros.Siglas
+                                }),
+                                     PagedList.Mvc.PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(PagedListRenderOptions.ClassicPlusFirstAndLast,
+                                     new AjaxOptions
+                                     {
+                                         HttpMethod = "get",
+                                        InsertionMode = InsertionMode.Replace,
+                                        UpdateTargetId = "listaOrganismos",
+                                        OnBegin = "BeginClient",
+                                        OnComplete = "CompleteClient"
+                                }))
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+

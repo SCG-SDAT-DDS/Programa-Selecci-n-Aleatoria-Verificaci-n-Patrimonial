@@ -1,0 +1,88 @@
+﻿@model Transparencia.Models.Plantilla
+
+@{
+    ViewBag.Title = "Eliminar Plantilla";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<h3>¿Está seguro de querer eliminar el elemento?</h3>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        @*<dt>
+            @Html.DisplayNameFor(model => model.TipoEstatusId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TipoEstatus.Nombre)
+        </dd>*@
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NombreCorto)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NombreCorto)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NombreLargo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NombreLargo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.NombreTabla)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.NombreTabla)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Ayuda)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Ayuda)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Orden)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Orden)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Activo)
+        </dt>
+
+        <dd>
+            @if (Model.Activo)
+            {
+                <span class="badge badge-success BadgeStatus">Activo</span>
+            }
+            else
+            {
+                <span class="badge badge-danger BadgeStatus">Inactivo</span>
+            }
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+    <div class="form-actions no-color">
+        <input type="submit" value="Eliminar" class="btn btn-danger" />
+        @Html.ActionLink("Regresar", "Index", null, new { @class = "btn btn-secondary" })
+    </div>
+    }
+</div>

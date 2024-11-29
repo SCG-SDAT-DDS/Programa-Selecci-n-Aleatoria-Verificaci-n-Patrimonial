@@ -1,0 +1,50 @@
+﻿@model Transparencia.Models.PlantillaFraccion
+
+@{
+    ViewBag.Title = "Eliminar la relacion entre Plantillas, fracciones y Organismos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<h3>¿Está seguro de querer eliminar el elemento?</h3>
+<div>
+    <h4>PlantillaFraccion</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.FraccionId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Fracciones.Nombre)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.OrganismoID)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Organismos.NombreOrganismo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.PlantillaId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Plantillas.NombreLargo)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+
+    <div class="form-actions no-color">
+        <input type="submit" value="Eliminar" class="btn btn-danger" />
+        @Html.ActionLink("Regresar", "Index", null, new { @class = "btn btn-secondary" })
+    </div>
+    }
+</div>

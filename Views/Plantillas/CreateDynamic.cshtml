@@ -1,0 +1,542 @@
+﻿@model List<Transparencia.Models.Campo>
+
+
+@{
+    ViewBag.Title = "Plantilla: "+ @ViewBag.NombrePlantilla;
+    //var sysFrecuencia = HMTLHelperExtensions.GetTipoFrecuencia();
+}
+
+
+<input type="hidden" id="error" value="@ViewBag.Error" />
+
+
+@using (Html.BeginForm("CreateDynamic", "Plantillas", FormMethod.Post, htmlAttributes: new { enctype="multipart/form-data", @id = "frmCrear" }))
+{
+    <input type="hidden" id="iPlantilldaId" name="iPlantilldaId" value="@ViewBag.PlantillaId" />
+    @Html.AntiForgeryToken()
+
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-lg-10">
+            <h2>Plantilla: </h2>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="@Url.Action("Index", "Home")">Inicio</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="@Url.Action("IndexPlantillas", "Plantillas")">Plantillas</a>
+                </li>
+                <li class="active breadcrumb-item">
+                    <strong>@ViewBag.Title</strong>
+                </li>
+            </ol>
+        </div>
+    </div>
+    <br />
+
+    <div class="col-lg-12">
+        <div class="ibox">
+            <div class="ibox-title">
+                <p>
+                    <h3>@ViewBag.Title</h3>
+                </p>
+            </div>
+
+            <div class="ibox-content">
+                <div class="row">
+
+                    <div class="form-group col-md-12">
+                        <div class="alert alert-info" role="alert">
+                            <h4><i class="fa fa-info-circle"></i> Por favor seleccione el ejercicio, la frecuencia y el tiempo de la frecuencia en donde se guardara esta información.</h4>
+                        </div>
+                    </div>
+
+                    <div class="form-group col-md-4" id="divTipo">
+                        <label for="sysPeriodo">Ejercicio</label>
+                        @Html.DropDownList("PeriodoId", new SelectList(ViewBag.AllPeriodos, "Value", "Text"), new { @class = "form-control" })
+                        <label for='sysPeriodo' generated='true' class='error'></label><div class='input-group mb-0'></div>
+                    </div>
+
+                    <div class="form-group col-md-4" id="divTipo">
+                        <label for="sysFrecuencia">
+                            Frecuencia de actualización
+                        </label>
+                        @Html.DropDownList("sysFrecuencia", new SelectList(ViewBag.AllFrecuencias, "Value", "Text"), new { @class = "form-control" })
+                        <label for='sysFrecuencia' generated='true' class='error'></label><div class='input-group mb-0'></div>
+                    </div>
+                    <div class="form-group col-md-4" id="divTipo">
+                        <label for="sysNumFrecuencia">Frecuencia</label>
+                        @Html.DropDownList("sysNumFrecuencia", new SelectList(ViewBag.AllSubFrecuencia, "Value", "Text"), new { @class = "form-control" })
+                        <label for='sysNumFrecuencia' generated='true' class='error'></label><div class='input-group mb-0'></div>
+                    </div>
+                </div>
+               
+
+                <hr />
+
+                @Html.Partial("_Campos", Model)
+
+                @*<div id="modalDatos"></div>*@
+                <div class="form-row">
+
+                    <div class="col-md-offset-2 col-md-12 text-right">
+                        @*@Html.ActionLink("Regresar", "IndexPlantillas", null, new { @class = "btn btn-w-m btn-secondary" })*@
+                        <a id="aRegresar" href="@Url.Action("Index")" class="btn btn-w-m btn-secondary"><i class="fa fa-arrow-left"></i> Regresar</a>
+                        @*<button id="btnSave" type="button" class="btn btn-primary">
+            <i class="fa fa-save"></i> Guardar
+        </button>*@
+                        <button id="btnSave" type="button" class="btn btn-primary">
+                            <i class="fa fa-save"></i> Guardar
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+}
+
+<div class="modal fade bd-example-modal-lg" id="ModalTabla" role="dialog" aria-labelledby="myLargeModalLabel">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalTabla">Por favor capura la información de <span id="modalTitleCatalogo"></span>. </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+
+                @using (Html.BeginForm("CreateDynamic", "Catalogos", FormMethod.Post, htmlAttributes: new { enctype = "multipart/form-data", @id = "frmCrearCatalogo" }))
+                {
+
+                    <input type="hidden" id="custom_tr_id" name="custom_tr_id" value="" />
+                    <div id="modalDatos">
+
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-offset-2 col-md-12 text-right">
+                            <button id="btnCloseTTabla" type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">
+                                <i class="fa fa-arrow-left"></i> Cerrar
+                            </button>
+                            <button id="btnSaveTabla" type="button" class="btn btn-success">
+                                <i class="fa fa-save"></i> Guardar
+                            </button>
+                            <button id="btnEditTable" type="button" class="btn btn-warning">
+                                <i class="fa fa-pencil"></i> Editar
+                            </button>
+                        </div>
+                    </div>
+                }
+            </div>
+            @*<div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Regresar</button>
+            </div>*@
+        </div>
+    </div>
+</div>
+
+
+@section AddToTop {
+    @Styles.Render("~/plugins/TimePickerStyle")
+    @Styles.Render("~/stepCss")
+    @*@Styles.Render("~/Content/jqueryUI")*@
+
+
+
+}
+
+@section scripts {
+    @*<script src="~/Scripts/steps/jquery-3.1.1.min.js"></script>
+        <script src="~/Scripts/steps/jquery.metisMenu.js"></script>
+        <script src="~/Scripts/steps/jquery.slimscroll.min.js"></script>
+        <script src="~/Scripts/steps/jquery.flot.tooltip.min.js"></script>*@
+
+    @*<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>*@
+
+    @Scripts.Render("~/plugins/TimePickerJs")
+    @Scripts.Render("~/stepJs")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jqueryUI")
+
+    @*<script src="~/Scripts/DatePickerReady.js"></script>*@
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.13.4/jquery.mask.min.js"></script>
+
+
+
+    <script>
+
+        $(function () {
+
+            $.datepicker.regional['es'] =
+            {
+                closeText: 'Cerrar',
+                prevText: 'Previo',
+                nextText: 'Próximo',
+
+                monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+                    'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun',
+                    'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+                monthStatus: 'Ver otro mes', yearStatus: 'Ver otro año',
+                dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+                dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sáb'],
+                dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+                dateFormat: 'dd/mm/yy', firstDay: 0,
+                initStatus: 'Selecciona la fecha', isRTL: false
+            };
+            $(".datefield").datepicker($.datepicker.regional["es"]);
+
+            //$('#sysNumFrecuencia').append($('<option value="0">Seleccione...</option>'));
+            $('#PeriodoId').prepend($('<option value="0">Seleccione...</option>'));
+           // $('#datepicker').datepicker({ dateFormat: 'dd-mm-yy' });
+
+            
+            if ($("#error").val().length > 0) {
+                Swal.fire(
+                    'Aviso',
+                    $("#error").val(),
+                    'error'
+                );
+            }
+
+          
+
+           
+
+
+
+            //Original
+            $("#frmCrear").submit(function () {
+                var vSubmit = $(this).valid();
+                if (vSubmit) {
+                    $('button[type=submit], input[type=submit]').prop('disabled', true);
+                    ShowLoading();
+                }
+                return vSubmit;
+            });
+
+            
+            @Html.Raw(ViewBag.Validation )
+
+
+
+            @*$('#btnSave').submit(function(e) {
+                e.preventDefault(); // stop the standard form submission
+                var Validar = $("#frmCrear").valid();
+                if (Validar) {
+                    ShowLoading();
+                       $.ajax({
+                        url: "@Url.Action("CreateDynamic")",
+                        type: "POST",
+                        data: new FormData(this),
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        success: function (data) {
+                             //console.log(data.Hecho);
+                                if (data.Hecho) {
+                                    window.location.href = '@Url.Action("IndexPlantillas", "Plantillas")';
+                                    limpiar();
+                                } else {
+                                    Swal.fire('Error', data.Mensaje, 'error');
+                                }
+                                HideLoading();
+                        },
+                        error: function(xhr, error, status) {
+                              Swal.fire('Error', 'Ocurrio un error al momento de eliminar el campo - ' + error.responseText, 'error');
+                              HideLoading();
+                        }
+                    });
+
+                }
+                return false;
+            });*@
+
+
+            $("#btnSave").click(function () {
+                var Validar = $("#frmCrear").valid();
+                if (Validar) {
+                    ShowLoading();
+                    var formElement = document.getElementById("frmCrear");
+                    var form = new FormData(formElement);
+                    //recuperamos toda la informacion de los datos de las sub tablas
+                    $(".FromTable").each(function (col, val) {
+                        var contador = 1;
+                         //recuperamos los datos
+                        $(val).find("tr.trFormTable").each(function (colTr, valTr) {
+                            $(valTr).find("td.validField").each(function (coltd, valtd) {
+                                const nombre = `${$(valtd).attr("data-name")}_${contador}`;
+                                const valor = $(valtd).attr("data-value");
+                                form.append(nombre, valor);
+                                console.log(nombre);
+                            });
+                            contador++;
+                        });
+                        
+                       
+                    });
+                   
+                    $.ajax({
+                        url: "@Url.Action("CreateDynamic")",
+                        dataType: "json",
+                        type: "POST",
+                        data: form,
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        success: function (data) {
+                            //console.log(data.Hecho);
+                            if (data.Hecho) {
+                                //window.location.href = '@Url.Action("IndexPlantillas", "Plantillas")';
+                                window.history.back();
+                                //Swal.fire('Completado',"Los datos se guardaron completamente", 'success');
+                                //limpiar();
+                            } else {
+                                Swal.fire('Error', data.Mensaje, 'error');
+                            }
+                            HideLoading();
+                        },
+                        error: function (error) {
+                            Swal.fire('Error', 'Ocurrio un error al momento de eliminar el campo - ' + error.responseText, 'error');
+                            HideLoading();
+                        }
+                    });
+                }
+            });
+
+            //cambiar frecuencia
+            $("#sysFrecuencia").change(function () {
+                var ComboCnanged = $(this).val();
+                $('#sysNumFrecuencia').empty();
+                $('#sysNumFrecuencia').append($('<option value="0">Seleccione...</option>'));
+                if (ComboCnanged != 0) {
+
+                    //sub
+                    ShowLoading();
+                    var Sub = $('#sysNumFrecuencia');
+                    if (ComboCnanged.length > 0) {
+                        $.ajax({
+                            url: "@Url.Action("GetFrecuencias", "Plantillas")",
+                            dataType: "json",
+                            type: "GET",
+                            data: {
+                                'vTipoFrecuencia': ComboCnanged
+                            },
+                            cache: false,
+                            contentType: 'application/json; charset=utf-8',
+                            success: function (data) {
+                                console.log(data);
+                                if (data.Hecho) {
+                                    Sub.empty(); // remove any existing options
+                                    Sub.append($('<option value="0">Seleccione...</option>'));
+                                    $.each(data.data, function (index, item) {
+                                        Sub.append($('<option></option>').text(item.Text).val(item.Value));
+                                    });
+                                    //ComboActivo.val(iiActivoId);
+                                    HideLoading();
+
+                                } else {
+
+                                    Sub.empty(); // remove any existing options
+                                    Sub.append($('<option value="0">Seleccione...</option>'));
+                                    HideLoading();
+                                }
+                            },
+                            error: function (error) {
+                                console.log(error);
+                                HideLoading();
+                            }
+                        });
+                    } else {
+                        ComboActivo.empty(); // remove any existing options
+                        Sub.append($('<option value="0">Seleccione...</option>'));
+                        Sub.attr("title", "Sin datos seleccionados");
+                        HideLoading();
+                    }
+
+                }
+               
+
+            });
+
+            //Create Tipo Tabla
+
+           $(".ButtonNewCatalogo").click(function () {
+
+               $("#btnSaveTabla").show();
+               $("#btnEditTable").hide();
+                var vCatalagoId = $(this).data("catalogo");
+                var vCampo_name = $(this).data("catalagoName");
+                ShowLoading();
+                $.ajax({
+                    url: "@Url.Action("GetCreateDynamicPartial","Catalogos")",
+                    //dataType: "JSON",
+                    type: "POST",
+                    data: {
+                        CatalogoId: vCatalagoId
+                    },
+                    success: function (data) {
+
+                        if (data.Hecho) {
+                            $("#modalDatos").html(data.Partial);
+                            $("#modalTitleCatalogo").html(data.Mensaje);
+                            $("#Table"+vCatalagoId).trigger('update');
+                            $("#ModalTabla").modal();
+
+                        } else {
+                            Swal.fire('Error1', data.Mensaje, 'error');
+                        }
+
+                        HideLoading();
+                    }, error: function (error) {
+                        Swal.fire('Error', 'Ocurrio un error al momento de eliminar el campo - s' + error.responseText, 'error');
+                        HideLoading();
+                    }
+                });
+           });
+
+          
+
+          
+            //Sub Tablas
+            $("#btnSaveTabla").click(function () {
+                var Validar = $("#frmCrearCatalogo").valid();
+                if (Validar) {
+                    ShowLoading();
+                    // function we want to run
+                    var vCatalogoId = $("#TablaCatalogoId").val();
+                    var fnstring = 'function_' + vCatalogoId;
+                    // find object
+                    var fn = window[fnstring];
+                    // is object a function?
+                    if (typeof fn === "function") {
+                        fn();
+                        HideLoading();
+                        $("#ModalTabla").modal("hide");
+                        $("#Table" + vCatalogoId).trigger('update');
+
+                    } else {
+                         Swal.fire('Error',fnstring+' no es una función, por favor verificar.', 'error');
+                         HideLoading();
+                    }
+
+                    
+                    //if (jQuery.isFunction(fn)) {
+
+                    //} else {
+                    //    Swal.fire('Error',fn+' no es una función, por favor verificar.', 'error');
+                    //    HideLoading();
+                    //}
+                    @*ShowLoading();
+                    var formElement = document.getElementById("frmCrearCatalogo");
+                    $.ajax({
+                        url: "@Url.Action("CreateDynamic","Catalogos")",
+                        dataType: "json",
+                        type: "POST",
+                        data: new FormData(formElement),
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        success: function (data) {
+                            console.log(data.Hecho);
+                            if (data.Hecho) {
+                                //window.location.href = '@Url.Action("IndexPlantillas", "Plantillas")';
+                                //window.history.back();
+                                //Swal.fire('Completado',"Los datos se guardaron completamente", 'success');
+                                //limpiar();
+                                Swal.fire('Guardado', 'Se guardo la información, correctamente.', 'success');
+                                $("#ModalTabla").modal();
+
+                                //seleccionamos el nombre del campo
+                                var nnombreCampo = $('#frmCrearCatalogo input[name=dynamic_field_name]').val();
+                                $(`#frmCrear input[name=${nnombreCampo}]`).val(data.InsertedId);
+
+                            } else {
+                                Swal.fire('Error', data.Mensaje, 'error');
+                            }
+                            HideLoading();
+                        },
+                        error: function (error) {
+                            Swal.fire('Error', 'Ocurrio un error al momento de eliminar el campo - ' + error.responseText, 'error');
+                            HideLoading();
+                        }
+                    });*@
+                }
+            });
+            $("#btnEditTable").click(function () {
+                var Validar = $("#frmCrearCatalogo").valid();
+                if (Validar) {
+                    ShowLoading();
+                    var trId = $("#custom_tr_id").val();
+                    //verificamos si tenemos el dato id
+                    if (trId.length <= 0) {
+                        Swal.fire('Error', 'Ocurrio un error al momento de encontrar el registro a modificar', 'error');
+                        HideLoading();
+                    }
+
+                    //ponemos los datos correctamente
+                    $(`#${trId}`).find('td').each(function (index) {
+                        var nameInput = $(this).data('name');
+                        var value = $('#' + nameInput).val();
+                        $(this).attr('data-value', value);
+                        $(this).html(value);
+
+                    });
+                    //CERRAMOS LA VENTANA Y LISTO
+                     HideLoading();
+                     $("#ModalTabla").modal("hide");
+                }
+            });
+           
+        });
+
+        //functiones()
+        function btnEditar(btnEditar) {
+            $("#btnSaveTabla").hide();
+            $("#btnEditTable").show();
+                var vCatalagoId = $(btnEditar).data("catalogo");
+                ShowLoading();
+                $.ajax({
+                    url: "@Url.Action("GetCreateDynamicPartial","Catalogos")",
+                    //dataType: "JSON",
+                    type: "POST",
+                    data: {
+                        CatalogoId: vCatalagoId
+                    },
+                    success: function (data) {
+
+                        if (data.Hecho) {
+                            $("#modalDatos").html(data.Partial);
+                            $("#modalTitleCatalogo").html(data.Mensaje);
+                            $("#ModalTabla").modal();
+                            //utilizaremos para saber que tr es en la edicion
+                            const custom_tr_id = $(btnEditar).closest('tr').attr('id');
+                            $('#frmCrearCatalogo input[id=custom_tr_id]').val(custom_tr_id);
+
+                            $(btnEditar).closest('tr').find('td').each(function (column, td) {
+                                const name = $(td).attr("data-name");
+                                const value = $(td).attr("data-value");
+                                $("#" + name).val(value);
+                            });
+
+                        } else {
+                            Swal.fire('Error1', data.Mensaje, 'error');
+                        }
+
+                        HideLoading();
+                    }, error: function (error) {
+                        Swal.fire('Error', 'Ocurrio un error al momento de eliminar el campo - s' + error.responseText, 'error');
+                        HideLoading();
+                    }
+                });
+            }
+
+
+       
+          
+    </script>
+
+}
+
+

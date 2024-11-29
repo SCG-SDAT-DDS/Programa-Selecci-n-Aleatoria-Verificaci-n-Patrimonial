@@ -1,0 +1,284 @@
+﻿@using Transparencia.Models
+@model LoginViewModel
+
+@{
+    Layout = "~/Views/Shared/Auth/_Auth.cshtml";
+    ViewBag.Title = "Inicio de Sesión";
+}
+
+
+@*<div class="login-panel">
+        <div class="animated fadeInDown bg-white shadow-lg border-radius-xl">
+            <div class="row no-gutters h-100 full-height justify-content-center">
+                <div class="col-12 col-sm-12 col-md-6">
+                    <div class="p-5">
+
+                        @Html.Partial("Auth/_HeaderAuth")
+
+                        @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "m-t", role = "form" }))
+                        {
+                            @Html.AntiForgeryToken()
+                            @Html.ValidationSummary(true)
+
+                            <div class="form-group">
+                                <label for="CorreoElectronico">Usuario</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            <span class="mdi mdi-account-outline"></span>
+                                        </span>
+                                    </div>
+                                    @Html.TextBoxFor(m => m.Usuario, new { @class = "form-control", @required = "required", @placeholder = "Usuario", @autofocus = "", @autocomplete = "" })
+                                </div>
+                                @Html.ValidationMessageFor(m => m.Usuario, null, htmlAttributes: new { @class = "text-danger" })
+                            </div>
+
+                            <div class="form-group">
+                                <label for="password">Contraseña</label>
+                                <div class="input-group">
+                                    <div class="input-group-prepend">
+                                        <span class="input-group-text">
+                                            <span class="mdi mdi-lock-open-outline"></span>
+                                        </span>
+                                    </div>
+                                    @Html.PasswordFor(m => m.Password, new { @class = "form-control", @required = "required", @placeholder = "Contraseña", @autocomplete = "current-password" })
+                                </div>
+                                @Html.ValidationMessageFor(m => m.Password, null, htmlAttributes: new { @class = "text-danger" })
+                            </div>
+                            <div class="form-group text-center">
+                                <button type="submit" class="btn btn-block btn-primary">
+                                    Iniciar Sesión
+                                </button>
+                            </div>
+                            <div class="form-row">
+                                <div class="form-group col-md-6 col-sm-6">
+                                    <div class="checkbox checkbox-dark">
+                                        <input id="iRememberMe" type="checkbox">
+                                        <label for="iRememberMe">
+                                            <smal>No cerrar sesión</smal>
+                                        </label>
+                                    </div>
+                                    <input type="hidden" name="bRememberMe" id="bRememberMe" value="false" />
+                                </div>
+
+                                <div class="form-group col-md-6 col-sm-6 text-right">
+                                    <a href="#" class="" id="iForgotPassword"><small>¿Has olvidado tu contraseña?</small></a>
+                                </div>
+                            </div>
+                        }
+
+                        @Html.Partial("Auth/_FooterAuth")
+
+                    </div>
+                </div>
+                <div class="col-12 col-sm-6 col-md-6 d-none d-sm-none d-md-block">
+                    <div class="bg-panel-login border-radius-right-xl"></div>
+                </div>
+            </div>
+        </div>
+    </div>*@
+
+<h3 class="fw-600 mb-4">Iniciar sesión</h3>
+
+@using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "m-t", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    <div class="mb-3">
+        <label for="email" class="form-label">Usuario</label>
+        @Html.TextBoxFor(m => m.Usuario, new { @class = "form-control", @required = "required", @placeholder = "Usuario", @autofocus = "", @autocomplete = "" })
+        @Html.ValidationMessageFor(m => m.Usuario, null, htmlAttributes: new { @class = "text-danger" })
+
+    </div>
+    <div class="mb-3">
+        <label for="password" class="form-label">Contraseña</label>
+        @Html.PasswordFor(m => m.Password, new { @class = "form-control", @required = "required", @placeholder = "Contraseña", @autocomplete = "current-password" })
+        @Html.ValidationMessageFor(m => m.Password, null, htmlAttributes: new { @class = "text-danger" })
+
+
+    </div>
+
+    <div class="row mt-4">
+        <div class="col">
+            <div class="form-check">
+                @Html.CheckBoxFor(m => m.RememberMe)
+                @Html.LabelFor(m => m.RememberMe)
+            </div>
+
+
+        </div>
+        <div class="col text-end">
+            <a id="iForgotPassword" href="#">¿Olvidaste tu contraseña?</a>
+        </div>
+    </div>
+
+
+    <div class="d-grid my-4">
+        <button type="submit" class="btn btn-primary btn-lg shadow-sm">
+            Ingresar
+        </button>
+    </div>
+
+
+
+}
+
+<div class="modal fade" id="phoneModal" tabindex="-1" aria-labelledby="phoneModalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="phoneModalLabel">Teléfonos de Atención</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <p><strong>Atención Servidores Públicos</strong></p>
+                <p>
+                    Ponemos a su disposición la siguiente información para que nos haga llegar sus preguntas, dudas o comentarios.
+                </p>
+
+                <div class="row">
+                    <div class="col-sm-6">
+                        <p>Los números teléfonicos</p>
+                        <ul class="list-group">
+                            <li class="list-group-item"><span class="mdi mdi-phone"></span> (662) 454 0074</li>
+                            <li class="list-group-item"><span class="mdi mdi-phone"></span> (662) 289 6800</li>
+                        </ul>
+                    </div>
+                    <div class="col-sm-6">
+                        <p>Correo electrónico:</p>
+                        <ul class="list-group">
+                            <li class="list-group-item">atencionciudadana@sonora.gob.mx.</li>
+
+                        </ul>
+
+                    </div>
+                </div>
+
+
+
+
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cerrar</button>
+            </div>
+        </div>
+    </div>
+</div>
+<div class="modal inmodal" id="mForgotPassword" tabindex="-1" role="dialog" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content animated bounceInUp">
+            <div class="modal-header">
+                <h4 class="modal-title">Recuperar contraseña</h4>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+
+            <div class="modal-body">
+                <div id="ibox-recover">
+
+                </div>
+                <p>Para recuperar su contraseña es necesario proporcionar su usuario.</p>
+                <p>La contraseña sera enviada al correo electrónico.</p>
+                <div class="form-group">
+                    <input type="text" class="form-control" id="txbUsername" placeholder="Usuario" />
+                </div>
+            </div>
+
+            <div class="modal-footer">
+                <button type="button" class="btn btn-white" data-dismiss="modal">Cerrar</button>
+                <button type="button" class="btn btn-primary" id="btnRecover">Recuperar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts{
+
+    
+    @Scripts.Render("~/validate")
+    <script>
+        @*@if (ViewData.ModelState.Any(r => r.Value.Errors.Any()))
+        {
+            var vError = ViewData.ModelState.Where(r => r.Key == "error").FirstOrDefault();
+            string sError = vError.Value.Errors.FirstOrDefault().ErrorMessage;
+            <text>
+            var vMessage = "@Html.Raw(sError)";
+        MyToast("Aviso!", vMessage, "error");
+            </text>
+        }*@
+
+
+        function ShowLoading() {
+            $(".cover-spin2").show();
+        }
+
+        function HideLoading() {
+            setTimeout(function () {
+                setTimeout(function () {
+                    $(".cover-spin2").hide();
+                }, 200);
+            }, 400)
+        }
+        $(function()
+        {
+           
+
+            $("#iRememberMe").click(function () {
+                var vRememberMe = $(this).prop("checked");
+                $("#bRememberMe").val(vRememberMe);
+            });
+
+            $("#iForgotPassword").click(function () {
+                event.preventDefault();
+                $("#mForgotPassword").modal("show");
+                setTimeout(function () {
+                    $("#txbUsername").focus();
+                }, 500)
+            });
+
+            $("#txbUsername").keypress(function () {
+                if (event.charCode == 13) {
+                    $("#btnRecover").trigger("click");
+                }
+            });
+
+            $("#btnRecover").click(function () {
+
+                ShowLoading();
+                var vUser = $("#txbUsername").val();
+                if (vUser.length == 0) {
+                    Swal.fire("Aviso!", "debe de ingresar un correo electrónico.", "error");
+                    return;
+                }
+
+                $.ajax({
+                    url: '@Url.Action("RecoverPassword")',
+                    type: "POST",
+                    data: JSON.stringify({
+                        'sUsername': vUser
+                    }),
+                    datatype: 'json',
+                    cache: false,
+                    contentType: 'application/json; charset=utf-8',
+                    success: function (data) {
+                        if (data.length == 0) {
+                            Swal.fire("Aviso!", "Se envio un correo electrónico al usuario con la contraseña.", "success");
+                            $("#txbUsername").val("");
+                            $("#mForgotPassword").modal("hide");
+                        } else {
+                            Swal.fire('Error', data, 'error');
+
+                        }
+                        HideLoading();
+                    },
+                    error: function (jqXHR, exception) {
+                        console.log(jqXHR);
+                        console.log(exception);
+                        HideLoading();
+                    }
+
+                });
+            });
+        })
+    </script>
+
+}

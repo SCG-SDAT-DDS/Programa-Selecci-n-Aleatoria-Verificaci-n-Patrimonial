@@ -1,0 +1,70 @@
+﻿@using Transparencia.Models
+@model ModificaUsuarioViewModel
+
+<table class="table">
+    <tr>
+        <th>
+            Rol
+        </th>
+        <th>
+            Descripción
+        </th>
+        <th>
+            Organismo
+        </th>
+        <th>
+            Unidad Administrativa    
+        </th>
+        <th>
+            Desde
+        </th>
+        <th>
+            Hasta
+        </th>
+        <th>
+            Activo
+        </th>
+        <th></th>
+    </tr>
+
+    @foreach (var item in Model.ListaRoles)
+    {
+<tr>
+    <td>
+        @Html.DisplayFor(modelItem => item.Name)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.Descripcion)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.NombreOrganismo)
+    </td>
+    <td>
+        @Html.Raw(item.NombreUnidadAdministrativa)
+    </td>
+    @*<td>
+        @Html.DisplayFor(modelItem => item.FechaDesde)
+    </td>
+    <td>
+        @Html.DisplayFor(modelItem => item.FechaHasta)
+    </td>*@
+    <td>
+        @if (item.Activo)
+        {
+            <span class="label label-primary BadgeStatus">Activo</span>
+        }
+        else
+        {
+            <span class="label label-danger BadgeStatus">Inactivo</span>
+        }
+    </td>
+    <td>
+        <button type="button" class="btn btn-w-m btn-xs btn-danger" data-eliminarol-url="@Url.Action("EliminaRolAUsuario", "UsuariosAdmin")"
+                name="btnEliminarRol" data-rol-name="@item.Name" data-toggle="modal" data-target="#confirm-delete">
+            Remover
+        </button>
+    </td>
+</tr>
+    }
+</table>
+

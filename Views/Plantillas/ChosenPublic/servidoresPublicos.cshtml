@@ -1,0 +1,167 @@
+﻿@model Transparencia.Models.vmChosenPuiblic
+@{
+    Layout = "appServidorPuiblico.cshtml";
+    ViewBag.Title = "Sorteo";
+}
+
+@Html.Hidden("plantillaId", Model.plantillaId)
+@Html.Hidden("PeriodoId", Model.PeriodoId)
+@Html.Hidden("sysFrecuencia", Model.sysFrecuencia)
+@Html.Hidden("sysNumFrecuencia", Model.sysNumFrecuencia)
+@Html.Hidden("organismoId", Model.organismoId)
+
+
+
+<header id="header" class="fixed-top">
+
+    <div class="container">
+        <div class="row g-3 justify-content-center">
+            <div class="col-sm-6">
+                <div class="">
+                    <a href="@Url.Action("InitChosenPublic","Plantillas",new { plantillaId = Model.plantillaId,PeriodoId = Model.PeriodoId,sysFrecuencia = (int)Model.sysFrecuencia,sysNumFrecuencia= Model.sysNumFrecuencia,OrganismoId= Model.organismoId })" class="link-light"><span class="mdi mdi-arrow-left"></span>Regresar</a>
+                </div>
+            </div>
+            <div class="col-sm-6">
+
+            </div>
+
+
+            <div class="col-sm-8">
+                <a class="brand mx-auto d-block text-center filter-white" href="http://provep.test" title="PROVEP">
+                    <h1>
+                        <img src="~/Content/images/imagePublic/SVG/logo-full-scg-provep.svg">
+                    </h1>
+                </a>
+            </div>
+
+        </div>
+    </div>
+
+
+    <nav class="navbar navbar-expand-lg navbar-dark " id="main-menu">
+        <div class="container">
+        </div>
+    </nav>
+</header>
+<div class="container">
+
+
+    <section class="py-5 text-center">
+        <div class="container">
+            <h2 class="mb-5">
+                Programa de Selección Aleatoria de <br />
+                Verificación Patrimonial
+            </h2>
+
+            <h3>@Model.textPlantilla</h3>
+            @*<h4>@Model.Descripcion</h4>*@
+        </div>
+    </section>
+    <section class="list-employees py-5">
+        <div class="container">
+
+            <div class="row justify-content-center g-3 g-sm-5">
+
+
+
+                @if (Model != null && Model.result != null && Model.result.datos != null)
+                {
+                    int contar = 0;
+                    foreach (var item in Model.result.datos)
+                    {
+                        contar++;
+                        <div class="col-sm-3">
+                            <div id="card-@contar" class="card card-body shadow border-0 is-loading position-relative p-4 text-center h-100">
+                                <div class="number">@contar</div>
+                                <h3 class="text-primary mt-3"></h3>
+                                <h4 class="fs-6 my-3"></h4>
+                                <p class="text-uppercase"></p>
+
+
+                                <div class="lds-ripple"><div></div><div></div></div>
+                            </div>
+                        </div>
+
+                    }
+                }
+
+            </div>
+
+
+        </div>
+    </section>
+
+</div>
+
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="@Url.Content("~/Scripts/jquery.form.min.js")"></script>
+    <script>
+
+        let defaultTimeLeft = 2;
+        const array =   @Html.Raw(Json.Encode(Model.result.datos ?? null));
+        let rows = array.length;
+        
+        var i = 1;                  //  set your counter to 1
+
+        function loadData() {         //  create a loop function
+            setTimeout(function () {   //  call a 3s setTimeout when the loop is called
+
+
+                let item = array[i - 1];
+                console.log(item, 'items');
+                parent = document.querySelector('#card-' + i);
+                parent.classList.remove("is-loading");
+                parent.classList.remove("next-loading");
+
+                var primer = '';
+                item.campos.filter(x => x.OrdenSeleccionPublico == 1).forEach(element => {
+                    primer += " "+ element.Valor;
+                });
+
+                parent.querySelector('h3').innerHTML = primer;
+
+                var segundo = '';
+                item.campos.filter(x => x.OrdenSeleccionPublico == 2).forEach(element => {
+                    segundo += " " + element.Valor;
+                });
+                parent.querySelector('h4').innerHTML = segundo;
+
+                var tercero = '';
+                item.campos.filter(x => x.OrdenSeleccionPublico == 3).forEach(element => {
+                    tercero += " " + element.Valor;
+                });
+                parent.querySelector('p').innerHTML = tercero;
+                parent.querySelector('.number').classList.remove("bg-primary");
+                parent.querySelector('.number').classList.add("bg-warning");
+
+                i++;
+
+                nextParent = document.querySelector('#card-' + i);
+                nextParent.classList.remove("is-loading");
+                nextParent.classList.add("next-loading");
+                nextParent.querySelector('.number').classList.add("bg-primary");
+
+
+
+                //  increment the counter
+                if (i <= rows) {           //  if the counter < 10, call the loop function
+                    loadData();             //  ..  again which will trigger another
+                }                       //  ..  setTimeout()
+            }, defaultTimeLeft * 0)
+        }
+
+        loadData();                   //  start the loop
+
+
+
+
+
+
+
+
+
+
+    </script>
+}

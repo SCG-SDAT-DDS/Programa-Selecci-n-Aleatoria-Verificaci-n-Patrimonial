@@ -1,0 +1,107 @@
+﻿@model IEnumerable<Transparencia.Models.Catalogo>
+
+@{
+    ViewBag.Title = "Listado de Catalogos";
+    FiltrosCatalogos filtros = ViewBag.Filtros != null ? ViewBag.Filtros as FiltrosCatalogos : new FiltrosCatalogos();
+    string show = ((int)ViewBag.PerPage).ToString();
+}
+
+@using (Ajax.BeginForm(
+    new AjaxOptions
+    {
+        HttpMethod = "get",
+        InsertionMode = InsertionMode.Replace,
+        UpdateTargetId = "lista",
+        OnBegin = "BeginClient",
+        OnComplete = "CompleteClient"
+    }))
+{
+
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-lg-10">
+            <h2>Catálogos</h2>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="@Url.Action("Index", "Home")">Inicio</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="@Url.Action("Index", "Catalogos")">Catálogos</a>
+                </li>
+                <li class="active breadcrumb-item">
+                    <strong>@ViewBag.Title</strong>
+                </li>
+            </ol>
+        </div>
+    </div>
+    <br />
+
+    <div class="wrapper wrapper-content animated fadeInRight ecommerce">
+        <div class="ibox-content m-b-sm border-bottom">
+            <div class="row">
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label class="col-form-label">Nombre</label>
+                        @Html.TextBoxFor(model => filtros.Nombre, htmlAttributes: new { @class = "form-control", @placeholder = "Nombre", autocomplete = "off" })
+                    </div>
+                </div>
+
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label class="col-form-label">Descripción</label>
+                        @Html.TextBoxFor(model => filtros.Descripcion, htmlAttributes: new { @class = "form-control", @placeholder = "Descripción", autocomplete = "off" })
+                    </div>
+                </div>
+
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        <label class="col-form-label">Estatus</label>
+                        <div class="input-group m-b">
+                            @Html.DropDownListFor(model => filtros.ActivoNull, new SelectList(ViewBag.CmbActivo, "Value", "Text"), "Seleccione...", new { @class = "form-control m-b" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br />
+
+            <div class="row justify-content-end">
+                <div class="col-sm-4 text-right">
+                    <a class="btn btn-w-m btn-secondary" href="@Url.Action("Index")">Limpiar</a>
+                    <button class="btn btn-w-m btn-success" type="submit">Buscar</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox">
+                    <div class="ibox-content">
+                        <div class="form-group row">
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                @Html.Partial("_lista", Model)
+                                @Html.Hidden("sOrder")
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+
+
+@section Styles {
+    @Styles.Render("~/plugins/footableStyles")
+}
+
+@section Scripts {
+    <script src="~/Scripts/PaginadorOrder.js"></script>
+    @Scripts.Render("~/plugins/footable")
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            $('.footable').footable();
+            $('#mostrar option[value="'+@show+'"]').attr("selected", "selected");
+        });
+    </script>
+}

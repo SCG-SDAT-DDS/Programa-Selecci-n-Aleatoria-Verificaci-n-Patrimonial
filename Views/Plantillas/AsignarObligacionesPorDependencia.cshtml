@@ -1,0 +1,346 @@
+﻿@model IEnumerable<Transparencia.Helpers.AuxPlantillas>
+
+@{
+    ViewBag.Title = "Asignación de obligaciones a Dependencias";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    //var Enlace = HMTLHelperExtensions.GetRoles(User.Identity.Name, "Enlace");
+}
+
+
+@using (Html.BeginForm("AsignarObligacionesPorDependenciaPost", "Plantillas", FormMethod.Post, htmlAttributes: new { enctype = "multipart/form-data", @id = "frmSearch" }))
+{
+
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-lg-10">
+            <h2>@ViewBag.Title</h2>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="@Url.Action("Index", "Home")">Inicio</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="@Url.Action("Index", "Plantillas")">Plantillas</a>
+                </li>
+                <li class="active breadcrumb-item">
+                    <strong>@ViewBag.Title</strong>
+                </li>
+            </ol>
+        </div>
+    </div>
+    <br />
+
+    @*<div class="col-lg-12">
+        <div class="ibox">*@
+    <div class="wrapper wrapper-content animated fadeInRight ecommerce">
+
+        <div class="ibox-content m-b-sm border-bottom">
+            <div class="row">
+                <div class="col-sm-8">
+                    <div class="form-group">
+
+                        @Html.Label("Dependencias")
+                        <div class="input-group m-b">
+                            @Html.DropDownList("OrganismoId", new SelectList(ViewBag.LstDependencias, "Id", "Nombre", ViewBag.LeyIds), "Seleccione...", htmlAttributes: new { @class = "form-control select2" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+                        @Html.Label("Ejercicio")
+                        <div class="input-group m-b">
+                            @Html.DropDownList("PeriodoId", new SelectList(ViewBag.LstPeriodo,  "PeriodoId", "NombrePeriodo"), "Seleccione...", new { @class = "form-control select2" })
+                        </div>
+                    </div>
+                </div>
+                <hr />
+                @*<div class="col-sm-4">
+                    <div class="form-group">
+
+                        @Html.Label("Ley")
+                        <div class="input-group m-b">
+                            @Html.DropDownList("LeyId", new SelectList(ViewBag.LeyId, "LeyId", "Nombre", ViewBag.LeyIds), "Seleccione...", htmlAttributes: new { @class = "form-control select2" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+
+                        @Html.Label("Articulo")
+                        <div class="input-group m-b">
+                            @Html.DropDownList("ArticuloId", new SelectList(ViewBag.ArticuloId, "ArticuloId", "Nombre", ViewBag.ArticuloId), "Seleccione...", htmlAttributes: new { @class = "form-control select2" })
+                        </div>
+                    </div>
+                </div>
+                <div class="col-sm-4">
+                    <div class="form-group">
+
+                        @Html.Label("Fracción")
+                        <div class="input-group m-b">
+                            @Html.DropDownList("FraccionId", new SelectList(ViewBag.FraccionId, "FraccionId", "Nombre", ViewBag.FraccionId), "Seleccione...", htmlAttributes: new { @class = "form-control select2" })
+                        </div>
+                    </div>
+                </div>*@
+
+
+
+            </div>
+            <br />
+
+            <div class="row justify-content-end">
+                <div class="col-sm-4 text-right">
+                    <a class="btn btn-w-m btn-secondary white-bg" id="btnLimpiar"><i class="fa fa-filter"></i> Limpiar</a>
+                    <button class="btn btn-w-m btn-success" id="btnSearch" type="button"><i class="fa fa-search"></i> Buscar</button>
+                </div>
+            </div>
+        </div>
+
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox">
+                    <div class="ibox-content">
+                        <div class="form-group row">
+                            <div class="col-md-12 col-sm-12 col-xs-12 text-center" id="lista">
+                                @Html.Partial("_ListaAsignarObligacionesPorDependencia", null)
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @*<div class="ibox-title">
+                <p>
+                    @Html.ActionLink("Nueva Plantilla", "Create", null, new { @class = "btn btn-w-m btn-primary" })
+                </p>
+            </div>*@
+
+        @*<div class="ibox-content">*@
+
+    </div>
+    <br />
+}
+
+
+
+@section Scripts {
+    <script src="~/Scripts/PaginadorOrder.js"></script>
+    @Scripts.Render("~/bundles/jqueryUI")
+    <script src="~/Scripts/DatePickerReady.js"></script>
+
+    <script>
+        $(function () {
+            $('.select2').select2();
+            // Get the coordinates
+            //navigator.geolocation.getCurrentPosition(show_map);
+
+            //function show_map(position) {
+            //  var latitude = position.coords.latitude;
+            //  var longitude = position.coords.longitude;
+
+            //  // post to your controller
+            //    var url = "/Home/Index?latitude=" + latitude + "&longtitude=" + longitude;
+            //    console.log(url);
+            //}
+
+        });
+        function asignarUA(input) {
+            console.log($(input).val());
+            console.log($(input).is(':checked'));
+            //start
+            ShowLoading();
+            $.ajax({
+                url: "@Url.Action("AsignarPlantillaDependencia")",
+                dataType: "json",
+                type: "POST",
+                data: {
+                    sAsignar: $(input).is(':checked'),
+                    plantillaId: $(input).val(),
+                    OrganismoId: $("#OrganismoId").val()
+                    
+                },
+                cache: false,
+                success: function (data) {
+                   // console.log(data.Hecho);
+                    if (data.Hecho) {
+                    } else {
+                        $(input).prop('checked', !$(input).is(':checked'));
+                        Swal.fire('Error', data.Mensaje, 'error');
+                    }
+                    HideLoading();
+                },
+                error: function (error) {
+                    $(input).prop('checked', !$(input).is(':checked'));
+                    Swal.fire('Error', 'Ocurrio un error al momento de eliminar el campo - ' + error.responseText, 'error');
+                    HideLoading();
+                }
+            });
+
+        }
+
+
+          $("#btnSearch").click(function () {
+              var Validar = true;  //$("#frmSearch").valid();
+                if (Validar) {
+                    ShowLoading();
+                    var formElement = document.getElementById("frmSearch");
+                    $.ajax({
+                        url: "@Url.Action("AsignarObligacionesPorDependenciaPost")",
+                        dataType: "json",
+                        type: "POST",
+                         data: new FormData(formElement),
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        success: function (data) {
+                            console.log(data.Hecho);
+                            if (data.Hecho) {
+                                $("#lista").html(data.Partial);
+                            } else {
+                                Swal.fire('Error', data.Mensaje, 'error');
+                            }
+                            HideLoading();
+                        },
+                        error: function (error) {
+                            Swal.fire('Error', 'Ocurrio un error al momento de eliminar el campo - ' + error.responseText, 'error');
+                            HideLoading();
+                        }
+                    });
+                }
+            });
+         @*$("#btnSave").click(function () {
+                var Validar = $("#frmCrear").valid();
+                if (Validar) {
+                    ShowLoading();
+                    var formElement = document.getElementById("frmCrear");
+                    $.ajax({
+                        url: "@Url.Action("IndexDatosPlantillasPOST")",
+                        dataType: "html",
+                        type: "POST",
+                         data: new FormData(formElement),
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        success: function (data) {
+
+                            $("#Listado").html(data);
+                            //if (data.Hecho) {
+
+                            //} else {
+                            //    Swal.fire('Error', data.Mensaje, 'error');
+                            //}
+                            HideLoading();
+                        },
+                        error: function (error) {
+                            Swal.fire('Error', 'Ocurrio un error al momento de eliminar el campo - ' + error.responseText, 'error');
+                            HideLoading();
+                        }
+                    });
+                }
+         });*@
+
+        $("#btnLimpiar").click(function () {
+            $('#frmSearch')[0].reset();
+            $('.icheckbox_square-green').removeClass('checked');
+            $("#lista").html('<div class="col-md-12"> No hay registros para mostrar. </div>');
+
+        });
+
+        $("#LeyId").change(function () {
+                //sub
+            ShowLoading();
+            $('#FraccionId').empty();
+            $('#FraccionId').append($('<option value>Seleccione...</option>'));
+                var ComboCnanged = $(this).val();
+                var Sub = $('#ArticuloId');
+                if (ComboCnanged.length > 0) {
+                    $.ajax({
+                        url: "@Url.Action("GetArticulosByLeyId", "Plantillas")",
+                        dataType: "json",
+                        type: "GET",
+                        data: {
+                            'iId': ComboCnanged
+                        },
+                        cache: false,
+                        contentType: 'application/json; charset=utf-8',
+                        success: function (data) {
+                            console.log(data.data);
+                            if (data.Encontro) {
+                                Sub.empty(); // remove any existing options
+                                Sub.append($('<option value>Seleccione...</option>'));
+                                $.each(data.data, function (index, item) {
+                                    Sub.append($('<option></option>').text(item.Nombre).val(item.ArticuloId));
+                                });
+                                //ComboActivo.val(iiActivoId);
+                                 HideLoading();
+
+                            } else {
+
+                                Sub.empty(); // remove any existing options
+                                Sub.append($('<option value>Seleccione...</option>'));
+                                 HideLoading();
+                            }
+                        },
+                        error: function (error) {
+                            console.log(error);
+                              HideLoading();
+                        }
+                    });
+                } else {
+                    ComboActivo.empty(); // remove any existing options
+                    Sub.append($('<option value>Seleccione...</option>'));
+                    Sub.attr("title", "Sin datos seleccionados");
+                    HideLoading();
+                }
+
+        });
+
+
+        $("#ArticuloId").change(function () {
+                //sub
+                ShowLoading();
+                var ComboCnanged = $(this).val();
+                var Sub = $('#FraccionId');
+                if (ComboCnanged.length > 0) {
+                    $.ajax({
+                        url: "@Url.Action("GetFraccionByArticulosId", "Plantillas")",
+                        dataType: "json",
+                        type: "GET",
+                        data: {
+                            'iId': ComboCnanged
+                        },
+                        cache: false,
+                        contentType: 'application/json; charset=utf-8',
+                        success: function (data) {
+                             console.log(data);
+                            if (data.Encontro) {
+                                Sub.empty(); // remove any existing options
+                                Sub.append($('<option value>Seleccione...</option>'));
+                                $.each(data.data, function (index, item) {
+                                    Sub.append($('<option></option>').text(item.Nombre).val(item.FraccionId));
+                                });
+                                //ComboActivo.val(iiActivoId);
+                                 HideLoading();
+
+                            } else {
+
+                                Sub.empty(); // remove any existing options
+                                Sub.append($('<option value>Seleccione...</option>'));
+                                 HideLoading();
+                            }
+                        },
+                        error: function (error) {
+                            console.log(error);
+                              HideLoading();
+                        }
+                    });
+                } else {
+                    ComboActivo.empty(); // remove any existing options
+                    Sub.append($('<option value>Seleccione...</option>'));
+                    Sub.attr("title", "Sin datos seleccionados");
+                    HideLoading();
+                }
+
+        });
+
+    </script>
+}
+

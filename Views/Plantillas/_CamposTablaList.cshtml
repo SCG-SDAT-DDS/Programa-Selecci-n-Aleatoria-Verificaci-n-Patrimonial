@@ -1,0 +1,374 @@
+﻿@model IPagedList<dynamic>
+
+@{
+    var Titulos = ViewBag.Titles as List<Transparencia.Helpers.AuxTitlePlantillas>;
+    var Relevante = ViewBag.Relevantes as List<Transparencia.Models.CampoCatalogo>;
+    string nombreCatalogo = ViewBag.nombreCatalogo != null ? ViewBag.nombreCatalogo : "";
+    int catalogoId = ViewBag.catalogoId != null ? ViewBag.catalogoId : 0;
+    int totalRow = Titulos.Count + 2;
+}
+
+<div class='form-group col-md-12'>
+    <div class='alert alert-warning' role='alert'>
+        <h4><i class='fa fa-info-circle'></i> Capture, borra o modifique la información necesaria para @nombreCatalogo.</h4>
+    </div>
+</div>
+
+<div class="col-ms-12 mt-1 mb-3">
+    <button type="button" id="ButtonNewCatalogo" class="btn btn-success"><i class="fa fa-plus"></i> Nuevo</button>
+    <button type="button" id="buttonDeleteField" class="btn btn-danger" disabled=""><i class="fa fa-remove"></i> Borrar</button>
+</div>
+
+<div class="table-responsive">
+    <table class="table table-bordered FromTable" id="tableDatosTabla">
+        <thead>
+            <tr>
+                <th scope="col" style="text-align: center; vertical-align: middle; width: 36px;">
+                    <label>
+                        <input data-index='0' id='selectAll' name='selectAll' type='checkbox' value='0'>
+                        <span></span>
+                    </label>
+                </th>
+                @if (Titulos != null)
+                {
+                    foreach (var item in Titulos)
+                    {
+                        <th>
+                            @item.LbNombre
+                        </th>
+                    }
+                }
+                <th>
+                    Acciones
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.Count > 0)
+            {
+                foreach (var item in Model)
+                {
+                    int TablaFisicaId = 0;
+                    string NombreTabla = "";
+                    int PlantillaId = 0;
+                    <tr class="trFormTable">
+                        <td>
+                            <label>
+                                <input data-index='0' id='chkEliminar' name='chkEliminar' type='checkbox' class="checkboxEliminar" value='0'>
+                                <span></span>
+                            </label>
+                        </td>
+                        @foreach (var datos in item)
+                        {
+                            if (datos.Key == "TablaFisicaId")
+                            {
+                                TablaFisicaId = datos.Value;
+
+                            }
+                            else if (datos.Key == "NombreTabla")
+                            {
+                                NombreTabla = datos.Value;
+
+                            }
+                            else if (datos.Key == "CatalogoId")
+                            {
+                                PlantillaId = datos.Value;
+
+                            }
+                            else if (datos.Key == "UsuarioId")
+                            {
+                                @*<td>
+                                        @HMTLHelperExtensions.getNombreUsuarioById(datos.Value)
+                                    </td>*@
+                            }
+                            else if (datos.Key == "FechaCreacion")
+                            {
+                                @*<td>
+                                        @HMTLHelperExtensions.GetFormatForSelect( Transparencia.Models.TipoCampo.Fecha,datos.Value.ToString())
+                                    </td>*@
+                            }
+                            else if (datos.Key == "Activo")
+                            {
+                                <td>
+                                    @if (datos.Value == true)
+                                    {
+                                        <span class="label label-primary BadgeStatus" onclick="changeStatusDynamic(this,'@Url.Action("changeStatusDynamic", "Catalogos")',@TablaFisicaId,'@NombreTabla')">Activo</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="label label-danger BadgeStatus" onclick="changeStatusDynamic(this,'@Url.Action("changeStatusDynamic", "Catalogos")',@TablaFisicaId,'@NombreTabla')">Inactivo</span>
+                                    }
+                                </td>
+
+                            }
+                            else
+                            {
+                                <td>
+                                    @{
+                                        var RelevanteDatos = Relevante.Where(x => x.Nombre == datos.Key).FirstOrDefault();
+                                    }
+                                    @if (RelevanteDatos != null)
+                                    {
+                                        @Html.Raw(HMTLHelperExtensions.FormatDataFromRazor(RelevanteDatos.TipoCampo, RelevanteDatos._ConDecimales, RelevanteDatos.iCatalogoId, datos.Value));
+                                    }
+                                </td>
+                            }
+
+                        }
+                        <td class='text-center'>
+                            <a class='btn-sm btn-primary text-white bg-warning btnEditForId' onclick='btnEditar(@PlantillaId,@TablaFisicaId)' data-tablaFisica="@TablaFisicaId" data-catalogo="@PlantillaId" title='Editar'>
+                                <i class='fa fa-pencil-square-o' aria-hidden='true'></i>
+                            </a>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr class="withoutRowsLabel">
+                    <th colspan="@totalRow" class="text-center text-danger">Sin registros.</th>
+                </tr>
+            }
+        </tbody>
+    </table>
+
+</div>
+
+
+<div class="row mt-5">
+    <div class="col-sm-4">
+        <div class="form-group row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <label>
+                    Mostrar
+                    <select class="input-sm filtrar" name="PerPage" id="mostrar">
+                        <option value="10">10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select>
+                    Registros
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-8">
+        <div class="pagination float-right">
+            <label style="padding: 5px 10px;">@(Model.LastItemOnPage > 0 ? Model.FirstItemOnPage : 0) - @Model.LastItemOnPage de @ViewBag.TotalCountString Registros</label>
+            <br />
+            <nav aria-label="...">
+                <ul class="pagination">
+
+                    @{
+                        var Anterior = ViewBag.iPagina > 1 ? ViewBag.iPagina - 1 : 1;
+                        var Siguiente = ViewBag.iPagina < ViewBag.PageCount ? ViewBag.iPagina + 1 : ViewBag.iPagina;
+                        var iLimitador = ViewBag.iPagina > 5 ? ViewBag.iPagina - 4 : 1;
+                        var totalPaginas = ViewBag.PageCount;
+                        var limit = 8 + iLimitador;
+                        var paginasImpresas = 0;
+                    }
+                    <li class="page-item">
+                        <a class="page-link" href="@Anterior">Anterior</a>
+                    </li>
+                    @for (int i = iLimitador; i < ViewBag.TotalCount && i < limit && i <= totalPaginas; i++)
+                    {
+                        if (ViewBag.iPagina == i)
+                        {
+                            <li class="page-item active">
+                                <span class="page-link">
+                                    @i
+                                    <input type="hidden" id="hiddenPage" name="hiddenPage" value="@i" />
+                                    <span class="sr-only">(current)</span>
+                                </span>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="page-item"><a class="page-link" href="@i">@i.ToString("#,##0")</a></li>
+                        }
+                        paginasImpresas = i;
+
+                    }
+                    @if (paginasImpresas < totalPaginas)
+                    {
+                        <li class="page-item disabled"><a class="page-link">...</a></li>
+                        <li class="page-item"><a class="page-link" href="@totalPaginas">@totalPaginas.ToString("#,##0")</a></li>
+                    }
+
+
+
+                    @*<li class="page-item"><a class="page-link" href="#">3</a></li>*@
+                    <li class="page-item">
+                        <a class="page-link" href="@Siguiente">Siguiente</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+
+<script type="text/javascript">
+
+    $(function () {
+        checkDatosForPlantilla();
+        $('.checkboxEliminar').click(function () {
+            //console.log("asdsadsa");
+            var totalChecked = $('.checkboxEliminar:checked').length;
+            var $remove = $('#buttonDeleteField');
+            if (totalChecked > 0) {
+                {
+                    $remove.prop('disabled', false);
+                }
+            } else {
+                {
+                    $remove.prop('disabled', true);
+                }
+            }
+
+        });
+        $('#selectAll').change(function () {
+            var $remove = $('#buttonDeleteField');
+            var $checkboxes = $('.checkboxEliminar');
+            var $selectAll = $('#selectAll');
+            $remove.prop('disabled', !$selectAll.is(':checked'));
+            $checkboxes.prop('checked', $selectAll.is(':checked'));
+
+        });
+
+
+        $("#ButtonNewCatalogo").click(function () {
+            $("#btnSaveTabla").show();
+            $("#btnEditTable").hide();
+                var vCatalagoId = $("#tmpCatalogoId").val();
+                var vCampo_name = $("tmpNombreCatalogo").val();
+                ShowLoading();
+                $.ajax({
+                    url: "@Url.Action("GetCreateDynamicPartial","Catalogos")",
+                    //dataType: "JSON",
+                    type: "POST",
+                    data: {
+                        CatalogoId: vCatalagoId
+                    },
+                    success: function (data) {
+
+                        if (data.Hecho) {
+                            $("#modalDatos").html(data.Partial);
+                            $("#modalTitleCatalogo").html(data.Mensaje);
+                            //$("#Table" + vCatalagoId).trigger('update');
+                            $("#ModalTabla").modal();
+
+                        } else {
+                            Swal.fire('Error1', data.Mensaje, 'error');
+                        }
+
+                        HideLoading();
+                    }, error: function (error) {
+                        Swal.fire('Error', 'Ocurrio un error al momento de eliminar el campo - s' + error.responseText, 'error');
+                        HideLoading();
+                    }
+                });
+        });
+
+        //Eliminar
+        $('#buttonDeleteField').click(function () {
+            ShowLoading();
+            var $selectAllSub = $('#checkboxEliminar');
+            var $selectAll = $('#selectAll');
+            var error = false;
+            // var successAll = false;
+            $("#tableDatosTabla input[type=checkbox]:checked:not('#selectAll')").parents("tr").find(".btnEditForId").each(function (col, val) {
+                var vCatalogo = $(val).attr('data-catalogo');
+                var vTablaFisicaId = $(val).attr('data-tablaFisica');
+                $.ajax({
+                    url: "@Url.Action("AjaxEliminarRegistro","Catalogos")",
+                    //dataType: "JSON",
+                    type: "POST",
+                    data: {
+                        CatalogoId: vCatalogo,
+                        TablaFisicaId: vTablaFisicaId
+                    },
+                    success: function (data) {
+                        if (data.Hecho) {
+                            $(val).closest('tr').remove();
+                            checkDatosForPlantilla();
+                        } else {
+                            error = true;
+                            Swal.fire('Error', data.Mensaje, 'error');
+                        }
+
+                        HideLoading();
+                    }, error: function (error) {
+                        error = true;
+                        Swal.fire('Error', 'Ocurrio un error al momento de eliminar el registro - s' + error.responseText, 'error');
+                        HideLoading();
+                    }
+                });
+
+            });
+            if (!error)
+                Swal.fire('Hecho', 'Se eliminaron los registros con exito.', 'success');
+
+            $selectAllSub.prop('checked', false);
+            $selectAll.prop('checked', false);
+            HideLoading();
+
+        });
+
+
+        @*$('#tableDatosTabla').on('update', function () {
+            var rowCount = $('#tableDatosTabla tbody tr.trFormTable').length;
+
+            if (rowCount == 0) {
+                var totalColums = $('#tableDatosTabla thead th').length;
+                $('#tableDatosTabla tbody tr.withoutRowsLabel').remove();
+                $('#tableDatosTabla > tbody:last-child').append(`
+                                            <tr class='withoutRowsLabel'>
+                                              <th colspan='@totalRow'  class='text-center text-danger'>Sin registros.</th>
+                                            </tr>`);
+                //$('#{item.Nombre}').val(0);
+            }
+
+        });*@
+
+        function checkDatosForPlantilla() {
+            var nombreInputHiden = $("#tmpNombreHidden").val();
+            var rowCount = $('#tableDatosTabla tbody tr.trFormTable').length;
+            console.log("entro al update son en total:", rowCount);
+            if (rowCount > 0) {
+                //$('#tableDatosTabla tbody tr.withoutRowsLabel').remove();
+                $(`#${nombreInputHiden}`).val(rowCount);
+            } else if (rowCount == 0) {
+                var totalColums = $('#tableDatosTabla thead th').length;
+                $('#tableDatosTabla tbody tr.withoutRowsLabel').remove();
+                $('#tableDatosTabla > tbody:last-child').append(`
+                                            <tr class='withoutRowsLabel'>
+                                              <th colspan='${totalColums}'  class='text-center text-danger'>Sin registros.</th>
+                                            </tr>`);
+                $(`#${nombreInputHiden}`).val(0);
+            }
+        }
+
+        //  $('#tableDatosTabla').on('update', function () {
+
+
+
+        //});
+
+
+        $('#ModalTabla').on('show.bs.modal', function () {
+             $("#ModalTablaList").modal("hide");
+        });
+         $('#ModalTabla').on('hidden.bs.modal', function () {
+             $("#ModalTablaList").modal("show");
+        });
+    });
+
+
+
+</script>
+

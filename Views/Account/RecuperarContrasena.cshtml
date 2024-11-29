@@ -1,0 +1,72 @@
+﻿@using Transparencia.Models
+@model RecuperarContrasenaViewModel
+
+@{
+    Layout = "~/Views/Shared/Auth/_Auth.cshtml";
+    ViewBag.Title = "Recuperar contraseña";
+}
+
+@section Styles{
+    @*@Styles.Render("")*@
+}
+
+
+
+<h3 class="fw-600 mb-4">Cambio de contraseña</h3>
+
+<div class="w-75 m-auto">
+    <p class="text-muted text-center">@Html.Raw(Model.Iformacion)</p>
+</div>
+
+@using (Html.BeginForm("RecuperarContrasena", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+{
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary(true)
+    @Html.HiddenFor(model => model.UserId)
+    @Html.HiddenFor(model => model.Key)
+
+
+
+    <div class="mb-3">
+        <label for="email" class="form-label">Contraseña nueva </label>
+        @Html.PasswordFor(m => m.NewPassword, new { @class = "form-control", @required = "required", @placeholder = "Contraseña nueva", @autocomplete = "current-password" })
+        @Html.ValidationMessageFor(m => m.NewPassword, null, htmlAttributes: new { @class = "text-danger" })
+
+    </div>
+
+    <div class="mb-3">
+        <label for="email" class="form-label">Repetir la contraseña nueva </label>
+        @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control", @required = "required", @placeholder = "Repetir contraseña nueva", @autocomplete = "current-password" })
+        @Html.ValidationMessageFor(m => m.ConfirmPassword, null, htmlAttributes: new { @class = "text-danger" })
+
+    </div>
+
+
+
+    <div class="d-grid my-4">
+        <button type="submit" class="btn btn-primary btn-lg shadow-sm">
+            Cambiar contraseña
+        </button>
+    </div>
+}
+
+@section Scripts{
+
+    @Scripts.Render("~/validate")
+    <script>
+        @if (ViewData.ModelState.Any(r => r.Value.Errors.Any()))
+        {
+            var vError = ViewData.ModelState.Where(r => r.Key == "error").FirstOrDefault();
+            string sError = vError.Value.Errors.FirstOrDefault().ErrorMessage;
+            <text>
+            var vMessage = "@Html.Raw(sError)";
+        MyToast("Aviso!", vMessage, "error");
+            </text>
+        }
+
+        $(function () {
+
+        });
+    </script>
+
+}

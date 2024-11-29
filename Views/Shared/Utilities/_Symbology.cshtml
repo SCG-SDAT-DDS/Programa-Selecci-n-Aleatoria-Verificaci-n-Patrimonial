@@ -1,0 +1,38 @@
+﻿@model int
+@*<div class="alert alert-info">
+    <p class="mb-2"><span class="mdi mdi-information"></span> <strong>@DiccionarioSistema.Simbologia:</strong></p>
+    <ul class="unstyled pl-0 m-0">
+        <li>
+            @DiccionarioSistema.CamposObligatorios
+        </li>
+
+        @{
+            switch (Model)
+            {
+                case 1:
+
+                    break;
+                case 2:
+                    <li>
+                        @Html.Raw(DiccionarioSistema.CampoFormatoCorreoElectronico)
+                    </li>
+                    break;
+
+                case 3:
+                    <li>@Html.Raw(DiccionarioSistema.CampoFormatoCorreoElectronico)</li>
+                    <li>
+                        <strong>@DiccionarioSistema.ConsejosSeguridad:</strong>
+                        <ul class="unstyled pl-2">
+                            <li>@DiccionarioSistema.MantengaDatosSeguros</li>
+                            <li>@DiccionarioSistema.NoCompartaCuenta</li>
+                            <li>@DiccionarioSistema.CambiaClaveRegularmente</li>
+                        </ul>
+                    </li>
+
+                    break;
+            }
+        }
+
+    </ul>
+
+</div>*@

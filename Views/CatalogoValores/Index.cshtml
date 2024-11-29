@@ -1,0 +1,52 @@
+﻿@model IEnumerable<Transparencia.Models.CatalogoValor>
+
+@{
+    ViewBag.Title = "Listado de valores para el catalago" + ViewBag.CatalogoName;
+}
+
+<h2>@ViewBag.CatalogoName</h2>
+
+<p>
+    @Html.ActionLink("Nuevo", "Create", new { id = ViewBag.CatalogoId }, new { @class = "btn btn-success" })
+    @Html.ActionLink("Regresar", "Index","Catalogos", null, new { @class = "btn btn-default" })
+</p>
+<table class="table">
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Catalogo.Nombre)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.valor)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.orden)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Activo)
+        </th>
+        <th></th>
+    </tr>
+
+@foreach (var item in Model) {
+    <tr>
+        <td>
+            @Html.DisplayFor(modelItem => item.Catalogo.Nombre)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.valor)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.orden)
+        </td>
+        <td>
+            @Html.DisplayFor(modelItem => item.Activo)
+        </td>
+        <td>
+            @Html.ActionLink("Modificar", "Edit", new { id = item.CatalogoValorId }, new { @class = "btn btn-xs btn-warning" })
+            @Html.ActionLink("Detalles", "Details", new { id = item.CatalogoValorId }, new { @class = "btn btn-xs btn-info" })
+            @Html.ActionLink("Eliminar", "Delete", new { id = item.CatalogoValorId }, new { @class = "btn btn-xs btn-danger" })
+        </td>
+    </tr>
+}
+
+</table>

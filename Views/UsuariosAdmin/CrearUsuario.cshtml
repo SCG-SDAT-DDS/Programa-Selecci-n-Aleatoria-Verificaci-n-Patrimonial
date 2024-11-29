@@ -1,0 +1,251 @@
+﻿@model Transparencia.Models.Usuario
+@{
+    ViewBag.Title = "Nuevo Usuario";
+    IEnumerable<SelectListItem> listaRoles = (IEnumerable<SelectListItem>)ViewBag.ListaRoles;
+    IEnumerable<SelectListItem> lstUnidadesAdministrativas = (IEnumerable<SelectListItem>)ViewBag.lstUnidadesAdministrativas;
+}
+
+
+
+@using (Html.BeginForm("CrearUsuario", "UsuariosAdmin", FormMethod.Post, new { @class = "form-horizontal", role = "form", @id="fmrCrear" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-lg-10">
+            <h2>@ViewBag.Title</h2>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="@Url.Action("Index", "Home")">Inicio</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="@Url.Action("ListaUsuarios", "UsuariosAdmin")">Lista de Usuarios</a>
+                </li>
+                <li class="active breadcrumb-item">
+                    <strong>@ViewBag.Title</strong>
+                </li>
+            </ol>
+        </div>
+    </div>
+    <br />
+
+
+    <div class="ibox">
+        <div class="ibox-title">
+            <p>
+                <h2>@ViewBag.Title</h2>
+            </p>
+        </div>
+
+        <div class="ibox-content">
+            @Html.ValidationSummary("", new { @class = "text-danger" })
+            <div class="form-horizontal">
+
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.NombreCompleto, new { @class = "col-md-2 control-label" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(m => m.NombreCompleto, new { @class = "form-control" })
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.UserName, new { @class = "col-md-2 control-label" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(m => m.UserName, new { @class = "form-control", @autocomplete = "off" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label name="Rol" class="control-label col-md-2">Rol</label>
+                    <div class="col-md-10">
+                        @Html.DropDownList("Rol", listaRoles, htmlAttributes: new { @class = "form-control" })
+
+                    </div>
+                </div>
+                @*<div class="form-group">
+            <label name="Rol" class="control-label col-md-2">Tipo organismo</label>
+            <div class="col-md-10">
+                @Html.DropDownList("TipoOrganismoId", new SelectList(ViewBag.TipoOrganismoId, "TipoOrganismoId", "Nombre", ViewBag.TipoOrganismoIds), "Seleccione...", htmlAttributes: new { @class = "form-control" })
+
+            </div>
+        </div>*@
+                @if (!ViewBag.esEnlace)
+                {
+                    <div class="form-group" id="divOrganismos">
+                        <div class="form-group col-md-10">
+                            @Html.Label("Tipo organismo", htmlAttributes: new { @class = "control-label" })
+                            @Html.DropDownList("TipoOrganismoId", new SelectList(ViewBag.TipoOrganismoId, "TipoOrganismoId", "Nombre", ViewBag.TipoOrganismoIds), "Seleccione...", htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessage("TipoOrganismoId", "", new { @class = "text-danger" })
+                        </div>
+                        <div class="form-group col-md-10">
+                            @Html.Label("Organismos", htmlAttributes: new { @class = "control-label" })
+                            @Html.DropDownList("OrganismoID", new SelectList(ViewBag.OrganismoID, "OrganismoID", "NombreOrganismo", ViewBag.OrganismoIDs), "Seleccione...", htmlAttributes: new { @class = "form-control" })
+                            @Html.ValidationMessage("OrganismoID", "", new { @class = "text-danger" })
+                        </div>
+
+                    </div>
+                }
+                else
+                {
+                    <div class="form-group col-md-10">
+
+                        @Html.Label("Dependencia/Entidad", htmlAttributes: new { @class = "control-label" })
+                        <input autocomplete="off" class="form-control" id="Organimos" name="Organimos" type="text" value="@ViewBag.Organismo" readonly="readonly">
+                    </div>
+
+                    <div class="form-group col-md-10">
+                        @Html.Label("Unidad Administrativa", htmlAttributes: new { @class = "control-label" })
+                        @Html.DropDownList("UnidadAdministrativaId", lstUnidadesAdministrativas, htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessage("UnidadAdministrativaId", "", new { @class = "text-danger" })
+                    </div>
+                }
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Email, new { @class = "col-md-2 control-label" })
+                    <div class="col-md-10">
+                        @Html.TextBoxFor(m => m.Email, new { @class = "form-control" })
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.Password, new { @class = "col-md-2 control-label" })
+                    <div class="col-md-10">
+                        @Html.PasswordFor(m => m.Password, new { @class = "form-control", @autocomplete = "off" })
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    @Html.LabelFor(m => m.ConfirmPassword, new { @class = "col-md-2 control-label" })
+                    <div class="col-md-10">
+                        @Html.PasswordFor(m => m.ConfirmPassword, new { @class = "form-control" })
+                    </div>
+                </div>
+
+
+
+                <br />
+
+                <div class="form-group text-right">
+                    <div class="col-md-offset-2 col-md-12">
+                        @Html.ActionLink("Regresar", "ListaUsuarios", null, new { @class = "btn btn-w-m btn-secondary" })
+                        <input type="submit" class="btn btn-w-m btn-primary" value="Guardar" />
+
+                    </div>
+                </div>
+
+
+            </div>
+            <br />
+        </div>
+    </div>
+
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+        $(function () {
+            // Document is ready
+
+            if ($('#Rol').val() != 'Enlace') {
+                $('#divOrganismos').hide();
+            }
+        });
+
+        $("#fmrCrear").submit(function () {
+            ShowLoading();
+            var isValid = $('#fmrCrear').valid();
+            if (!isValid) {
+                HideLoading();
+                return false;
+            }
+             
+            if ($("#Rol").val() == 'Enlace') {
+                if (!$("#OrganismoID").val()) {
+                    Swal.fire('¡Aviso!', "El organismo es requerido", 'error');
+                    HideLoading();
+                    return false;
+                }
+             }
+
+             if ($("#Rol").val() == 'Unidad Administrativa') {
+                if ($("#UnidadAdministrativaId").val() == "0") {
+                    Swal.fire('¡Aviso!', "La Unidad Administrativa es requerido", 'error');
+                    HideLoading();
+                    return false;
+                }
+             }
+            return true;
+        });
+
+        //Seleccionando el rol
+          $("#Rol").change(function () {
+            ShowLoading();
+                var ComboCnanged = $(this).val();
+                var div = $('#divOrganismos');
+              if (ComboCnanged == 'Enlace') {
+
+                  div.show();
+                  HideLoading();
+                    
+              } else {
+                  div.hide();
+                HideLoading();
+              }
+
+         });
+        //buscar organismo por tipo de organimso
+         $("#TipoOrganismoId").change(function () {
+                //sub
+            ShowLoading();
+            //$('#asdsa').empty();
+            //$('#asdas').append($('<option value>Seleccione...</option>'));
+                var ComboCnanged = $(this).val();
+                var Sub = $('#OrganismoID');
+                if (ComboCnanged.length > 0) {
+                    $.ajax({
+                        url: "@Url.Action("GetOrganismoByTipoOrganismoId", "Organismos")",
+                        dataType: "json",
+                        type: "GET",
+                        data: {
+                            'iId': ComboCnanged
+                        },
+                        cache: false,
+                        contentType: 'application/json; charset=utf-8',
+                        success: function (data) {
+                            if (data.Encontro) {
+                                Sub.empty(); // remove any existing options
+                                Sub.append($('<option value>Seleccione...</option>'));
+                                $.each(data.data, function (index, item) {
+                                    Sub.append($('<option></option>').text(item.NombreOrganismo).val(item.OrganismoID));
+                                });
+                                //ComboActivo.val(iiActivoId);
+                                 HideLoading();
+
+                            } else {
+
+                                Sub.empty(); // remove any existing options
+                                Sub.append($('<option value>Seleccione...</option>'));
+                                 HideLoading();
+                            }
+                        },
+                        error: function (error) {
+                            console.log(error);
+                              HideLoading();
+                        }
+                    });
+                } else {
+                    ComboActivo.empty(); // remove any existing options
+                    Sub.append($('<option value>Seleccione...</option>'));
+                    Sub.attr("title", "Sin datos seleccionados");
+                    HideLoading();
+                }
+
+         });
+    </script>
+}

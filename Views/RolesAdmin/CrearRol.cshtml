@@ -1,0 +1,98 @@
+﻿@model Transparencia.Models.RolViewModel
+
+@{
+    ViewBag.Title = "Nuevo Rol";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-lg-10">
+            <h2>@ViewBag.Title</h2>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="@Url.Action("Index", "Home")">Inicio</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="@Url.Action("ListaRoles", "RolesAdmin")">Lista de Roles</a>
+                </li>
+                <li class="active breadcrumb-item">
+                    <strong>@ViewBag.Title</strong>
+                </li>
+            </ol>
+        </div>
+    </div>
+    <br />
+
+
+    <div class="ibox">
+        <div class="ibox-title">
+            <p>
+                <h2>@ViewBag.Title</h2>
+            </p>
+        </div>
+        
+        <div class="ibox-content">
+            <div class="form-horizontal">
+
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+
+                <div class="form-group">
+                    @Html.Label("Rol", htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Name, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Name, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.Descripcion, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.Descripcion, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.Descripcion, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.FechaDesde, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.FechaDesde, new { htmlAttributes = new { @class = "form-control datefield", @autocomplete = "off" } })
+                        @Html.ValidationMessageFor(model => model.FechaDesde, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.FechaHasta, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.FechaHasta, new { htmlAttributes = new { @class = "form-control datefield ", @autocomplete = "off" } })
+                        @Html.ValidationMessageFor(model => model.FechaHasta, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+                <br />
+
+                <div class="form-group">
+                    <div class="col-md-offset-2 col-md-10">
+                        <input type="submit" value="Crear Rol" class="btn btn-w-m btn-primary" />
+                        @Html.ActionLink("Regresar", "ListaRoles", null, new { @class = "btn btn-w-m btn-secondary" })
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+
+@section AddToTop {
+    @Styles.Render("~/Content/jqueryUI")
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jqueryUI")
+    <script src="~/Scripts/DatePickerReady.js"></script>
+}

@@ -1,0 +1,93 @@
+﻿@model List<Transparencia.Models.CampoCatalogo>
+@{
+    Layout = null;
+}
+
+
+
+<div class="table-responsive">
+    <table class="table table-striped" id="tCamposTableroTabla">
+        <thead>
+            <tr>
+                <th style="display:none;"></th>
+                <th>
+                    <label>Tipo de Campo</label>
+                </th>
+                <th>
+                    <label>Longitud</label>
+                </th>
+                <th>
+                    <label>Requerido</label>
+                </th>
+                <th>
+                    <label>Nombre Campo</label>
+                </th>
+                <th>
+                    <label>Orden</label>
+                </th>
+                <th class="text-center">
+                    <label>Activo</label>
+                </th>
+                <th class="text-center">
+                    <label>Acciones</label>
+                </th>
+            </tr>
+
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                var iTr = "Tr" + item.CampoCatalogoId.ToString();
+                var principal = item.Principal ? @"<span class='label label-info'> Principal </span>" : "";
+                //int iOrden = i + 1;
+            <tr id="@iTr">
+                <td>@item.TipoCampo</td>
+                <td>@item.Longitud</td>
+                <td>
+                    @if (item.Requerido == true)
+                    {
+                        <span class="label label-primary BadgeStatus">Requerido</span>
+                    }
+                    else
+                    {
+                        <span class="label label-danger BadgeStatus">No requerido</span>
+                    }
+                </td>
+                <td>@item.Nombre @Html.Raw(principal)</td>
+                <td class="td-orden">
+                    @item.Orden <a title="Modificar Orden" onclick="CambioOrden(@item.CampoCatalogoId,'@item.Nombre')"><i class="fa fa-first-order"></i></a>
+                </td>
+                @*<td class="text-center">
+            <a class="btn btn-icon btn-danger btn-circle" onclick="DeleteCampo(@item.CampoCatalogoId,'#@iTr')" indice="" title="Eliminar"><i class="fa fa-trash text-light"></i></a>
+        </td>*@
+                <td class="text-center">
+                    @if (item.Activo == true)
+                    {
+                        <span class="label label-primary BadgeStatus" onclick="changeStatus(this,'@Url.Action("CambiarStatusCampo", "Catalogos")',@item.CampoCatalogoId)">Activo</span>
+                    }
+                    else
+                    {
+                        <span class="label label-danger BadgeStatus" onclick="changeStatus(this,'@Url.Action("CambiarStatusCampo", "Catalogos")',@item.CampoCatalogoId)">Inactivo</span>
+                    }
+
+
+                </td>
+                <td class="text-center">
+                    <div class="btn-group">
+                        <button onclick="ModificarCampo(@item.CampoCatalogoId)" class="btn btn-warning btn-circle" title="Editar Campo"><i class="fa fa-pencil-square"></i></button>
+                        <button onclick="DetallesCampo(@item.CampoCatalogoId)" class="btn btn-info btn-circle" title="Detalles del Campo"><i class="fa fa-info-circle"></i></button>
+                        <button onclick="DeleteCampo(@item.CampoCatalogoId,'#@iTr')" class="btn btn-icon btn-danger btn-circle" indice="" title="Eliminar"><i class="fa fa-trash"></i></button>
+                    </div>
+
+                </td>
+
+
+            </tr>
+            }
+
+          
+        </tbody>
+    </table>
+</div>
+
+<input type="hidden" id="errorCampos" value="@ViewBag.Error" />

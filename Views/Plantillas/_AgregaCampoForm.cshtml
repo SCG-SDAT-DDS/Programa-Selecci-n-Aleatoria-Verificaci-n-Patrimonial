@@ -1,0 +1,121 @@
+﻿@{
+    var tipos = HMTLHelperExtensions.GetTipoCampoDropDown();
+    var grupos = ViewBag.GrupoExtension;
+    var catalogosList = ViewBag.listaCatalogos;
+    var tipoFechas = HMTLHelperExtensions.GetTipoFechaDropDown();
+}
+
+    <div class="form-horizontal">
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+
+        <div class="form-group" id="divTipo">
+            <label for="AddTipoCampo" class="control-label col-md-2">Tipo de Campo</label>
+            <div class="col-md-10">
+                @Html.DropDownList("AddTipoCampo", new SelectList(tipos, "Value", "Text"), "Seleccionar...", new { @class = "form-control" })
+                @Html.ValidationMessage("AddTipoCampo", "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group" id="divNombre">
+            <label for="AddNombre" class="control-label col-md-2">Nombre del Campo</label>
+            <div class="col-md-10">
+                @Html.Editor("AddNombre", new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessage("AddNombre", "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group" id="divPorcentaje">
+            <label for="AddConDecimales" class="control-label col-md-2">Con decimales</label>
+            <div class="col-md-10">
+                <div class="i-checks">
+                    <input id="AddConDecimales" name="AddConDecimales" type="checkbox" class="form-control" />
+                    @Html.ValidationMessage("AddConDecimales", "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group" id=" divEtiqueta">
+            <label for="AddEtiqueta" class="control-label col-md-2">Etiqueta</label>
+            <div class="col-md-10">
+                @Html.Editor("AddEtiqueta", new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessage("AddEtiqueta", "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group" id="divLongitud">
+            <label for="AddLongitud" class="control-label col-md-2">Longitud</label>
+            <div class="col-md-10">
+                @Html.Editor("AddLongitud", new { htmlAttributes = new { @class = "form-control asaasa" } })
+                @Html.ValidationMessage("AddLongitud", "", new { @class = "text-danger" })
+                <input type="hidden" id="ValidLongitud" name="ValidLongitud" value="">
+            </div>
+        </div>
+
+        <div class="form-group" id="divTipoFecha">
+            <label for="AddTipoFecha" class="control-label col-md-2">Tipo de Fecha</label>
+            <div class="col-md-10">
+                @Html.DropDownList("AddTipoFecha", new SelectList(tipoFechas, "Value", "Text"), "Seleccionar...", new { @class = "form-control" })
+                @Html.ValidationMessage("AddTipoFecha", "", new { @class = "text-danger" })
+                <input type="hidden" id="ValidarFecha" name="ValidarFecha" value="">
+            </div>
+        </div>
+
+        <div class="form-group" id="divGpoExtensiones">
+            <label for="AddGrupoExtensionId" class="control-label col-md-2">Grupo de Extensiones</label>
+            <div class="col-md-10">
+                @Html.DropDownList("AddGrupoExtensionId", new SelectList(grupos, "Value", "Text"), "Seleccionar...", new { @class = "form-control" })
+                @Html.ValidationMessage("AddGrupoExtensionId", "", new { @class = "text-danger" })
+                <input type="hidden" id="ValidatExtension" name="ValidatExtension" value="">
+            </div>
+        </div>
+
+        <div class="form-group" id="divSize">
+            <label for="AddSize" class="control-label col-md-2">Tamaño en MB</label>
+            <div class="col-md-10">
+                @Html.Editor("AddSize", new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessage("AddSize", "", new { @class = "text-danger" })
+                <input type="hidden" id="ValidarSize" name="ValidarSize" value="">
+            </div>
+        </div>
+
+        <div class="form-group" id="divCatalogos">
+            <label for="AddCatalogoId" class="control-label col-md-2">Catálogo</label>
+            <div class="col-md-10">
+                @Html.DropDownList("AddCatalogoId", new SelectList(catalogosList, "Value", "Text"), "Seleccionar...", new { @class = "form-control" })
+                @Html.ValidationMessage("AddCatalogoId", "", new { @class = "text-danger" })
+                <input type="hidden" id="ValidarCatalogos" name="ValidarCatalogos" value="">
+            </div>
+        </div>
+
+        <div class="form-group" id="divAyuda">
+            <label for="AddAyuda" class="control-label col-md-2">Ayuda</label>
+            <div class="col-md-10">
+                @Html.Editor("AddAyuda", new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessage("AddAyuda", "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group" id="divRequerido">
+            <label for="AddRequerido" class="control-label col-md-2">Requerido</label>
+            <div class="col-md-10">
+                <div class="i-checks">
+                    @Html.CheckBox("AddRequerido", new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessage("AddRequerido", "", new { @class = "text-danger" })
+                </div>
+            </div>
+        </div>
+
+        <div class="form-group" id="divCampoPNT">
+            <label for="AddNombre" class="control-label col-md-2">ID Campo PNT</label>
+            <div class="col-md-10">
+                @Html.Editor("AddCampoPNT", new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessage("AddCampoPNT", "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input id="btnAgregaCampo" type="submit" value="Agregar" class="btn btn-w-m btn-primary" />
+            </div>
+        </div>
+    </div>

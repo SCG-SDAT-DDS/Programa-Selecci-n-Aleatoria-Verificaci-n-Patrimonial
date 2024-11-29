@@ -1,0 +1,110 @@
+﻿@model Transparencia.Models.TipoOtraInformacion
+
+
+@{
+    ViewBag.Title = "Detalles de Tipo Otra Información";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>@ViewBag.Title</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="@Url.Action("Index", "Home")">Inicio</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="@Url.Action("Index", "TipoOtraInformacion")">Tipo Otra información</a>
+            </li>
+            <li class="active breadcrumb-item">
+                <strong>@ViewBag.Title</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+<br />
+
+<div class="col-lg-12">
+    <div class="ibox">
+        <div class="ibox-title">
+            <p>
+                <h2>@ViewBag.Title</h2>
+            </p>
+        </div>
+
+        <div class="ibox-content">
+            <div class="form-row">
+                <div class="form-group col-5">
+                    <dl>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Nombre)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.Nombre)
+                        </dd>
+                    </dl>
+                </div>
+                <div class="form-group col-5">
+                    <dl>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Descripcion)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.Descripcion)
+                        </dd>
+                    </dl>
+                </div>
+
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-5">
+                    <dl>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Activo)
+                        </dt>
+
+                        <dd>
+                            @if (Model.Activo)
+                            {
+                                <span class="label label-success BadgeStatus">Activo</span>
+                            }
+                            else
+                            {
+                                <span class="label label-danger BadgeStatus">Inactivo</span>
+                            }
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+
+            <br />
+            <p class="text-right">
+                @Html.ActionLink("Regresar", "Index", null, new { @class = "btn btn-w-m btn-secondary" })
+                @Html.ActionLink("Modificar", "Edit", new { id = Model.TipoOtraInformacionId }, new { @class = "btn btn-w-m btn-warning" })
+
+            </p>
+            <br />
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    @Styles.Render("~/Content/plugins/iCheck/iCheckStyles")
+}
+
+@section scripts {
+    @Scripts.Render("~/plugins/iCheck")
+
+
+    <script>
+        $(document).ready(function () {
+            $('.i-checks').iCheck({
+                checkboxClass: 'icheckbox_square-green',
+                radioClass: 'iradio_square-green',
+            });
+        });
+    </script>
+}

@@ -1,0 +1,91 @@
+﻿@model PagedList<Transparencia.Models.BitIniSesion>
+
+@{
+     FiltrosPlantilla filtros = ViewBag.Filtros != null ? ViewBag.Filtros as FiltrosPlantilla : new FiltrosPlantilla();
+
+}
+
+<table class="table">
+        <thead>
+            <tr>
+                <th>
+                    <label>Usuario</label>
+                </th>
+                <th class="text-center">
+                    <label>Fecha</label>
+                </th>
+                <th class="text-center">
+                    <label>Plataforma</label>
+                </th>
+                <th class="text-center">
+                    <label>Navegador</label>
+                </th>
+
+                <th class="text-center">
+                    Acciones
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+
+            @foreach (var item in Model)
+            {
+               
+            <tr>
+                <td>
+                    @Html.Raw(item.NombreUsuario)
+                </td>
+                <td class="text-center">
+                    @Html.Raw(item.FechatoString)
+                </td>
+                <td class="text-center">
+                    @Html.Raw(item.LabelOS)
+                </td>
+                <td class="text-center">
+                    @Html.Raw(item.LabelBroswer)
+                </td>
+                <td class="text-center">
+                    <a class="btn btn-info btn-circle text-white" title="Detalles" onclick='Details(@Html.Raw(Json.Encode(item)))'><i class="fa fa-info-circle"></i></a>
+                </td>
+            </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td>
+                    <div class="form-group row">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <label>
+                                Mostrar
+                                <select class="input-sm filtrar" name="PerPage" id="mostrar">
+                                    <option value="10">10</option>
+                                    <option value="25">25</option>
+                                    <option selected value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>
+                                Registros
+                            </label>
+                        </div>
+                    </div>
+                </td>
+                <td colspan="7">
+
+                    <div class="pagination float-right">
+                        <div id="pagedList" class="pagedList" data-otf-target="#lista">
+                            <label style="padding: 5px 10px;">@(Model.LastItemOnPage > 0 ? Model.FirstItemOnPage : 0) - @Model.LastItemOnPage de @Model.TotalItemCount Registros</label>
+
+                            @Html.PagedListPager(Model, iPagina => Url.Action("Index", new { iPagina, PerPage = ViewBag.PerPage, sOrder = ViewBag.Order, UsuarioId = filtros.UsuarioId }), PagedList.Mvc.PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(PagedListRenderOptions.ClassicPlusFirstAndLast,
+                       new AjaxOptions
+                       {
+                           HttpMethod = "get",
+                           InsertionMode = InsertionMode.Replace,
+                           UpdateTargetId = "lista",
+                           OnBegin = "BeginClient",
+                           OnComplete = "CompleteClient"
+                       }))
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </tfoot>
+    </table>

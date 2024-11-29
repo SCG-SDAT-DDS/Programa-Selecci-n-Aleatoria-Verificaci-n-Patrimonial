@@ -1,0 +1,63 @@
+﻿@model Transparencia.Models.CatalogoValor
+
+@{
+    ViewBag.Title = "Detalles";
+}
+
+<h2>Mostrando los detalles del valor: @Html.DisplayFor(model => model.valor)</h2>
+
+<div>
+    <h4>CatalogoValor</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Catalogo.Nombre)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Catalogo.Nombre)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.valor)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.valor)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.orden)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.orden)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Activo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Activo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RelatedCatalogoValor)
+        </dt>
+
+        <dd>
+            <ul>
+                @foreach (var item in Model.RelatedCatalogoValor)
+                {
+                    <li>@Html.DisplayFor(model => item.Catalogo.Nombre): @Html.DisplayFor(model => item.valor)</li>
+                }
+            </ul>
+        </dd>
+
+    </dl>
+</div>
+<p>
+    @Html.ActionLink("Modificar", "Edit", new { id = Model.CatalogoValorId }, new { @class = "btn btn-warning" })
+    @Html.ActionLink("Regresar", "Index", new { id = Model.CatalogoId }, new { @class = "btn btn-default" })
+</p>

@@ -1,0 +1,114 @@
+﻿@model IEnumerable<Transparencia.Models.InputConfig>
+
+@{
+    ViewBag.Title = "Listado de tipo de Input Config";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    FiltrosInputConfig filtros = ViewBag.Filtros != null ? ViewBag.Filtros as FiltrosInputConfig : new FiltrosInputConfig();
+}
+
+
+@using (Ajax.BeginForm(
+    new AjaxOptions
+    {
+        HttpMethod = "get",
+        InsertionMode = InsertionMode.Replace,
+        UpdateTargetId = "lista",
+        OnBegin = "BeginClient",
+        OnComplete = "CompleteClient"
+    }))
+{
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-lg-10">
+            <h2>@ViewBag.Title</h2>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="@Url.Action("Index", "Home")">Inicio</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="@Url.Action("Index", "InputConfigs")">Tipo de Input Config</a>
+                </li>
+                <li class="active breadcrumb-item">
+                    <strong>@ViewBag.Title</strong>
+                </li>
+            </ol>
+        </div>
+    </div>
+    <br />
+
+    <div class="ibox">
+        <div class="ibox-title">
+            <p>
+                @Html.ActionLink("Nuevo tipo de input", "Create", null, new { @class = "btn btn-w-m btn-primary" })
+            </p>
+        </div>
+        <div class="ibox-content">
+            <div class="form-group row">
+                <div class="col-md-6 col-sm-12 col-xs-12">
+                    <label>Nombre</label>
+                    <div class="input-group m-b">
+                        @Html.TextBoxFor(model => filtros.Nombre, htmlAttributes: new { @class = "form-control", @placeholder = "Nombre", autocomplete = "off" })
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12 col-xs-12">
+                    <label>Tipo Input</label>
+                    <div class="input-group m-b">
+                        @Html.DropDownListFor(model => filtros.TipoInputs, new SelectList(ViewBag.CmbTipoInputs, "Value", "Text"), "Seleccione...", new { @class = "form-control m-b" })
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-md-6 col-sm-12 col-xs-12">
+                    <label>Data Type</label>
+                    <div class="input-group m-b">
+                        @Html.DropDownListFor(model => filtros.DataTypeMs, new SelectList(ViewBag.CmbDataTypeMs, "Value", "Text"), "Seleccione...", new { @class = "form-control m-b" })
+                    </div>
+                </div>
+                <div class="col-md-6 col-sm-12 col-xs-12">
+                    <label>Estatus</label>
+                    <div class="input-group m-b">
+                        @Html.DropDownListFor(model => filtros.ActivoNull, new SelectList(ViewBag.CmbActivo, "Value", "Text"), "Seleccione...", new { @class = "form-control m-b" })
+                    </div>
+                </div>
+            </div>
+
+
+
+            <div class="form-group row">
+                <div class="col-md-6 col-sm-6 col-xs-12">
+                    <a class="btn btn-w-m btn-secondary" href="@Url.Action("Index")">Limpiar</a>
+                    <button class="btn btn-w-m btn-success" type="submit">Buscar</button>
+                </div>
+            </div>
+            <br />
+
+            <div class="form-group row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    <label>
+                        Mostrar
+                        <select class="input-sm filtrar" name="PerPage">
+                            <option value="10">10</option>
+                            <option value="25">25</option>
+                            <option value="50">50</option>
+                            <option value="100">100</option>
+                        </select>
+                        Registros
+                    </label>
+                </div>
+            </div>
+
+            <div class="form-group row">
+                <div class="col-md-12 col-sm-12 col-xs-12">
+                    @Html.Partial("_lista", Model)
+                    @Html.Hidden("sOrder")
+                </div>
+            </div>
+        </div>
+    </div>
+
+}
+
+
+@section Scripts {
+    <script src="~/Scripts/PaginadorOrder.js"></script>
+}

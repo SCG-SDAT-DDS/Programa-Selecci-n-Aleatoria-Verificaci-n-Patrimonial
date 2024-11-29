@@ -1,0 +1,162 @@
+﻿@model IEnumerable<Transparencia.Models.VMCampos>
+
+@{
+    ViewBag.Title = "Listado de datos del Catalogo: ";
+    List<Transparencia.Models.CampoCatalogo> mFiltros = ViewBag.Filtros != null ? ViewBag.Filtros as List<Transparencia.Models.CampoCatalogo> : new List<Transparencia.Models.CampoCatalogo>();
+    //string show = ((int)ViewBag.PerPage).ToString();
+}
+
+
+@using (Html.BeginForm("BuscarDynamic", "Catalogos", FormMethod.Post, htmlAttributes: new { enctype = "multipart/form-data", @id = "frmCrear" }))
+{
+
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-lg-10">
+            <h2>Catálogos</h2>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="@Url.Action("Index", "Home")">Inicio</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="@Url.Action("Index", "Catalogos")">Catálogos</a>
+                </li>
+                <li class="active breadcrumb-item">
+                    <strong>@ViewBag.Title</strong>
+                </li>
+            </ol>
+        </div>
+    </div>
+    <br />
+
+    <div class="wrapper wrapper-content animated fadeInRight ecommerce">
+        <div class="ibox-content m-b-sm border-bottom">
+            <div class="row">
+                @*<div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-form-label">Nombre</label>
+                            @Html.TextBoxFor(model => filtros.Nombre, htmlAttributes: new { @class = "form-control", @placeholder = "Nombre", autocomplete = "off" })
+                        </div>
+                    </div>*@
+
+                @*<div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-form-label">Descripción</label>
+                            @Html.TextBoxFor(model => filtros.Descripcion, htmlAttributes: new { @class = "form-control", @placeholder = "Descripción", autocomplete = "off" })
+                        </div>
+                    </div>*@
+
+                @*<div class="col-sm-4">
+                        <div class="form-group">
+                            <label class="col-form-label">Estatus</label>
+                            <div class="input-group m-b">
+                                @Html.DropDownListFor(model => filtros.ActivoNull, new SelectList(ViewBag.CmbActivo, "Value", "Text"), "Seleccione...", new { @class = "form-control m-b" })
+                            </div>
+                        </div>
+                    </div>*@
+                @if (mFiltros.Count != null && mFiltros.Count > 0)
+                {
+                    foreach (var item in mFiltros.OrderBy(x=>x.Orden))
+                    {
+                        @Html.Raw(item.InputHtmlFilter)
+                    }
+                }
+
+            </div>
+            <br />
+
+            <div class="row justify-content-end">
+                <div class="col-sm-4 text-right">
+                    <button class="btn btn-w-m btn-secondary" id="btnLimpiar" type="button">Limpiar</button>
+                    @*<a class="btn btn-w-m btn-secondary" href="@Url.Action("InexDatosCatalogos")">Limpiar</a>*@
+                    <button class="btn btn-w-m btn-success" id="btnSave" type="button">Buscar</button>
+                </div>
+            </div>
+
+
+        </div>
+
+        <div class="row">
+            <div class="col-lg-12">
+                <div class="ibox">
+                    <div class="ibox-content">
+                        <div class="form-group row">
+                            <div class="col-md-12 col-sm-12 col-xs-12" id="Listado">
+                                @Html.Partial("_listaDatosCatalogos", Model)
+                                @Html.Hidden("sOrder")
+                            </div>
+
+                            <div class="col-md-offset-2 col-md-12 text-right">
+                                @Html.ActionLink("Regresar", "Index", null, new { @class = "btn btn-w-m btn-secondary" })
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    @Html.Hidden("iId", ViewBag.iId as string)
+}
+
+
+
+@section Styles {
+    @Styles.Render("~/plugins/TimePickerStyle")
+    @Styles.Render("~/stepCss")
+    @Styles.Render("~/plugins/footableStyles")
+}
+
+@section Scripts {
+    <script src="~/Scripts/PaginadorOrder.js"></script>
+    @Scripts.Render("~/plugins/footable")
+
+    @Scripts.Render("~/plugins/TimePickerJs")
+    @Scripts.Render("~/stepJs")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jqueryUI")
+
+    <script src="~/Scripts/DatePickerReady.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.13.4/jquery.mask.min.js"></script>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+
+        });
+        $("#btnSave").click(function () {
+                var Validar = $("#frmCrear").valid();
+                if (Validar) {
+                    ShowLoading();
+                    var formElement = document.getElementById("frmCrear");
+                    $.ajax({
+                        url: "@Url.Action("IndexDatosCatalogosPOST")",
+                        dataType: "html",
+                        type: "POST",
+                         data: new FormData(formElement),
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        success: function (data) {
+                            
+                            $("#Listado").html(data);
+                            //if (data.Hecho) {
+
+                            //} else {
+                            //    Swal.fire('Error', data.Mensaje, 'error');
+                            //}
+                            HideLoading();
+                        },
+                        error: function (error) {
+                            Swal.fire('Error', 'Ocurrio un error al momento de eliminar el campo - ' + error.responseText, 'error');
+                            HideLoading();
+                        }
+                    });
+                }
+        });
+        $("#btnLimpiar").click(function () {
+            $('#frmCrear')[0].reset();
+            $('.icheckbox_square-green').removeClass('checked');
+            $("#btnSave").click();
+
+        });
+    </script>
+}

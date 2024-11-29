@@ -1,0 +1,192 @@
+﻿<!doctype html>
+<html>
+<head>
+    <link rel="shortcut icon" href="~/Content/images/imagePublic/favicon.png" type="image/x-icon">
+    <link rel="icon" href="~/Content/images/imagePublic/favicon.png" type="image/x-icon">
+
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+
+    <meta name="csrf-token" content="qz2vqwEAt0aDeAFde6dpfQW1E1gUJvrIoZ459KTX">
+    <title>PROVEP</title>
+
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@500,600;700&family=Roboto:wght@300;500;700&display=swap" rel="stylesheet">
+
+    <link href="~/Content/cssPublico/app.css" rel="stylesheet">
+
+</head>
+
+<body class="intro">
+
+    <main>
+        <div class="">
+            @RenderBody();
+        </div>
+    </main>
+    <footer>
+        <div class="container">
+            <div class="row justify-content-center g-3 g-sm-5">
+                <div class="col-sm-7">
+
+                    <div class="border-start border-2 ps-3 fs-6">
+                        <p>
+                            <strong>Secretaria de la Contralor&iacute;a General.</strong> <br />
+                            <strong>Dirección:</strong> Centro de Gobierno, Edificio Hermosillo Segundo Nivel. Blvd. Paseo Río Sonora y Comonfort. C.P. 83280, Col. Villa de Seris. Hermosillo, Sonora, México.<br />
+                            <strong>Teléfonos:</strong> (662) 217 1885, (662) 217 2517, (662) 217 2106 <br />
+                            <strong>Correo Electrónico:</strong> <a href="mailto://contraloriasocial@sonora.gob.mx">contraloriasocial@sonora.gob.mx</a>
+                        </p>
+                    </div>
+
+                </div>
+                <div class="col-sm-5">
+                    <div class="mb-2">
+                        <ul class="d-flex list-icons justify-content-end">
+                            <li class="">
+                                <a class="btn btn-link fs-3" href="https://www.facebook.com/ContraloriadeSonora" aria-label="Facebook" target="_blank" rel="nofollow noreferrer noopener">
+                                    <i class="mdi mdi-facebook " aria-hidden="true" title="Facebook"></i>
+                                </a>
+                            </li>
+                            <li class="">
+                                <a class="btn btn-link fs-3" href="https://twitter.com/contraloriason" aria-label="Twitter" target="_blank" rel="nofollow noreferrer noopener">
+                                    <i class="mdi mdi-twitter " aria-hidden="true" title="Twitter"></i>
+                                </a>
+                            </li>
+                            <li class="">
+                                <a class="btn btn-link  fs-3" href="https://www.instagram.com/contraloriasonora" aria-label="Instagram" target="_blank" rel="nofollow noreferrer noopener">
+                                    <i class="mdi mdi-instagram " aria-hidden="true" title="Instagram"></i>
+                                </a>
+                            </li>
+                            <li class="">
+                                <a class="btn btn-link fs-3" href="https://www.youtube.com/channel/UC5Up4gGVXQXHIJjArxKoliw" aria-label="Youtube" target="_blank" rel="nofollow noreferrer noopener">
+                                    <i class="mdi mdi-youtube " aria-hidden="true" title="Youtube"></i>
+                                </a>
+                            </li>
+                            <li class="">
+                                <a href="https://contraloria.sonora.gob.mx" class="btn btn-link text-decoration-none pt-3 pe-0">
+                                    @*@ContraloriaSonora*@
+                                </a>
+
+                            </li>
+                        </ul>
+                    </div>
+                    <div class="mb-2">
+                        <ul class="d-flex list-links justify-content-end">
+                            <li>
+                                <a href="https://contraloria.sonora.gob.mx/politica-de-uso-y-privacidad.html" class=" btn btn-sm btn-link px-0 me-3 ">Política de Uso y Privacidad</a>
+                            </li>
+
+                            <li>
+                                <a href="https://decides.sonora.gob.mx/" target="_blank" class=" btn btn-sm btn-link px-0 me-3 ">Denuncia Ciudadana</a>
+                            </li>
+
+                            <li>
+                                <a href="https://contraloria.sonora.gob.mx/contacto.html" target="_blank" class=" btn btn-sm btn-link px-0 ">Contacto</a>
+                            </li>
+                        </ul>
+                    </div>
+                    <p class="text-end small">
+                        Todos los derechos reservados. Sitio desarrollado por <a class="" href="https://contraloria.sonora.gob.mx" title="Secretaría de la Contraloría General">Contraloría General</a>
+                    </p>
+                </div>
+            </div>
+        </div>
+    </footer>
+    <script src="~/Scripts/jsPublic/app.js" type="text/javascript"></script>
+
+
+
+
+    <!-- Modal -->
+    <div class="modal fade" id="loadDataModal" tabindex="-1" aria-labelledby="loadDataModalLabel" aria-hidden="true" data-bs-backdrop="static">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content border-0 ">
+
+                <div class="modal-body bg-transparent text-center p-3">
+
+                    <div class="loader">
+                        <div class="loader-timer">
+                            <span id="seconds">10</span>s
+                        </div>
+                        <svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" style="margin:auto;background:#fff;display:block;" width="224px" height="224px" viewBox="0 0 100 100" preserveAspectRatio="xMidYMid">
+                            <g transform="translate(50,50)">
+                                <g transform="scale(0.8)">
+                                    <g transform="translate(-50,-50)">
+                                        <g>
+                                            <animateTransform attributeName="transform" type="rotate" repeatCount="indefinite" values="360 50 50;240 50 50;120 50 50;0 50 50" keyTimes="0;0.333;0.667;1" dur="2.272727272727273s" keySplines="0.7 0 0.3 1;0.7 0 0.3 1;0.7 0 0.3 1" calcMode="spline"></animateTransform>
+                                            <path fill="#960e53" d="M54.3,28.1h34.2c-4.5-9.3-12.4-16.7-21.9-20.8L45.7,28.1L54.3,28.1L54.3,28.1z"></path>
+                                            <path fill="#b94645" d="M61.7,7.3C51.9,4,41.1,4.2,31.5,8.1v29.5l6.1-6.1L61.7,7.3C61.7,7.3,61.7,7.3,61.7,7.3z"></path>
+                                            <path fill="#dc7f37" d="M28.1,11.6c-9.3,4.5-16.7,12.4-20.8,21.9l20.8,20.8v-8.6L28.1,11.6C28.1,11.6,28.1,11.6,28.1,11.6z"></path>
+                                            <path fill="#dc7f37" d="M31.5,62.4L7.3,38.3c0,0,0,0,0,0C4,48.1,4.2,58.9,8.1,68.5h29.5L31.5,62.4z"></path>
+                                            <path fill="#960e53" d="M45.7,71.9H11.5c0,0,0,0,0,0c4.5,9.3,12.4,16.7,21.9,20.8l20.8-20.8H45.7z"></path>
+                                            <path fill="#b94645" d="M62.4,68.5L38.3,92.6c0,0,0,0,0,0c9.8,3.4,20.6,3.1,30.2-0.8V62.4L62.4,68.5z"></path>
+                                            <path fill="#dc7f37" d="M71.9,45.7v8.6v34.2c0,0,0,0,0,0c9.3-4.5,16.7-12.4,20.8-21.9L71.9,45.7z"></path>
+                                            <path fill="#dc7f37" d="M91.9,31.5C91.9,31.5,91.9,31.5,91.9,31.5l-29.5,0l0,0l6.1,6.1l24.1,24.1c0,0,0,0,0,0 C96,51.9,95.8,41.1,91.9,31.5z"></path>
+                                        </g>
+                                    </g>
+                                </g>
+                            </g>
+                        </svg>
+                    </div>
+                    <h4>Redireccionando<span>...</span></h4>
+
+                    <p>
+                        Estamos procesando una muestra de servidores públicos
+                        que serán seleccionados para una verificación patrimonial.
+                    </p>
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    @Scripts.Render("~/bundles/jquery")
+    @Scripts.Render("~/sweatalert")
+    @RenderSection("scripts", required: false)
+    <script>
+        let timeLeft = 0;
+
+        const myModalEl = document.getElementById('loadDataModal');
+        const modal = new bootstrap.Modal(myModalEl);
+
+
+        function redirectURL() {
+            /*window.location = './servidores-publicos.html'*/
+            $("#submitChoosenPublic").submit();
+        }
+
+
+        function countdown() {
+            timeLeft--;
+            document.getElementById("seconds").innerHTML = String(timeLeft);
+            //document.getElementById("points").innerHTML = String( timeLeft );
+            if (timeLeft > 0) {
+                setTimeout(countdown, 1000);
+            }
+            if (timeLeft == 0) {
+                modal.hide();
+
+                setTimeout(redirectURL, 1000);
+            }
+
+        };
+
+
+
+        myModalEl.addEventListener('shown.bs.modal', event => {
+            timeLeft = 10;
+            setTimeout(countdown, 1000);
+
+        })
+
+
+
+
+
+    </script>
+
+</body>
+</html>

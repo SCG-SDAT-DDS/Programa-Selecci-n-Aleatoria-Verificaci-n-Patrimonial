@@ -1,0 +1,207 @@
+﻿@model PagedList<Transparencia.Helpers.AuxPlantillas>
+
+@{
+    FiltrosPlantilla filtros = ViewBag.Filtros != null ? ViewBag.Filtros as FiltrosPlantilla : new FiltrosPlantilla();
+    var r = new Random();
+    var vRandomDownloader = r.Next(10000, 777777);
+    string ley = "", articulo="";
+}
+
+<div id="lista" >
+    <p class="text-right">
+        @*@Html.ActionLink("Nueva Plantilla", "Create", null, new { @class = "btn btn-w-m btn-primary" })*@
+
+        @*<a class="btn btn-w-m btn-primary" href="@Url.Action("Create")"><i class="fa fa-pencil"></i> Nueva Plantilla</a>*@
+    </p>
+    <hr />
+
+
+    <table class="table  table-sm">
+        <thead class="table-active">
+            <tr>
+                <th>
+                    <label onclick="OrderBy(this)" order="@ViewBag.OrderNombreCorto">Fracción <i class="fa fa-sort"></i> </label>
+                </th>
+                @*<th>
+            <label onclick="OrderBy(this)" order="@ViewBag.OrderNombreLargo">Nombre plantilla <i class="fa fa-sort"></i> </label>
+        </th>*@
+                <th class="text-center">
+                    <label onclick="OrderBy(this)" order="@ViewBag.OrderOrden">Frecuencia <i class="fa fa-sort"></i> </label>
+                </th>
+                <th class="text-center">
+                    <label onclick="OrderBy(this)" order="@ViewBag.OrderOrden"> Ejercicio </label>
+                </th>
+                <th class="text-center">
+                    <label onclick="OrderBy(this)" order="@ViewBag.OrderActivo"> Período </label>
+                </th>
+                @*<th>
+            <label onclick="OrderBy(this)" order="@ViewBag.OrderActivo">  @Html.DisplayNameFor(model => model.FirstOrDefault().Plantillas.Activo) <i class="fa fa-sort"></i> </label>
+        </th>*@
+                <th class="text-center">
+                    Acciones
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                string labelEstatus = "lbEstatus" + item.PlantillaId.ToString();
+                
+                
+                //string faicon = "fa" + item.PlantillaId.ToString();
+                //string ahref = "ahref" + item.PlantillaId.ToString();
+                //string aEditHref = "aEditHref" + item.PlantillaId.ToString();
+                //string aDeleteHref = "aDeleteHref" + item.PlantillaId.ToString();
+                //string aConfHref = "aConfHref" + item.PlantillaId.ToString();
+                //string dPublicDiv = "dPublicDiv" + item.PlantillaId.ToString();
+                //string dEditDiv = "dEditDiv" + item.PlantillaId.ToString();
+                //string titleEstatus = item.Publicado == true ? "Diseñar" : "Publicar";
+                //string faiconInit = item.Publicado == true ? "fa-eye-slash" : "fa-eye";
+                if (ley != item.LeyNombre)
+                {
+                    ley = item.LeyNombre;
+
+                    <tr class="bg-light">
+                        <th colspan="6">@Html.DisplayFor(modelItem => item.LeyNombre)</th>
+                    </tr>
+
+                }
+                if (articulo != item.ArticuloNombre)
+                {
+                    articulo = item.ArticuloNombre;
+
+                    <tr class="bg-light">
+                        <th colspan="6">@Html.DisplayFor(modelItem => item.ArticuloNombre)</th>
+                    </tr>
+
+                }
+
+        <tr>
+            <td>
+                @Html.DisplayFor(modelItem => item.FracionNombre)
+                <p><b>@Html.DisplayFor(modelItem => item.NombreLargo)</b></p>
+            </td>
+            @*<td>
+            @Html.DisplayFor(modelItem => item.Plantillas.NombreCorto)
+        </td>*@
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => item.Frecuencia)
+            </td>
+            <td class="text-center">
+                @Html.DisplayFor(modelItem => item.Ejercicios)
+            </td>
+            <td style="width:200px;" class="text-center">
+                @Html.PeriodoDesdeToString(item.PeriodoDesde) @Html.PeriodoHastaToString(item.PeriodoHasta, item.PeriodoDesde)
+
+
+                @*@Html.DisplayFor(modelItem => item.Plantillas.PeriodoDesdeToString)  @Html.DisplayFor(modelItem => item.Plantillas.PeriodoHastaToString)*@
+            </td>
+            <td>
+                <div class="text-center">
+
+                    <div class="btn-group">
+                        @{
+                            var vClass = "pt-2 pb-2";
+
+                        }
+
+                        @if (!item.Publicado)
+                        {
+                            <button type="button" class="btn btn-warning" data-container="body" data-toggle="popover" data-placement="top" title="Formato en diseño" data-content="El administrador esta alterando el formato, esto puede tardar algunos minutos, muchas gracias.">
+                                <i class="fa fa-lock"></i>  Acciones
+                            </button>
+                        }
+                        else
+                        {
+                            <button class="btn btn-none btn-sm dropdown-toggle" type="button" data-toggle="dropdown" aria-haspopup="true" aria-expanded="false">
+                                <i class="fa fa-wrench"></i>  Acciones
+                            </button>
+                            <div class="dropdown-menu">
+                                <a href="@Url.Action("CreateDynamic", new { id = item.PlantillaId })" class="dropdown-item @vClass" title="Capturar"><i class="fa fa-pencil"></i> Capturar</a>
+                                <a href="@Url.Action("IndexDatosPlantillas", new { id = item.PlantillaId })" class="dropdown-item @vClass" title="Lista de datos"><i class="fa fa-list"></i> Ver información</a>
+
+                                <div class="dropdown-divider"></div>
+                                <h6 class="dropdown-header">EXPORTAR</h6>
+                                <a class="dropdown-item @vClass" onclick="descargarDatos(@item.PlantillaId, '@item.NombreCorto')" title="Descargar información"><i class="fa fa-download"></i> Descargar información</a>
+                                <a id="btnDownloader" onclick="CookiesForDownloader('@vRandomDownloader')" href="@Url.Action("FormatoExcelPlantilla", new { iId = item.PlantillaId, CookieName = vRandomDownloader })" class="dropdown-item @vClass" title="Descargar formato"><i class="fa fa-download"></i> Descargar formato</a>
+
+
+                                <div class="dropdown-divider"></div>
+                                <h6 class="dropdown-header">Sorteo</h6>
+                                <a id="btnChosen" href="@Url.Action("IndexHistory", new { plantillaId = item.PlantillaId })" class="dropdown-item @vClass" title="Generar selección"><i class="fa fa-cube"></i> Generar selección </a>
+                               
+                                <div class="dropdown-divider"></div>
+                                <h6 class="dropdown-header">IMPORTAR</h6>
+                                @*<a id="btnDownloader" href="@Url.Action("ImportarExcel", new { iId = item.PlantillaId })" class="dropdown-item @vClass" title="Descargar formato"><i class="fa fa-upload"></i> Importar </a>*@
+                                <a id="btnDownloader" href="@Url.Action("ImportarExcelBeta", new { iId = item.PlantillaId })" class="dropdown-item @vClass" title="Descargar formato"><i class="fa fa-upload"></i> Importar</a>
+                                @*<a id="btnDownloader" href="@Url.Action("Index","ImportacionMasivo", new { PlantillaId = item.PlantillaId })" class="dropdown-item @vClass" title="Descargar formato"><i class="fa fa-upload"></i> Importar masivo </a>*@
+
+                            </div>
+                        }
+                    </div>
+                </div>
+
+                @*<div class="btn-group">
+                <a href="@Url.Action("DetailDynamic", new { id = item.PlantillaId })" class="btn btn-info btn-circle" title="Detalles"><i class="fa fa-info-circle"></i></a>
+            </div>
+
+            <div class="btn-group">
+                <a href="@Url.Action("EditDynamic", new { id = item.PlantillaId })" class="btn btn-warning btn-circle" title="Detalles"><i class="fa fa-edit"></i></a>
+            </div>*@
+
+
+
+
+                @*<a id="btnDownloader" href="@Url.Action("ImportarExcel", new { iId = item.PlantillaId })" class="dropdown-item @vClass" title="Descargar Plantilla"><i class="fa fa-file-image-o"></i> Importar Plantilla</a>*@
+                @*<a id="btnDownloader" onclick="CookiesForDownloader('@vRandomDownloader')" href="@Url.Action("FormatoExcelPlantilla", new { iId = item.PlantillaId, CookieName = vRandomDownloader  })" class="dropdown-item @vClass" title="Descargar Plantilla"><i class="fa fa-download"></i> Descargar Plantilla</a>*@
+            </td>
+        </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td>
+                    <div class="form-group row">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <label>
+                                Mostrar
+                                @{
+                                    var porPage = ViewBag.PerPage;
+                                    string per10 = porPage == 10 ? "selected" : "";
+                                    string per25 = porPage == 25 ? "selected" : "";
+                                    string per50 = porPage == 50 ? "selected" : "";
+                                    string per100 = porPage == 100 ? "selected" : "";
+                                }
+                                <select class="input-sm filtrar" name="PerPage" id="mostrar">
+                                    <option @per10 value="10">10</option>
+                                    <option @per25 value="25">25</option>
+                                    <option @per50 value="50">50</option>
+                                    <option @per100 value="100">100</option>
+                                </select>
+                                Registros
+                            </label>
+                        </div>
+                    </div>
+                </td>
+                <td colspan="7">
+
+                    <div class="pagination float-right">
+                        <div id="pagedList" class="pagedList" data-otf-target="#lista">
+                            <label style="padding: 5px 10px;">@(Model.LastItemOnPage > 0 ? Model.FirstItemOnPage : 0) - @Model.LastItemOnPage de @Model.TotalItemCount Registros</label>
+
+                            @Html.PagedListPager(Model, iPagina => Url.Action("IndexPlantillas", new { iPagina, PerPage = ViewBag.PerPage, sOrder = ViewBag.Order, NombreCorto = filtros.NombreCorto, NombreLargo = filtros.NombreLargo, Activo = filtros.Activo }), PagedList.Mvc.PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(PagedListRenderOptions.ClassicPlusFirstAndLast,
+                       new AjaxOptions
+                       {
+                           HttpMethod = "get",
+                           InsertionMode = InsertionMode.Replace,
+                           UpdateTargetId = "lista",
+                           OnBegin = "BeginClient",
+                           OnComplete = "CompleteClient"
+                       }))
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</div>

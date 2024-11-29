@@ -1,0 +1,317 @@
+﻿@model Transparencia.Models.PlantillaViewModel
+
+@{
+    ViewBag.Title = "Modificar Plantilla";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ViewBag.Title</h2>
+@using (Html.BeginForm("Edit", "Plantillas", FormMethod.Post, htmlAttributes: new { @id = "frm" }))
+{
+    @Html.AntiForgeryToken()
+
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-lg-10">
+            <h2>Plantillas</h2>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="@Url.Action("Index", "Home")">Inicio</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="@Url.Action("Index", "Plantillas")">Plantillas</a>
+                </li>
+                <li class="active breadcrumb-item">
+                    <strong>@ViewBag.Title</strong>
+                </li>
+            </ol>
+        </div>
+    </div>
+    <br />
+
+    <div class="col-lg-12">
+        <div class="ibox">
+            <div class="ibox-title">
+                <p>
+                    <h2>Modificando la Plantilla: @Html.DisplayFor(model => model.Plantilla.NombreCorto)</h2>
+                </p>
+            </div>
+            <div class="ibox-content">
+                @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+                @Html.HiddenFor(model => model.Plantilla.PlantillaId)
+                @*@Html.HiddenFor(model => model.PlantillaFraccion.PlantillaId,Model.PlantillaId)*@
+                <div class="form-row">
+                    @*<div class="form-group col-md-4">
+            @Html.LabelFor(model => model.Plantilla.IdPlantillaPNT, htmlAttributes: new { @class = "control-label" })
+            @Html.EditorFor(model => model.Plantilla.IdPlantillaPNT, new { htmlAttributes = new { @class = "form-control", @placeholder = "ID plantilla PNT" } })
+            @Html.ValidationMessageFor(model => model.Plantilla.IdPlantillaPNT, "", new { @class = "text-danger" })
+        </div>*@
+                    <div class="form-group col-md-4">
+                        @Html.LabelFor(model => model.Plantilla.NombreCorto, htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.Plantilla.NombreCorto, new { htmlAttributes = new { @class = "form-control", @placeholder = "Nombre corto" } })
+                        @Html.ValidationMessageFor(model => model.Plantilla.NombreCorto, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group col-md-8">
+                        @Html.LabelFor(model => model.Plantilla.NombreLargo, htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.Plantilla.NombreLargo, new { htmlAttributes = new { @class = "form-control", @placeholder = "Nombre largo" } })
+                        @Html.ValidationMessageFor(model => model.Plantilla.NombreLargo, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group col-md-12">
+                        @Html.LabelFor(model => model.Plantilla.Ayuda, htmlAttributes: new { @class = "control-label" })
+                        @Html.TextAreaFor(model => model.Plantilla.Ayuda, 5, 0, htmlAttributes: new { @class = "form-control", @placeholder = "Ayuda" })
+                        @Html.ValidationMessageFor(model => model.Plantilla.Ayuda, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group col-md-2">
+                        @Html.LabelFor(model => model.Plantilla.Orden, htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.Plantilla.Orden, new { htmlAttributes = new { @class = "form-control", @placeholder = "Orden" } })
+                        @Html.ValidationMessageFor(model => model.Plantilla.Orden, "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group col-md-2">
+                        @Html.LabelFor(model => model.Plantilla.Publicado, htmlAttributes: new { @class = "control-label" })
+                        <div class="i-checks">
+                            @Html.CheckBoxFor(model => model.Plantilla.Publicado)
+                            @Html.ValidationMessageFor(model => model.Plantilla.Publicado, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group col-md-2">
+                        @Html.LabelFor(model => model.Plantilla.IsPreved, htmlAttributes: new { @class = "control-label" })
+                        <div class="i-checks">
+                            @Html.CheckBoxFor(model => model.Plantilla.IsPreved)
+                            @Html.ValidationMessageFor(model => model.Plantilla.IsPreved, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group col-md-2">
+                        @Html.Label("Activo", htmlAttributes: new { @class = "control-label" })
+                        <div class="i-checks">
+                            @Html.CheckBoxFor(model => model.Plantilla.Activo)
+                            @Html.ValidationMessageFor(model => model.Plantilla.Activo, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12">
+                    </div>
+                    <div class="form-group col-md-4">
+                        @Html.LabelFor(model => model.Plantilla.Periodos, htmlAttributes: new { @class = "control-label" })
+                        @Html.ListBoxFor(model => model.SelectedPeriodo, (IEnumerable<SelectListItem>)ViewBag.AllPeriodos, new { @class = "selectpicker selectPickerClas form-control", multiple = "multiple", title = "Seleccione..." })
+                        @Html.ValidationMessageFor(model => model.Plantilla.Periodos, "", new { @class = "text-danger" })
+                    </div>
+                    @*<div class="form-group col-md-4">
+            @Html.LabelFor(model => model.Plantilla.PeriodoDesde, htmlAttributes: new { @class = "control-label" })
+            @Html.EditorFor(model => model.Plantilla.PeriodoDesde, new { htmlAttributes = new { @class = "form-control", @placeholder = "Período Desde", @readonly = "readonly" } })
+            @Html.ValidationMessageFor(model => model.Plantilla.PeriodoDesde, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group col-md-4">
+            @Html.LabelFor(model => model.Plantilla.PeriodoHasta, htmlAttributes: new { @class = "control-label" })
+            @Html.EditorFor(model => model.Plantilla.PeriodoHasta, new { htmlAttributes = new { @class = "form-control", @placeholder = "Período Hasta", @readonly = "readonly" } })
+            @Html.ValidationMessageFor(model => model.Plantilla.PeriodoHasta, "", new { @class = "text-danger" })
+        </div>*@
+
+                    <div class="form-group col-md-4">
+                        @Html.LabelFor(model => model.Plantilla.Frecuencia, htmlAttributes: new { @class = "control-label" })
+                        @*@Html.ListBoxFor(model => model.SelectedPeriodo, (IEnumerable<SelectListItem>)ViewBag.AllPeriodos, new { @class = "selectpicker selectPickerClas form-control", multiple = "multiple", title = "Seleccione..." })*@
+                        @Html.EnumDropDownListFor(x => x.Plantilla.Frecuencia, "Seleccione...", new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Plantilla.Frecuencia, "", new { @class = "text-danger" })
+
+                    </div>
+                    <div class="form-group col-md-4">
+                        @Html.LabelFor(model => model.Plantilla.Porcentage, htmlAttributes: new { @class = "control-label" })
+                        @Html.EditorFor(model => model.Plantilla.Porcentage, new { htmlAttributes = new { @class = "form-control", @placeholder = "Porcentaje" } })
+                        @Html.ValidationMessageFor(model => model.Plantilla.Porcentage, "", new { @class = "text-danger" })
+                    </div>
+
+                    @*<div class="form-group col-md-4">
+            @Html.LabelFor(model => model.Plantilla.FrecuenciaConservacion, htmlAttributes: new { @class = "control-label" })
+            @Html.DropDownListFor(model => model.Plantilla.FrecuenciaConservacion, (IEnumerable<SelectListItem>)ViewBag.FrecuenciaConservacion, new { @class = "selectpicker selectPickerClas form-control", title = "Seleccione..." })
+            @Html.ValidationMessageFor(model => model.Plantilla.FrecuenciaConservacion, "", new { @class = "text-danger" })
+        </div>*@
+                    @*<div class="form-group col-md-12">
+            @Html.LabelFor(model => model.Plantilla.DescripcionFrecuenciaConservacion, htmlAttributes: new { @class = "control-label" })
+            @Html.TextAreaFor(model => model.Plantilla.DescripcionFrecuenciaConservacion, 5, 0, htmlAttributes: new { @class = "form-control", @placeholder = "Escribe una descripción" })
+            @Html.ValidationMessageFor(model => model.Plantilla.DescripcionFrecuenciaConservacion, "", new { @class = "text-danger" })
+        </div>
+        <div class="form-group col-md-12">
+            @Html.LabelFor(model => model.Plantilla.Tags, htmlAttributes: new { @class = "control-label" })
+            @Html.ListBoxFor(model => model.SelectedTag, (IEnumerable<SelectListItem>)ViewBag.AllTags, new { @class = "selectpicker selectPickerClas form-control", multiple = "multiple", title = "Seleccione..." })
+            @Html.ValidationMessageFor(model => model.Plantilla.Tags, "", new { @class = "text-danger" })
+        </div>*@
+
+                </div>
+                @*<hr />
+                <div class="form-row">
+                    <div class="title">
+                        <p>
+                            <h3>relacion entre Plantillas, fracciones</h3>
+                        </p>
+                    </div>
+                </div>
+                <div class="form-row">
+                    <div class="form-group col-md-4">
+                        @Html.Label("Ley", htmlAttributes: new { @class = "control-label" }) *
+                        @Html.DropDownList("LeyId", new SelectList(ViewBag.LeyId, "LeyId", "Nombre", ViewBag.LeyIds), "Seleccione...", htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessage("LeyId", "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        @Html.Label("Artículo", htmlAttributes: new { @class = "control-label" }) *
+                        @Html.DropDownList("ArticuloId", new SelectList(ViewBag.ArticuloId, "ArticuloId", "Nombre", ViewBag.ArticuloIds), "Seleccione...", htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessage("ArticuloId", "", new { @class = "text-danger" })
+                    </div>
+                    <div class="form-group col-md-4">
+                        @Html.LabelFor(model => model.Plantilla.PlantillaFraccion.FraccionId, htmlAttributes: new { @class = "control-label" }) *
+                        @Html.DropDownListFor(model => model.Plantilla.PlantillaFraccion.FraccionId, new SelectList(ViewBag.FraccionId, "FraccionId", "Nombre", ViewBag.FraccionIds), "Seleccione...", htmlAttributes: new { @class = "form-control" })
+                        @Html.ValidationMessageFor(model => model.Plantilla.PlantillaFraccion.FraccionId, "", new { @class = "text-danger" })
+                    </div>
+                </div>*@
+                <div class="form-row">
+                    <div class="col-md-offset-2 col-md-12 text-right">
+                        @Html.ActionLink("Regresar", "Index", null, new { @class = "btn btn-w-m btn-secondary" })
+                        <button id="btnSave2" type="submit" class="btn btn-primary">
+                            <i class="fa fa-save"></i> Guardar
+                        </button>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+    @Html.HiddenFor(m => m.Plantilla.NombreTabla);
+}
+
+
+
+@section Styles {
+    @Styles.Render("~/Content/plugins/iCheck/iCheckStyles")
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
+}
+
+@section Scripts {
+    @Scripts.Render("~/plugins/iCheck")
+    @Scripts.Render("~/bundles/jqueryval")
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+
+    @Scripts.Render("~/bundles/jqueryUI")
+    <script src="~/Scripts/DatePickerReady.js"></script>
+    <script>
+        $(function () {
+             console.log("1");
+            $("#frm").submit(function () {
+                console.log("asdasda");
+                var vSubmit = $(this).valid();
+                if (vSubmit) {
+                    $('button[type=submit], input[type=submit]').prop('disabled', true);
+                    ShowLoading();
+                }
+                return vSubmit;
+            });
+        });
+        
+        $(document).ready(function () {
+           
+            jQuery.validator.methods["date"] = function (value, element) { return true; }
+            $('.selectPickerClass').selectpicker();
+            $('.i-checks').iCheck({
+                checkboxClass: 'icheckbox_square-green',
+                radioClass: 'iradio_square-green',
+            });
+            @*if (@ViewBag.LeyIds != 0) {
+                $("#LeyId").val(@ViewBag.LeyIds);
+
+            }
+            if (@ViewBag.ArticuloIds != 0) {
+                $("#ArticuloId").val(@ViewBag.ArticuloIds);
+            }*@
+        });
+
+        @*$("#LeyId").change(function () {
+                //sub
+            ShowLoading();
+            $('#PlantillaFraccion_FraccionId').empty();
+            $('#PlantillaFraccion_FraccionId').append($('<option value>Seleccione...</option>'));
+                var ComboCnanged = $(this).val();
+                var Sub = $('#ArticuloId');
+                if (ComboCnanged.length > 0) {
+                    $.ajax({
+                        url: "@Url.Action("GetArticulosByLeyId", "Plantillas")",
+                        dataType: "json",
+                        type: "GET",
+                        data: {
+                            'iId': ComboCnanged
+                        },
+                        cache: false,
+                        contentType: 'application/json; charset=utf-8',
+                        success: function (data) {
+                            if (data.Encontro) {
+                                Sub.empty(); // remove any existing options
+                                Sub.append($('<option value>Seleccione...</option>'));
+                                $.each(data.data, function (index, item) {
+                                    Sub.append($('<option></option>').text(item.Nombre).val(item.ArticuloId));
+                                });
+                                //ComboActivo.val(iiActivoId);
+                                 HideLoading();
+
+                            } else {
+
+                                Sub.empty(); // remove any existing options
+                                Sub.append($('<option value>Seleccione...</option>'));
+                                 HideLoading();
+                            }
+                        },
+                        error: function (error) {
+                            console.log(error);
+                              HideLoading();
+                        }
+                    });
+                } else {
+                    ComboActivo.empty(); // remove any existing options
+                    Sub.append($('<option value>Seleccione...</option>'));
+                    Sub.attr("title", "Sin datos seleccionados");
+                    HideLoading();
+                }
+
+        });
+        $("#ArticuloId").change(function () {
+                //sub
+                ShowLoading();
+                var ComboCnanged = $(this).val();
+                var Sub = $('#Plantilla_PlantillaFraccion_FraccionId');
+                if (ComboCnanged.length > 0) {
+                    $.ajax({
+                        url: "@Url.Action("GetFraccionByArticulosId", "Plantillas")",
+                        dataType: "json",
+                        type: "GET",
+                        data: {
+                            'iId': ComboCnanged
+                        },
+                        cache: false,
+                        contentType: 'application/json; charset=utf-8',
+                        success: function (data) {
+                             console.log(data);
+                            if (data.Encontro) {
+                                Sub.empty(); // remove any existing options
+                                Sub.append($('<option value>Seleccione...</option>'));
+                                $.each(data.data, function (index, item) {
+                                    Sub.append($('<option></option>').text(item.Nombre).val(item.FraccionId));
+                                });
+                                //ComboActivo.val(iiActivoId);
+                                 HideLoading();
+
+                            } else {
+
+                                Sub.empty(); // remove any existing options
+                                Sub.append($('<option value>Seleccione...</option>'));
+                                 HideLoading();
+                            }
+                        },
+                        error: function (error) {
+                            console.log(error);
+                              HideLoading();
+                        }
+                    });
+                } else {
+                    ComboActivo.empty(); // remove any existing options
+                    Sub.append($('<option value>Seleccione...</option>'));
+                    Sub.attr("title", "Sin datos seleccionados");
+                    HideLoading();
+                }
+
+            });*@
+    </script>
+
+}

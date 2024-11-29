@@ -1,0 +1,79 @@
+﻿@model Transparencia.Models.Ley
+
+@{
+    ViewBag.Title = "Eliminar Módulo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<h3>¿Está seguro de querer eliminar está Módulo?</h3>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Nombre)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Nombre)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.TipoLeyId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.TipoLeyes.Nombre)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Url)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Url)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Ayuda)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Ayuda)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Orden)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Orden)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Activo)
+        </dt>
+
+        <dd>
+            @if (Model.Activo)
+            {
+                <span class="badge badge-success BadgeStatus">Activo</span>
+            }
+            else
+            {
+                <span class="badge badge-danger BadgeStatus">Inactivo</span>
+            }
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+    <div class="form-actions no-color">
+        <input type="submit" value="Eliminar" class="btn btn-danger" />
+        @Html.ActionLink("Regresar", "Index", null, new { @class = "btn btn-secondary" })
+    </div>
+    }
+</div>

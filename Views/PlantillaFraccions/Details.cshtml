@@ -1,0 +1,70 @@
+﻿@model Transparencia.Models.PlantillaFraccion
+
+@{
+    ViewBag.Title = "Detalles de la relacion entre Plantillas, fracciones y Organismos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>Relacionar Plantillas</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="@Url.Action("Index", "Home")">Inicio</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="@Url.Action("Index", "PlantillaFraccions")">Relacionar Plantillas</a>
+            </li>
+            <li class="active breadcrumb-item">
+                <strong>@ViewBag.Title</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+<br />
+
+<div class="col-lg-12">
+    <div class="ibox">
+        <div class="ibox-title">
+            <p>
+                <h2>@ViewBag.Title</h2>
+            </p>
+        </div>
+
+        <div class="ibox-content">
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.FraccionId)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Fracciones.Nombre)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.OrganismoID)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Organismos.NombreOrganismo)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.PlantillaId)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Plantillas.NombreLargo)
+                </dd>
+
+            </dl>
+            <br />
+
+            <p>
+                @Html.ActionLink("Modificar", "Edit", new { id = Model.PlantillaFraccionId }, new { @class = "btn btn-w-m btn-warning" })
+                @Html.ActionLink("Regresar", "Index", null, new { @class = "btn btn-w-m btn-secondary" })
+            </p>
+        </div>
+    </div>
+</div>

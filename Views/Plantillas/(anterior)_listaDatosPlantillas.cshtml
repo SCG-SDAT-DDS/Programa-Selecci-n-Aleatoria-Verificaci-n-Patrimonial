@@ -1,0 +1,236 @@
+﻿@model IPagedList<dynamic>
+@{
+    //FiltrosCatalogos filtros = ViewBag.Filtros != null ? ViewBag.Filtros as FiltrosCatalogos : new FiltrosCatalogos();
+
+    var Titulos = ViewBag.Titles as List<Transparencia.Helpers.AuxTitlePlantillas>;
+    var Relevante = ViewBag.Relevantes as List<Transparencia.Models.Campo>;
+}
+
+<div id="lista" class="table-responsive">
+
+
+    <hr />
+    <table class="table">
+        <thead>
+            <tr>
+                @if (Titulos != null)
+                {
+                    foreach (var item in Titulos)
+                    {
+                        <th>
+                            <label> @item.LbNombre </label>
+                        </th>
+                    }
+                }
+                <th>
+                    Acciones
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                int TablaFisicaId = 0;
+                string NombreTabla = "";
+                int PlantillaId = 0;
+                <tr>
+                    @foreach (var datos in item)
+                    {
+                        if (datos.Key == "TablaFisicaId")
+                        {
+                            TablaFisicaId = datos.Value;
+
+                        }
+                        else if (datos.Key == "NombreTabla")
+                        {
+                            NombreTabla = datos.Value;
+
+                        }
+                        else if (datos.Key == "PlantillaId")
+                        {
+                            PlantillaId = datos.Value;
+
+                        }
+                        else if (datos.Key == "UsuarioId")
+                        {
+                            @*<td>
+                                    @HMTLHelperExtensions.getNombreUsuarioById(datos.Value)
+                                </td>*@
+                        }
+                        else if (datos.Key == "FechaCreacion")
+                        {
+                            @*<td>
+                                    @HMTLHelperExtensions.GetFormatForSelect( Transparencia.Models.TipoCampo.Fecha,datos.Value.ToString())
+                                </td>*@
+                        }
+                        else if (datos.Key == "Activo")
+                        {
+                            <td>
+                                @if (datos.Value == true)
+                                {
+                                    <span class="label label-primary BadgeStatus" onclick="changeStatusDynamic(this,'@Url.Action("changeStatusDynamic", "Catalogos")',@TablaFisicaId,'@NombreTabla')">Activo</span>
+                                }
+                                else
+                                {
+                                    <span class="label label-danger BadgeStatus" onclick="changeStatusDynamic(this,'@Url.Action("changeStatusDynamic", "Catalogos")',@TablaFisicaId,'@NombreTabla')">Inactivo</span>
+                                }
+                            </td>
+
+                        }
+                        else
+                        {
+                            <td>
+                                @{
+                                    var RelevanteDatos = Relevante.Where(x => x.Nombre == datos.Key).FirstOrDefault();
+                                }
+                                @if (RelevanteDatos != null)
+                                {
+                                    @Html.Raw(HMTLHelperExtensions.FormatDataFromRazor(RelevanteDatos.TipoCampo, RelevanteDatos._ConDecimales, RelevanteDatos.CatalogoId, datos.Value));
+                                }
+                            </td>
+                        }
+
+                    }
+
+
+                    @*<td>
+                            @if (item.Activo == true)
+                            {
+                                <span class="label label-primary BadgeStatus" onclick="changeStatusDynamic(this,'@Url.Action("changeStatusDynamic", "Catalogos")',@item.TablaFisicaId,'@item.TablaNombre')">Activo</span>
+                            }
+                            else
+                            {
+                                <span class="label label-danger BadgeStatus" onclick="changeStatusDynamic(this,'@Url.Action("changeStatusDynamic", "Catalogos")',@item.TablaFisicaId,'@item.TablaNombre')">Inactivo</span>
+                            }
+                        </td>*@
+                    <td>
+                        <div class="btn-group">
+
+                            <a href="@Url.Action("EditDynamic", new { id = TablaFisicaId, iPlantilldaId = PlantillaId, TablaNombre = NombreTabla })" class="btn btn-warning btn-circle" title="Editar"><i class="fa fa-pencil-square"></i></a>
+                            @*<a href="@Url.Action("DetailDynamic", new { id = TablaFisicaId, iPlantilldaId = PlantillaId, TablaNombre = NombreTabla })" class="btn btn-info btn-circle" title="Detalles"><i class="fa fa-info-circle"></i></a>*@
+                            <a class="btn btn-info btn-circle text-white" title="Detalles" onclick="DetailsDynamics(@TablaFisicaId,@PlantillaId,'@NombreTabla')"><i class="fa fa-info-circle"></i></a>
+
+                        </div>
+                    </td>
+                </tr>
+            }
+        </tbody>
+        @*<tfoot>
+                <tr>
+                    <td>
+                    <div class="form-group row">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <label>
+                                Mostrar
+                                <select class="input-sm filtrar" name="PerPage" id="mostrar">
+                                    <option value="10">10</option>
+                                    <option value="25">25</option>
+                                    <option value="50">50</option>
+                                    <option value="100">100</option>
+                                </select>
+                                Registros
+                            </label>
+                        </div>
+                    </div>
+                </td>
+                    <td colspan="7">
+                    <div class="pagination float-right">
+                        <label style="padding: 5px 10px;">@(Model.LastItemOnPage > 0 ? Model.FirstItemOnPage : 0) - @Model.LastItemOnPage de @Model.TotalItemCount Registros</label>
+                        <br />
+                        <div id="pagedList" class="pagedList" data-otf-target="#lista">
+
+                            @Html.PagedListPager(Model, iPagina => Url.Action("IndexDatosPlantillasPOST", new
+                            {
+                               iPagina,
+                               PerPage = ViewBag.PerPage,
+                               sOrder = ViewBag.Order
+
+                            }),
+                                 PagedList.Mvc.PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(PagedListRenderOptions.ClassicPlusFirstAndLast,
+                                 new AjaxOptions
+                                 {
+                                   HttpMethod = "get",
+                                   InsertionMode = InsertionMode.Replace,
+                                   UpdateTargetId = "lista",
+                                   OnBegin = "BeginClient",
+                                   OnComplete = "CompleteClient"
+                            }))
+                        </div>
+                    </div>
+                </td>
+                </tr>
+            </tfoot>*@
+    </table>
+</div>
+<div class="row mt-5">
+    <div class="col-sm-4">
+        <div class="form-group row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <label>
+                    Mostrar
+                    <select class="input-sm filtrar" name="PerPage" id="mostrar">
+                        <option value="10">10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select>
+                    Registros
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-8">
+        <div class="pagination float-right">
+            <label style="padding: 5px 10px;">@(Model.LastItemOnPage > 0 ? Model.FirstItemOnPage : 0) - @Model.LastItemOnPage de @ViewBag.TotalCountString Registros</label>
+            <br />
+            <nav aria-label="...">
+                <ul class="pagination">
+
+                    @{
+                        var Anterior = ViewBag.iPagina > 1 ? ViewBag.iPagina - 1 : 1;
+                        var Siguiente = ViewBag.iPagina < ViewBag.PageCount ? ViewBag.iPagina + 1 : ViewBag.iPagina;
+                        var iLimitador = ViewBag.iPagina > 5 ? ViewBag.iPagina - 4 : 1;
+                        var totalPaginas = ViewBag.PageCount;
+                        var limit = 8 + iLimitador;
+                        var paginasImpresas = 0;
+                    }
+                    <li class="page-item">
+                        <a class="page-link" href="@Anterior">Anterior</a>
+                    </li>
+                    @for (int i = iLimitador; i < ViewBag.TotalCount && i < limit && i <= totalPaginas; i++)
+                    {
+                        if (ViewBag.iPagina == i)
+                        {
+                            <li class="page-item active">
+                                <span class="page-link">
+                                    @i
+                                    <input type="hidden" id="hiddenPage" name="hiddenPage" value="@i" />
+                                    <span class="sr-only">(current)</span>
+                                </span>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="page-item"><a class="page-link" href="@i">@i.ToString("#,##0")</a></li>
+                        }
+                        paginasImpresas = i;
+
+                    }
+                    @if (paginasImpresas < totalPaginas)
+                    {
+                        <li class="page-item disabled"><a class="page-link">...</a></li>
+                        <li class="page-item"><a class="page-link" href="@totalPaginas">@totalPaginas.ToString("#,##0")</a></li>
+                    }
+
+
+
+                    @*<li class="page-item"><a class="page-link" href="#">3</a></li>*@
+                    <li class="page-item">
+                        <a class="page-link" href="@Siguiente">Siguiente</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+

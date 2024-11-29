@@ -1,0 +1,173 @@
+﻿@model Transparencia.Models.CatalogoValorViewModels
+
+@{
+                /**/
+
+                ViewBag.Title = "Nuevo";
+}
+
+<h2>Nuevo valor al catalago: @ViewBag.CatalogoName</h2>
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+    @Html.HiddenFor(x => x.CatalogoValor.CatalogoId)
+    <div class="form-horizontal">
+        <h4>Catalogo de valores</h4>
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-group">
+            @Html.LabelFor(model => model.CatalogoValor.CatalogoId, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.TextBox("CatalogoNombre", (string)ViewBag.CatalogoName, new { @class = "form-control", @readonly = "" })
+                @Html.ValidationMessageFor(model => model.CatalogoValor.CatalogoId, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+        <div class="form-group">
+            @Html.LabelFor(model => model.CatalogoValor.valor, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.CatalogoValor.valor, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.CatalogoValor.valor, "", new { @class = "text-danger" })
+            </div>
+        </div>
+        <div class="form-group">
+            @Html.LabelFor(model => model.CatalogoValor.orden, htmlAttributes: new { @class = "control-label col-md-2" })
+            <div class="col-md-10">
+                @Html.EditorFor(model => model.CatalogoValor.orden, new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessageFor(model => model.CatalogoValor.orden, "", new { @class = "text-danger" })
+            </div>
+        </div>
+
+
+        <h4>Pertenece a:</h4>
+        <hr />
+        <div id="hiddenlist">
+
+        </div>
+        <table class="table" id="tbCatValor">
+            <thead>
+                <tr>
+                    <th>Catalogo</th>
+                    <th>Valor</th>
+                </tr>
+            </thead>
+            <tbody></tbody>
+        </table>
+
+
+        <div class="form-group">
+            <div class="col-md-offset-2 col-md-10">
+                <input type="submit" value="Guardar" class="btn btn-success" />
+                <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#Pertenece">
+                    Ligar a un Catalogo
+                </button>
+                @Html.ActionLink("Regresar", "Index", new { id = Model.CatalogoValor.CatalogoId }, new { @class = "btn btn-default" })
+            </div>
+        </div>
+    </div>
+
+    <div class="modal fade" id="Pertenece" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">@Html.DisplayNameFor(x => x.CatalogoValor.RelatedCatalogoValor)</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="form-group">
+                        @Html.Label("Catalogos", htmlAttributes: new { @class = "col-form-label" })
+                            @Html.DropDownList("Catalogos", null, "seleccione el catalogo", htmlAttributes: new { @class = "form-control limpiaCombo" })
+                    </div>
+
+                    <div class="form-group">
+                        @Html.LabelFor(model => model.AllValor, "Valores", new { @class = "col-form-label" })
+                            @Html.DropDownList("vSelectedValor", (IEnumerable<SelectListItem>)ViewBag.AllValor, "primero seleccione el catalogo", htmlAttributes: new { @class = "form-control limpiaCombo" })
+                            @Html.ValidationMessageFor(model => model.CatalogoValor.RelatedCatalogoValor, "", new { @class = "text-danger" })
+                    </div>
+                    <br />
+                </div>
+                <div class="modal-footer">
+                        <input id="btnAddCatalogo" type="button" value="Agregar" class="btn btn-success" />
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Cerrar</button>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+    <script>
+        $(document).ready(function () {
+            var contadorHidden = 0;
+            $("#Catalogos").on('change',function () {
+                var SelectValor = $('#vSelectedValor');
+                var strSelected = "";
+                $("#Catalogos option:selected").each(function () {
+                    strSelected += $(this)[0].value;
+                    console.log(strSelected);
+                });
+                if (strSelected != "") {
+                    //var url = "/CatalogoValores/MyAction/" + strSelected;
+                    var url = "@Url.Action("getDatosCatalogoById")/" + strSelected
+                    $.post(url, function (data) {
+                        var s = '<option value>Seleccione un valor</option>';
+                        var RelatedCatalogoValor = SelectValor.html(s);
+                        $.each(data, function (index, item) { // item is now an object containing properties ID and Text
+                            RelatedCatalogoValor.append($('<option></option>').text(item.Text).val(item.Value));
+                        });
+                    });
+                } else {
+                    var s = '<option value>primero seleccione el catalogo</option>';
+                    SelectValor.html(s);
+                }
+            });
+            //
+            $("#btnAddCatalogo").click(function () {
+                contadorHidden = 0;
+                if (!$("#vSelectedValor").val().length > 0 || !$("#Catalogos").val() > 0) {
+                    alert("Primero debe de seleccionar un catalogo junto con un valor, gracias.");
+                    return false;
+                }
+                var val = $("#vSelectedValor").val();
+                var div = $('#hiddenlist');
+                var catalogo = $("#Catalogos option:selected").text();
+                var valor = $("#vSelectedValor option:selected").text();
+                var id = $("#Catalogos option:selected").val() + $("#vSelectedValor option:selected").val();
+                if ($('*[data-id="' + id + '"]').length > 0) {
+                    alert("Ya existe el elemento en la lista");
+                    return false;
+                }
+                if (confirm("esta seguro que desea asociar este valor con el catalago: " + catalogo + " y el valor: " + valor + "?")) {
+                    var markup = '<tr><td style="display: none;">'+id+'</td><td>' + catalogo + '</td><td>' + valor + '</td><td><a class="btn btn-danger btn-sm">X</a> </td></tr>';
+                    $("#tbCatValor tbody").append(markup);
+                    div.append('<input type="hidden" name="SelectedValor"  data-id="'+ id+'" value="' + val + '" />');
+                    limpiarCombos();
+                    $('#Pertenece').modal('hide');
+                }
+            });
+            $("#tbCatValor").on("click", "a", function (event) {
+                if (confirm("¿Esta seguro que desea eliminar esta asignación?")) {
+                    var id = $(this).parent().siblings(":first").text();
+                    console.log(id);
+                    var element = $('*[data-id="' + id + '"]');
+                    element.remove();
+                    var tr = $(this).closest('tr');
+                    tr.remove();
+                }
+
+            });
+            function limpiarCombos() {
+                $('.limpiaCombo').val(null);
+                $("#vSelectedValor").empty();
+                var s = '<option value>primero seleccione el catalogo</option>';
+                $("#vSelectedValor").append(s);
+            }
+        });
+    </script>
+}

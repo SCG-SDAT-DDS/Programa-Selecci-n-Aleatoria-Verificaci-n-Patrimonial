@@ -1,0 +1,31 @@
+﻿@model List<Transparencia.Models.Campo>
+
+@{
+//FiltrosPlantilla filtros = ViewBag.Filtros != null ? ViewBag.Filtros as FiltrosPlantilla : new FiltrosPlantilla();
+//var Enlace = HMTLHelperExtensions.GetRoles(User.Identity.Name, "Enlace");
+}
+
+
+
+    <div class="row">
+
+
+        <table class="col-sm-12 table-bordered">
+            <thead>
+                <tr>
+                    <th colspan="2" class="text-center">Detalles del campo: </th>
+
+                </tr>
+            </thead>
+            <tbody>
+                @if (Model.Count() > 0)
+                {
+                    foreach (var item in Model)
+                    {
+                        @Html.Raw(item.InputHtmlDetails)
+
+                    }
+                }
+            </tbody>
+        </table>
+    </div>

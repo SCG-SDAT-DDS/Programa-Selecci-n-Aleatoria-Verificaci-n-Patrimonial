@@ -1,0 +1,60 @@
+﻿@model Transparencia.Models.GrupoExtension
+
+@{
+    ViewBag.Title = "Eliminar " + @Html.DisplayFor(model => model.Nombre);
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<h3>¿Está seguro de querer eliminar este Grupo de Extensiones?</h3>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Nombre)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Nombre)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Descripcion)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Descripcion)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Extensiones)
+        </dt>
+        <dd>
+            <ul>
+                @foreach (var extension in Model.Extensiones)
+                {
+                    <li>@Html.DisplayFor(model => extension.Nombre)</li>
+                }
+            </ul>
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Activo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Activo)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+        <div class="form-actions no-color">
+            <input type="submit" value="Eliminar" class="btn btn-danger" /> 
+            @Html.ActionLink("Regresar", "Index", null, new { @class="btn btn-secondary"})
+        </div>
+    }
+</div>

@@ -1,0 +1,71 @@
+﻿@model Transparencia.Models.CatalogoValor
+
+@{
+    ViewBag.Title = "Eliminar";
+}
+
+
+<h2>Eliminando el valor: @Html.DisplayFor(model => model.valor)</h2>
+
+<h3>¿Esta seguro que desea eliminar el registro?</h3>
+<div>
+    <h4>Catalogo Valor</h4>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Catalogo.Nombre)
+        </dt>
+
+        <dd>
+            @ViewBag.CatalogoName
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.valor)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.valor)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.orden)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.orden)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Activo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Activo)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.RelatedCatalogoValor)
+        </dt>
+
+        <dd>
+            <ul>
+                @foreach (var item in Model.RelatedCatalogoValor)
+                {
+                    <li>@Html.DisplayFor(model => item.Catalogo.Nombre): @Html.DisplayFor(model => item.valor)</li>
+                }
+            </ul>
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm())
+    {
+        @Html.AntiForgeryToken()
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-actions no-color">
+            <input type="submit" value="Eliminar" class="btn btn-danger" />
+            @Html.ActionLink("Regresar", "Index", new { id = Model.CatalogoId }, new { @class = "btn btn-default" })
+        </div>
+    }
+</div>

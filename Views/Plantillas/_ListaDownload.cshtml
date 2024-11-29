@@ -1,0 +1,34 @@
+﻿@model List<Transparencia.FiltersClass.ListaDescargar>
+
+@{
+}
+@using (Html.BeginForm("ExcelDatos", "Plantillas", FormMethod.Post,new {target = "_blank"}))
+{
+
+    <input type="hidden" name="iPlantillaId" id="iPlantillaId" value="@ViewBag.iPlantillaId" />
+    <div>
+        @*<p>Seleccione el tipo de documento que requiere descargar:</p>*@
+        @*<hr />*@
+        <div class="custom-control custom-radio" hidden>
+            <input type="radio" id="customRadio1" name="Tipo" class="custom-control-input" value="1" checked>
+            <label class="custom-control-label" for="customRadio1">Información con datos reales.</label>
+        </div>
+        <div class="custom-control custom-radio" hidden>
+            <input type="radio" id="customRadio2" name="Tipo" class="custom-control-input" value="2">
+            <label class="custom-control-label" for="customRadio2">Información con datos de catalogos.</label>
+        </div>
+
+        <br />
+
+        <div class="form-group col-md-12" id="divListado">
+            <label for="divListado">Rango de descarga</label>
+            @Html.DropDownList("addRango", new SelectList(Model, "Valor", "Nombre"), null, new { @class = "form-control" })
+            @Html.ValidationMessage("addRango", "", new { @class = "text-danger" })
+        </div>
+
+        <button id="btnDescargar" type="submit" class="btn btn-success">
+            <i class="fa fa-download"></i> Descargar archivo
+        </button>
+    </div>
+}
+

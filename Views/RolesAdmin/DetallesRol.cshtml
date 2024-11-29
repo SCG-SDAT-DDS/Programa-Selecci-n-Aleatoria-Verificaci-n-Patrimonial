@@ -1,0 +1,87 @@
+﻿@model Transparencia.Models.ApplicationRole
+
+@{
+    ViewBag.Title = "Detalles del Rol";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+    <div class="col-lg-12">
+        <div class="ibox">
+            <div class="ibox-title">
+                <p>
+                    <h2>@ViewBag.Title</h2>
+                </p>
+            </div>          
+            
+            <div class="ibox-content">
+                <dl class="dl-horizontal">
+                    <dt>
+                        Rol
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Name)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Descripcion)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.Descripcion)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.FechaDesde)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.FechaDesde)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.FechaHasta)
+                    </dt>
+
+                    <dd>
+                        @Html.DisplayFor(model => model.FechaHasta)
+                    </dd>
+
+                    <dt>
+                        @Html.DisplayNameFor(model => model.Activo)
+                    </dt>
+
+                    <dd>
+                        <div class="i-checks">
+                            @Html.DisplayFor(model => model.Activo)
+                        </div>
+                    </dd>
+
+                </dl>
+                <br />
+
+                <p>
+                    @Html.ActionLink("Modificar", "ModificarRol", new { id = Model.Id }, new { @class = "btn btn-w-m btn-warning" })
+                    @Html.ActionLink("Regresar", "ListaRoles", null, new { @class = "btn btn-w-m btn-secondary" })
+                </p>
+            </div>
+        </div>
+    </div>
+
+@section Styles {
+    @Styles.Render("~/Content/plugins/iCheck/iCheckStyles")
+}
+
+@section scripts {
+    @Scripts.Render("~/plugins/iCheck")
+
+
+    <script>
+        $(document).ready(function () {
+            $('.i-checks').iCheck({
+                checkboxClass: 'icheckbox_square-green',
+                radioClass: 'iradio_square-green',
+            });
+        });
+    </script>
+}

@@ -1,0 +1,41 @@
+﻿@model List<Transparencia.Helpers.AuxPlantillas>
+
+@{
+
+    //var Enlace = HMTLHelperExtensions.GetRoles(User.Identity.Name, "Enlace");
+    
+    string ley = "", articulo="";
+}
+
+    <div id="ListaChecks" class="row center">
+
+        @if (Model != null)
+        {
+            foreach (var item in Model)
+            {
+                var sChecked = item.Seleccionado ? "checked" : "";
+
+                <div class="col-md-4 mb-2">
+                    <section class="section-preview">
+
+                        <!-- Default checked -->
+                        <div class="custom-control custom-checkbox pointer">
+                            <input type="checkbox" class="custom-control-input" id="@item.PlantillaId" @sChecked value="@item.PlantillaId" onclick="asignarUA(this);">
+                            <label class="custom-control-label" for="@item.PlantillaId">@item.FracionNombre.ToUpper()</label><br/>
+                            <label class="custom-control-label" for="@item.PlantillaId">@item.NombreCorto.ToUpper()</label>
+                            <label class="custom-control-label-subtitle" for="@item.PlantillaId">@Html.PeriodoDesdeToString(item.PeriodoDesde) @Html.PeriodoHastaToString(item.PeriodoHasta, item.PeriodoDesde)</label>
+                        </div>
+
+                    </section>
+                </div>
+
+
+            }
+        }
+        else
+        {
+            <div class="col-md-12"> No hay registros para mostrar. </div>
+        }
+
+
+    </div>

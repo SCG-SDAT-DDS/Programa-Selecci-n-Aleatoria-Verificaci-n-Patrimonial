@@ -1,0 +1,257 @@
+﻿@model Transparencia.Models.vmResultadoDatos2
+@{
+    Layout = null;
+    ViewBag.Title = "Reporte seleccion";
+
+    
+
+}
+
+<!doctype html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+
+    <title>Reporte de Selección</title>
+
+    <link href="@Url.Content("~/Content/style-for-pdf.css")" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <div class="box">
+
+
+        <div class="row">
+            <div class="column">
+                @if (Model.IsPreved == true)
+                {
+                    <img src="~/content/images/PREVED_0001_Negro.png" height="90" alt="Gobierno del Estado de Sonora">
+                }
+                else
+                {
+                    <img src="~/content/images/PROVEP3x-black.png" height="130" alt="Gobierno del Estado de Sonora">
+                }
+
+            </div>
+            <div class="column">
+                <h2>Reporte de Selección de Servidores Publicos</h2>
+                <p> @ViewBag.textPlantilla</p>
+                @*<p>Para la temporalidad de @ViewBag.sysNumFrecuenciaStr </p>*@
+            </div>
+            <div class="column" >
+               <h1>Período: @ViewBag.sPeriodo</h1>
+               <h2>Registros: @ViewBag.totalRows</h2>
+            </div>
+        </div>
+    </div>  
+
+    @using (Html.BeginForm("BuscarDynamic", "Plantillas", FormMethod.Post, htmlAttributes: new { enctype = "multipart/form-data", @id = "frmCrear" }))
+    {
+
+        <div class="wrapper wrapper-content animated fadeInRight ecommerce">
+
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ibox">
+                        <div class="ibox-content">
+                            <div class="form-group row">
+                                <div class="col-md-12 col-sm-12 col-xs-12" id="Listado">
+                                    @Html.Partial("Chosen/_PdfChosen", Model)
+                                    @Html.Hidden("sOrder")
+                                </div>
+
+
+                                @if (Model.IsPreved == false)
+                                {
+                                    <div style="page-break-after: always;"></div>
+
+                                }
+
+
+                                @*<div class="col-md-12">
+            <div class="row sign">
+            </div>
+        </div>*@
+                                @if (Model.PlantillaId == 2)
+                                {
+
+                                    <div class="row sign"><div class="column-two"></div></div>
+                                    <div class="row sign"><div class="column-two"></div></div>
+                                }
+
+                                @if (Model.IsPreved)
+                                {
+                                    @*<div class="row sign"><div class="column-two"></div></div>
+                                    <div class="row sign"><div class="column-two"></div></div>*@
+                                    <div class="col-md-12">
+                                        <div class="row sign">
+                                            <div class="column-one">
+                                                <h5 class="line-one"></h5>
+                                                @{
+                                                    var DirectorProved = "LIC. LUIS CARLOS PONCE DE LEÓN KIRK";
+                                                    var PuestoDirectorProved = "DIRECTOR GENERAL DE INTEGRIDAD.";
+                                                }
+                                                <strong>@DirectorProved</strong><br />
+                                                <strong>@PuestoDirectorProved</strong>
+                                            </div>
+                                        </div>
+                                    </div>
+                                }
+                                else
+                                {
+                                    <div class="row sign"><div class="column-two"></div></div>
+                                    <div class="row sign"><div class="column-two"></div></div>
+                                    <div class="col-md-12">
+                                        <div class="row sign">
+                                            <div class="column-one">
+                                                <h5 class="line-one"></h5>
+                                                @{
+                                                    var Director = Model.IsPreved ? "MTRO(A). GUILLERMO ALEJANDRO NORIEGA ESPARZA" : "LIC. GUILLERMO ALEJANDRO NORIEGA ESPARZA";
+                                                    var PuestoDirector = Model.IsPreved ? "SECRETARIO DE LA CONTRALORÍA GENERAL." : "SECRETARIO DE LA CONTRALORÍA GENERAL";
+                                                }
+                                                <strong>@Director</strong><br />
+                                                <strong>@PuestoDirector</strong>
+                                            </div>
+                                        </div>
+
+                                        @*@if (Model.PlantillaId == 3)
+                {
+
+                    <div class="row sign"><div class="column-two"></div></div>
+                }*@
+                                        <div class="row sign"><div class="column-two"></div></div>
+                                        <div class="row sign"><div class="column-two"></div></div>
+                                        <div class="row sign">
+                                            @{
+                                                var classVariable = Model.IsPreved ? "column-two" : "column-two";
+                                            }
+                                            <div class="@classVariable">
+                                                <h5 class="line"></h5>
+                                                @{
+                                                    var PrimeraFirma = Model.IsPreved ? "LIC. LUIS CARLOS PONCE DE LEÓN KIRK" : "LIC. LUIS CARLOS PONCE DE LEON KIRK";
+                                                    var PrimerPuesto = Model.IsPreved ? "DIRECTOR GENERAL DE INTEGRIDAD." : "DIRECCIÓN GENERAL DE INTEGRIDAD";
+                                                }
+                                                <strong>@PrimeraFirma</strong><br />
+                                                <strong>@PrimerPuesto</strong>
+                                            </div>
+                                            @*@if (Model.IsPreved == false)
+                    {*@
+                                            <div class="column-two">
+
+                                                <h5 class="line"></h5>
+                                                @{
+                                                    var SegundaFirma = Model.IsPreved ? "LIC. ALEXIA GABRIELA CASAS HERNÁNDEZ" : "LIC. ALEXIA GABRIELA CASAS HERNÁNDEZ";
+                                                    var SegundaPuesto = Model.IsPreved ? "DIRECTORA GENERAL DE LA UNIDAD DE TRANSPARENCIA Y ASUNTOS JURÍDICOS." : "DIRECTORA GENERAL DE LA UNIDAD DE TRANSPARENCIA Y ASUNTOS JURÍDICOS";
+                                                }
+
+
+                                                @if (Model.fechaCreacion < new DateTime(2023, 10, 20))
+                                                {
+                                                    <strong>LIC. CINTHYA CORRAL MAR</strong><br />
+                                                    <strong>ENCARGADA DEL DESPACHO DE LA DIRECCION GENERAL DE LA UNIDAD DE TRANSPARENCIA Y ASUNTOS JURIDICOS</strong>
+
+                                                }
+                                                else
+                                                {
+                                                    <strong>@SegundaFirma</strong><br />
+                                                    <strong>@SegundaPuesto</strong>
+                                                }
+
+
+
+
+
+                                            </div>
+                                            @*}
+                    else
+                    {
+
+                    }*@
+
+
+
+
+                                        </div>
+                                        @*<div class="row sign">
+                    <div class="column-one">
+
+                        <strong>TESTIGOS</strong><br />
+                    </div>
+                </div>*@
+                                        <div class="row sign"><div class="column-two"></div></div>
+
+
+                                        <div class="row sign"><div class="column-two"></div></div>
+                                        @*@if (Model.PlantillaId == 3)
+                {
+
+                    <div class="row sign"><div class="column-two"></div></div>
+                    <div class="row sign"><div class="column-two"></div></div>
+                }*@
+                                        <div class="row sign">
+                                            <div class="column-two">
+                                                <h5 class="line"></h5>
+                                                @{
+                                                    var TerceraFirma = Model.IsPreved ? "CP. LUIS ALBERTO VÁSQUEZ MENDOZA" : "CP. PATRICIA EUGENIA ARGÜELLES CANSECO";
+                                                    var TerceraPuesto = Model.IsPreved ? "ENCARGADO DEL DESPACHO DE LA DIRECCIÓN GENERAL DE AUDITORIA GUBERNAMENTAL." : "DIRECCIÓN GENERAL DE AUDITORÍA GUBERNAMENTAL";
+                                                }
+                                                <strong>@TerceraFirma</strong><br />
+                                                <strong>@TerceraPuesto</strong>
+                                            </div>
+                                            <div class="column-two">
+                                                <h5 class="line"></h5>
+                                                @{
+                                                    var CuartaFirma = Model.IsPreved ? "LIC. LINDA KRISTAL SOTO SALAZAR" : "LIC. SHEILA GUADALUPE HERNANDEZ ALCARAZ";
+                                                    var CuartaPuesto = Model.IsPreved ? "ENCARGADA DE DESPACHO DE LA DIRECCIÓN GENERAL DE CONTRALORÍA SOCIAL." : "DIRECCIÓN GENERAL DE CONTRALORÍA SOCIAL";
+                                                }
+                                                <strong>@CuartaFirma</strong><br />
+                                                <strong>@CuartaPuesto</strong>
+                                            </div>
+                                        </div>
+                                        @*<div class="row sign">
+                    <div class="column-two">
+                        <h5 class="line"></h5>
+                        <strong>Testigo</strong>
+                    </div>
+                    <div class="column-two">
+                        <h5 class="line"></h5>
+                        <strong>Testigo</strong>
+                    </div>
+                </div>*@
+                                    </div>
+                                }
+
+
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @Html.Hidden("id", ViewBag.iId as string)
+        @Html.Hidden("PlantillaHistoryId", ViewBag.PlantillaHistoryId as string)
+    }
+    @section Styles {
+        @Styles.Render("~/plugins/TimePickerStyle")
+        @Styles.Render("~/stepCss")
+        @Styles.Render("~/plugins/footableStyles")
+    }
+
+    @section Scripts {
+        <script src="~/Scripts/PaginadorOrder.js"></script>
+        @Scripts.Render("~/plugins/footable")
+
+        @Scripts.Render("~/plugins/TimePickerJs")
+        @Scripts.Render("~/stepJs")
+        @Scripts.Render("~/bundles/jqueryval")
+        @Scripts.Render("~/bundles/jqueryUI")
+
+        <script src="~/Scripts/DatePickerReady.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.13.4/jquery.mask.min.js"></script>
+
+    }
+</body>
+</html>

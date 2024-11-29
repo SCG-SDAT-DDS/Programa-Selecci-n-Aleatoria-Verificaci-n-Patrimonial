@@ -1,0 +1,67 @@
+﻿@model PagedList<Transparencia.Models.PlantillaFraccion>
+
+@{
+    FiltrosPlantillaFraccion filtros = ViewBag.Filtros != null ? ViewBag.Filtros as FiltrosPlantillaFraccion : new FiltrosPlantillaFraccion();
+}
+
+<div id="lista">
+    <table class="table">
+        <thead>
+            <tr>
+                <th>
+                    <label onclick="OrderBy(this)" order="@ViewBag.OrderFracciones">  @Html.DisplayNameFor(model => model.FirstOrDefault().FraccionId) <i class="fa fa-sort"></i> </label>
+                </th>
+                <th>
+                    <label onclick="OrderBy(this)" order="@ViewBag.OrderOrganismos">  @Html.DisplayNameFor(model => model.FirstOrDefault().OrganismoID) <i class="fa fa-sort"></i> </label>
+                </th>
+                <th>
+                    <label onclick="OrderBy(this)" order="@ViewBag.OrderPlantillas">  @Html.DisplayNameFor(model => model.FirstOrDefault().PlantillaId) <i class="fa fa-sort"></i> </label>
+                </th>
+                <th></th>
+            </tr>
+        </thead>
+        <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Fracciones.Nombre) con el Artículo: @Html.DisplayFor(modelItem => item.Fracciones.Articulos.Nombre), Ley: @Html.DisplayFor(modelItem => item.Fracciones.Articulos.Leyes.Nombre) - @Html.DisplayFor(modelItem => item.Fracciones.Articulos.Leyes.TipoLeyes.Nombre)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Organismos.NombreOrganismo)
+                    </td>
+                    <td>
+                        @Html.DisplayFor(modelItem => item.Plantillas.NombreLargo)
+                    </td>
+                    <td>
+                        @Html.ActionLink("Modificar", "Edit", new { id = item.PlantillaFraccionId }, new { @class = "btn btn-w-m btn-warning btn-xs" })
+                        @Html.ActionLink("Detalles", "Details", new { id = item.PlantillaFraccionId }, new { @class = "btn btn-w-m btn-info btn-xs" })
+                    </td>
+                </tr>
+            }
+        </tbody>
+        <tfoot>
+            <tr>
+                <td colspan="6">
+                    <div>
+                        <label>@(Model.LastItemOnPage > 0 ? Model.FirstItemOnPage : 0) - @Model.LastItemOnPage de @Model.TotalItemCount Registros</label>
+                    </div>
+
+                    <div>
+                        <div id="pagedList" class="pagedList" data-otf-target="#lista">
+                            @Html.PagedListPager(Model, iPagina => Url.Action("Index", new { iPagina, PerPage = ViewBag.PerPage, sOrder = ViewBag.Order, Fracciones = filtros.Fracciones, Organismos = filtros.Organismos, Plantillas = filtros.Plantillas }), PagedList.Mvc.PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(PagedListRenderOptions.ClassicPlusFirstAndLast,
+                       new AjaxOptions
+                       {
+                           HttpMethod = "get",
+                           InsertionMode = InsertionMode.Replace,
+                           UpdateTargetId = "lista",
+                           OnBegin = "BeginClient",
+                           OnComplete = "CompleteClient"
+                       }))
+                        </div>
+                    </div>
+                </td>
+            </tr>
+        </tfoot>
+    </table>
+</div>

@@ -1,0 +1,68 @@
+﻿@model Transparencia.Models.vmResultPdf
+@{
+   
+}
+
+<div id="lista" class="table">
+    <hr />
+    <table class="styled-table">
+        <thead>
+            <tr>
+                <th colspan="2">Detalles del campo: </th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model.campos.Count > 0)
+            {
+                foreach (var item in Model.campos.Where(x => !x.isTable))
+                {
+                    @Html.Raw(item.InputHtmlDetails)
+
+                }
+            }
+        </tbody>
+    </table>
+            @if (Model.Tablas.Count > 0)
+            {
+                foreach (var lstItem in Model.Tablas)
+                {
+                    <table class="styled-table mt-5">
+                        <thead>
+                            <tr>
+                                <th colspan="2">@lstItem.nombreTabla</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @if (lstItem.camposTabla.Count > 0)
+                            {
+                                var tableFisicaId = 0;
+                                var firstTime = true;
+                                foreach (var item in lstItem.camposTabla)
+                                {
+                                    if (item.CatalogoTablaFisicaId != tableFisicaId && !firstTime)
+                                    {
+
+                                        @Html.Raw(@"   </tbody></table>");
+
+                                        @Html.Raw(@"<table class='styled-table mt-5'>
+                                                        <thead>
+                                                            <tr>
+                                                                <th colspan='2'>" + lstItem.nombreTabla + @"</th>
+                                                            </tr>
+                                                        </thead>
+                                                        <tbody>");
+                                    }
+                                    tableFisicaId = item.CatalogoTablaFisicaId;
+                                    firstTime = false;
+                                    item.isTable = true;
+
+                                    @Html.Raw(item.InputHtmlDetails)
+
+                                }
+                            }
+                        </tbody>
+                    </table>
+
+                }
+            }
+</div>

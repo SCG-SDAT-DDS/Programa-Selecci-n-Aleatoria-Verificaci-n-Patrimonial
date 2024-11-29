@@ -1,0 +1,116 @@
+﻿@model Transparencia.Models.ModificaUsuarioViewModel
+
+@{
+
+    //@model Transparencia.Models.Usuario 
+    ViewBag.Title = "Detalles Usuario";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>@ViewBag.Title</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="@Url.Action("Index", "Home")">Inicio</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="@Url.Action("ListaUsuarios", "UsuariosAdmin")">Lista de Usuarios</a>
+            </li>
+            <li class="active breadcrumb-item">
+                <strong>@ViewBag.Title</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+<br />
+
+<div class="col-lg-12">
+    <div class="ibox">
+        <div class="ibox-title">
+            <p>
+                <h2>@ViewBag.Title</h2>
+            </p>
+        </div>        
+        
+        <div class="ibox-content">
+
+            <dl class="dl-horizontal">
+                <dt>
+                    @Html.DisplayNameFor(model => model.NombreCompleto)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.NombreCompleto)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.UserName)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.UserName)
+                </dd>
+
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Email)
+                </dt>
+
+                <dd>
+                    @Html.DisplayFor(model => model.Email)
+                </dd>
+
+                <dt>
+                    @Html.DisplayNameFor(model => model.Activo)
+                </dt>
+
+                <dd>
+                    <div class="i-checks">
+                        @Html.DisplayFor(model => model.Activo)
+                    </div>
+                </dd>
+
+                <dt>
+                    @Html.DisplayName("Roles")
+                </dt>
+                <dd>
+                    <div id="divRolesUsuario">
+                        @{Html.RenderPartial("_RolesUsuarioDetalles", Model);}
+                    </div>
+                </dd>
+               
+
+            </dl>
+            <br />
+
+            <p class="text-right">
+                
+                <a id="aRegresar" href="@Url.Action("ListaUsuarios")" class="btn btn-w-m btn-secondary"><i class="fa fa-arrow-left"></i> Regresar</a>
+                <a id="aRegresar" href="@Url.Action("ModificarUsuario", new { id = Model.Id })" class="btn btn-w-m btn-warning"><i class="fa fa-pencil-square"></i> Modificar</a>
+                @*@Html.ActionLink("Modificar", "ModificarUsuario", new { id = Model.Id }, new { @class = "btn btn-w-m btn-warning" })*@
+
+            </p>
+        </div>
+
+    </div>
+</div>
+
+
+@section Styles {
+    @Styles.Render("~/Content/plugins/iCheck/iCheckStyles")
+}
+
+@section scripts {
+    @Scripts.Render("~/plugins/iCheck")
+
+
+    <script>
+        $(document).ready(function () {
+            $('.i-checks').iCheck({
+                checkboxClass: 'icheckbox_square-green',
+                radioClass: 'iradio_square-green',
+            });
+        });
+    </script>
+}

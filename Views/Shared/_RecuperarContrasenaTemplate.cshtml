@@ -1,0 +1,64 @@
+﻿@model Transparencia.Helpers.AuxRecuperarContrasena
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <title>TRANSPARENCIA | SONORA</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link href='http://fonts.googleapis.com/css?family=Raleway:400,600' rel='stylesheet' type='text/css' />
+    <style type="text/css">
+    </style>
+</head>
+<body style="margin: 0; padding: 0;">
+    <div id="wrapper" style="border:1px solid #ddd; width: 600px; background:#fff; min-heigh:480px; box-shadow: 0 0 5px rgba(0,0,0,0.1); font-size:14px; margin: 30px auto; font-family: ' Helvetica Neue', Helvetica, Arial, sans-serif; color #3a3a3a">
+        @*<div id="header" style='padding:15px; border-bottom:1px solid #ddd; text-align:center;'><p style='text-align:center; margin:0px; padding:0px;'><img src='https://s19.postimg.org/64q11r26r/logo_contraloria.png' height='70px' style='margin:0px; padding:0px;' /></p></div>*@
+        <div id='content' style='padding:15px; line-height:1.4em;'>
+            <h2 style='margin:0px; padding:0px; text-align:center; line-height:1.2; font-weight:700; font-size:20px;  color: #0a0a0a'>Gobierno del Estado de Sonora</h2>
+            @*<h3 style='margin:0px; padding:0px; text-align:center; line-height:1.2; font-weight:500; font-size:16px; color: #0a0a0a'>Secretaría de la Contraloría General</h3>*@
+            <h4 style='margin:0px; padding:0px; text-align:center; line-height:1.2; font-weight:500; font-size:14px; color: #0a0a0a'>@*Subsecretaría de Desarrollo Administrativo y Tecnológico*@</h4>
+            <h1 style='margin:30px 0px 30px 0px; padding:0px; text-align:center; line-height:1.2; font-weight: 300; font-size:24px;  color: #0a0a0a'>Recuperación de contraseña de Transparencia Sonora</h1>
+            <table width='80%' border='0' cellpadding='0' cellspacing='0' style='width:80%; margin:15px auto;'>
+                <tbody>
+                    <tr>
+                        <td style="color: #8a8a8a; font-family: 'Raleway', arial; font-size: 16px; line-height:28px; text-align:justify;">
+                            Estimado usuario de Transparencia Sonora (@Model.NombreUsuario):
+                            <br />
+                            <br />
+                            Si recibiste este correo electrónico es porque solicitaste la recuperación de tu contraseña de tu cuenta <strong>Transparencia Sonora</strong>
+
+                            <br />
+                            <br />
+
+                            Fecha: @Model.Fecha.ToLongDateString() a las @Model.Fecha.ToString("hh:mm tt")<br />
+                            Nombre: @Model.NombreUsuario <br />
+                            Correo: @Model.Usuario <br />
+                            <br />
+                            <br />
+
+
+                            Por favor accesar al siguiente link para poder ingresar una nueva contraseña: <a href="@Model.Url"> Recuperar contraseña</a>
+
+                            <br />
+                            Si no fue usted el que solicito un cambio de contraseña, porfavor haga caso omiso a este correo.
+
+                            <br />
+                            <br />
+                            Este es un correo de carácter informativo, favor de no responderlo. Para mayor seguridad de su cuenta, no reenviar este correo.
+                            <br />
+                            <br />
+                        </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <div id='footer' style='font-size:12px; padding: 15px; background: #f5f5f5; border-top:1px solid #ddd; text-align:center;'>
+            @*<p style='text-align:center; margin:0px;'>
+                    <img src='https://s19.postimg.org/6dnlrrf03/logo-sonora-unidos-logramos-mas-01.png' height='35px' />
+                </p>
+                <p style='margin:0px; padding:0px;'>
+                    Gobierno del Estado de Sonora. Comonfort y Dr. Paliza S/N. Colonia Centenario. CP 83260. Teléfonos: 2171885, 2172517, 2172105. Hermosillo, Sonora. <a href='http://www.sonora.gob.mx' style='color: #3a3a3a'>www.sonora.gob.mx</a> | <a href='http://contraloria.sonora.gob.mx' style='color: #3a3a3a'>contraloria.sonora.gob.mx</a>
+                </p>*@
+        </div>
+    </div>
+</body>
+</html>

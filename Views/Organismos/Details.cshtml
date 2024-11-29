@@ -1,0 +1,353 @@
+﻿@model Transparencia.Models.Organismo
+
+@{
+    ViewBag.Title = "Detalles Organismo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>@ViewBag.Title</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="@Url.Action("Index", "Home")">Inicio</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="@Url.Action("Index", "Organismos")">Organismos</a>
+            </li>
+            <li class="active breadcrumb-item">
+                <strong>@ViewBag.Title</strong>
+            </li>
+        </ol>
+    </div>
+</div>
+<br />
+
+<div class="col-lg-12">
+    <div class="ibox">
+        <div class="ibox-title">
+            <p>
+                <h2>@ViewBag.Title</h2>
+            </p>
+        </div>
+
+        <div class="ibox-content">
+            <div class="form-row">
+                <div class="form-group col-5">
+                    <dl>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.NombreOrganismo)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.NombreOrganismo)
+                        </dd>
+                    </dl>
+                </div>
+                <div class="form-group col-5">
+                    <dl>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.TipoOrganismo.Nombre)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.TipoOrganismo.Nombre)
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-5">
+                    <dl>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Descripcion)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.Descripcion)
+                        </dd>
+                    </dl>
+                </div>
+
+                <div class="form-group col-5">
+                    <dl>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Siglas)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.Siglas)
+                        </dd>
+                    </dl>
+                </div>
+
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-5">
+                    <dl>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Direccion)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.Direccion)
+                        </dd>
+                    </dl>
+                </div>
+
+                <div class="form-group col-5">
+                    <dl>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.CP)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.CP)
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-4">
+                    <dl>
+                        <dt> @Html.DisplayNameFor(model => model.Ciudad.NombreCiudad) </dt>
+                        <dd>@Html.DisplayFor(model => model.Ciudad.NombreCiudad)</dd>
+                    </dl>
+                </div>
+                <div class="form-group col-4">
+                    <dl>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Estado.NombreEstado)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.Estado.NombreEstado)
+                        </dd>
+                    </dl>
+                </div>
+                <div class="form-group col-4">
+                    <dl>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Pais.NombrePais)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.Pais.NombrePais)
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-4">
+                    <dl>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Representante.NombreCompleto)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.Representante.NombreCompleto)
+                        </dd>
+                    </dl>
+                </div>
+                <div class="form-group col-4">
+                    <dl>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Telefono)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.Telefono)
+                        </dd>
+                    </dl>
+                </div>
+
+                <div class="form-group col-4">
+                    <dl>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Extension)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.Extension)
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-5">
+                    <dl>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.URL)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.URL)
+                        </dd>
+                    </dl>
+                </div>
+
+                <div class="form-group col-5">
+                    <dl>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Logo)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.Logo)
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-5">
+                    <dl>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Latitud)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.Latitud)
+                        </dd>
+                    </dl>
+                </div>
+                <div class="form-group col-5">
+                    <dl>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Longitud)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.Longitud)
+                        </dd>
+                    </dl>
+                </div>
+
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-5">
+                    <dl>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Facebook)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.Facebook)
+                        </dd>
+                    </dl>
+                </div>
+
+                <div class="form-group col-5">
+                    <dl>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Twitter)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.Twitter)
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-5">
+                    <dl>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Youtube)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.Youtube)
+                        </dd>
+                    </dl>
+                </div>
+
+                <div class="form-group col-5">
+                    <dl>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Instagram)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.Instagram)
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+            <div class="form-row">
+                <div class="form-group col-5">
+                    <dl>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.UrlHistorico)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.UrlHistorico)
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+
+            <div class="form-row">
+                <div class="form-group col-5">
+                    <dl>
+
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Orden)
+                        </dt>
+
+                        <dd>
+                            @Html.DisplayFor(model => model.Orden)
+                        </dd>
+                    </dl>
+                </div>
+
+                <div class="form-group col-5">
+                    <dl>
+                        <dt>
+                            @Html.DisplayNameFor(model => model.Activo)
+                        </dt>
+
+                        <dd>
+                            <div class="i-checks">
+                                @Html.DisplayFor(model => model.Activo)
+                            </div>
+                        </dd>
+                    </dl>
+                </div>
+            </div>
+            <br />
+            <p class="text-right">
+                @Html.ActionLink("Regresar", "Index", null, new { @class = "btn btn-w-m btn-secondary" })
+                @Html.ActionLink("Modificar", "Edit", new { id = Model.OrganismoID }, new { @class = "btn btn-w-m btn-warning" })
+
+            </p>
+            <br />
+        </div>
+    </div>
+</div>
+
+@section Styles {
+    @Styles.Render("~/Content/plugins/iCheck/iCheckStyles")
+}
+
+@section scripts {
+    @Scripts.Render("~/plugins/iCheck")
+
+
+    <script>
+        $(document).ready(function () {
+            $('.i-checks').iCheck({
+                checkboxClass: 'icheckbox_square-green',
+                radioClass: 'iradio_square-green',
+            });
+        });
+    </script>
+}

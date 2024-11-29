@@ -1,0 +1,478 @@
+﻿@model List<Transparencia.Models.Campo>
+
+
+@{
+    ViewBag.Title = "Plantilla: " + @ViewBag.NombrePlantilla;
+}
+
+
+<input type="hidden" id="error" value="@ViewBag.Error" />
+
+
+@using (Html.BeginForm("CreateDynamic", "Plantillas", FormMethod.Post, htmlAttributes: new { enctype = "multipart/form-data", @id = "frmCrear" }))
+{
+    <input type="hidden" id="iPlantilldaId" name="iPlantilldaId" value="@ViewBag.PlantillaId" />
+    @Html.AntiForgeryToken()
+
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-lg-10">
+            <h2>Edición de obligación</h2>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="@Url.Action("Index", "Home")">Inicio</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="@Url.Action("IndexPlantillas", "Plantillas")">Plantillas</a>
+                </li>
+                <li class="active breadcrumb-item">
+                    <strong>@ViewBag.Title</strong>
+                </li>
+            </ol>
+        </div>
+    </div>
+    <br />
+
+    <div class="col-lg-12">
+        <div class="ibox">
+            <div class="ibox-title">
+                <p>
+                    <h3>@ViewBag.Title</h3>
+                </p>
+            </div>
+
+            <div class="ibox-content">
+                @Html.Partial("_CamposEdit", Model)
+                @Html.Hidden("TablaFisicaId", ViewBag.TablaFisicaId as string)
+
+                <div class="form-row">
+
+                    <div class="col-md-offset-2 col-md-12 text-right">
+                        <a id="aRegresar" href="@Url.Action("IndexPlantillas")" class="btn btn-w-m btn-secondary"><i class="fa fa-arrow-left"></i> Regresar</a>
+                        @*<button id="btnSave" type="button" class="btn btn-primary">
+                                <i class="fa fa-save"></i> Guardar
+                            </button>*@
+                        <button id="btnSave" type="button" class="btn btn-primary">
+                            <i class="fa fa-save"></i> Guardar
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+}
+
+<div class="modal fade bd-example-modal-lg ModalNew" id="ModalTabla" role="dialog" aria-labelledby="myLargeModalLabel">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalTabla">Por favor capura la información de <span id="modalTitleCatalogo"></span>. </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                @using (Html.BeginForm("CreateDynamic", "Catalogos", FormMethod.Post, htmlAttributes: new { enctype = "multipart/form-data", @id = "frmCrearCatalogo" }))
+                {
+                    <input type="hidden" id="tmp_TablaFisicaId" name="tmp_TablaFisicaId" value="0" />
+                    <div id="modalDatos">
+
+                    </div>
+                    <div class="form-row">
+                        <div class="col-md-offset-2 col-md-12 text-right">
+                            <button id="btnCloseTTabla" type="button" class="btn btn-secondary" data-dismiss="modal" aria-label="Close">
+                                <i class="fa fa-arrow-left"></i> Cerrar
+                            </button>
+                            <button id="btnSaveTabla" type="button" class="btn btn-success">
+                                <i class="fa fa-save"></i> Guardar
+                            </button>
+                            <button id="btnEditTable" type="button" class="btn btn-warning">
+                                <i class="fa fa-pencil"></i> Editar
+                            </button>
+                        </div>
+                    </div>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+<div class="modal fade bd-example-modal-lg modalLista" id="ModalTablaList" role="dialog" aria-labelledby="myLargeModalLabel">
+    <div class="modal-dialog modal-lg">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalTabla">Por favor capura la información de <span id="modalTitleCatalogoList"></span>. </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <input type="hidden" id="tmpCatalogoId" name="tmpCatalogoId" value="0" />
+                <input type="hidden" id="tmpNombreCatalogo" name="tmpNombreCatalogo" value="" />
+                <input type="hidden" id="tmpNombreHidden" name="tmpNombreHidden" value="" />
+                <div id="modalDatosList">
+
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+
+@section AddToTop {
+    @Styles.Render("~/plugins/TimePickerStyle")
+    @Styles.Render("~/stepCss")
+    @*@Styles.Render("~/Content/jqueryUI")*@
+
+
+
+}
+
+@section scripts {
+    @*<script src="~/Scripts/steps/jquery-3.1.1.min.js"></script>
+        <script src="~/Scripts/steps/jquery.metisMenu.js"></script>
+        <script src="~/Scripts/steps/jquery.slimscroll.min.js"></script>
+        <script src="~/Scripts/steps/jquery.flot.tooltip.min.js"></script>*@
+
+    @*<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>*@
+    <script src="~/Scripts/PaginadorOrder.js"></script>
+    @Scripts.Render("~/plugins/TimePickerJs")
+    @Scripts.Render("~/stepJs")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jqueryUI")
+
+    @*<script src="~/Scripts/DatePickerReady.js"></script>*@
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.13.4/jquery.mask.min.js"></script>
+
+
+
+    <script>
+
+        $(function () {
+             $.datepicker.regional['es'] =
+            {
+                closeText: 'Cerrar',
+                prevText: 'Previo',
+                nextText: 'Próximo',
+
+                monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+                    'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+                monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun',
+                    'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+                monthStatus: 'Ver otro mes', yearStatus: 'Ver otro año',
+                dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+                dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sáb'],
+                dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+                dateFormat: 'dd/mm/yy', firstDay: 0,
+                initStatus: 'Selecciona la fecha', isRTL: false
+            };
+            $(".datefield").datepicker($.datepicker.regional["es"]);
+
+            if ($("#error").val().length > 0) {
+                Swal.fire(
+                    'Aviso',
+                    $("#error").val(),
+                    'error'
+                );
+            }
+            $("#frmCrear").submit(function () {
+                var vSubmit = $(this).valid();
+                if (vSubmit) {
+                    $('button[type=submit], input[type=submit]').prop('disabled', true);
+                    ShowLoading();
+                }
+                return vSubmit;
+            });
+
+            @Html.Raw(ViewBag.Validation )
+
+
+            @*$('#btnSave').submit(function(e) {
+                e.preventDefault(); // stop the standard form submission
+                var Validar = $("#frmCrear").valid();
+                if (Validar) {
+                    ShowLoading();
+                       $.ajax({
+                        url: "@Url.Action("CreateDynamic")",
+                        type: "POST",
+                        data: new FormData(this),
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        success: function (data) {
+                             //console.log(data.Hecho);
+                                if (data.Hecho) {
+                                    window.location.href = '@Url.Action("IndexPlantillas", "Plantillas")';
+                                    limpiar();
+                                } else {
+                                    Swal.fire('Error', data.Mensaje, 'error');
+                                }
+                                HideLoading();
+                        },
+                        error: function(xhr, error, status) {
+                              Swal.fire('Error', 'Ocurrio un error al momento de eliminar el campo - ' + error.responseText, 'error');
+                              HideLoading();
+                        }
+                    });
+
+                }
+                return false;
+            });*@
+
+
+            $("#btnSave").click(function () {
+                var Validar = $("#frmCrear").valid();
+                if (Validar) {
+                    ShowLoading();
+                    var formElement = document.getElementById("frmCrear");
+                    $.ajax({
+                        url: "@Url.Action("EditDynamic")",
+                        dataType: "json",
+                        type: "POST",
+                         data: new FormData(formElement),
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        success: function (data) {
+                            console.log(data.Hecho);
+                            if (data.Hecho) {
+                                //window.location.href = '@Url.Action("IndexPlantillas", "Plantillas")';
+                                window.history.back();
+                                limpiar();
+                            } else {
+                                Swal.fire('Error', data.Mensaje, 'error');
+                            }
+                            HideLoading();
+                        },
+                        error: function (error) {
+                            Swal.fire('Error', 'Ocurrio un error al momento de eliminar el campo - ' + error.responseText, 'error');
+                            HideLoading();
+                        }
+                    });
+                }
+            });
+
+
+            //comienzan los nuevos cambios
+
+               //cambios nuevos
+            $(".modalCatalogoList").click(function () {
+                ShowLoading();
+                var vCatalagoId = $(this).data("catalogo");
+                var vIdregistro = $("#TablaFisicaId").val();
+                $("#tmpCatalogoId").val(0);
+                $("#tmpNombreHidden").val($(this).data("hidden"));
+                //console.log(vCatalagoId, vIdregistro);
+                $.ajax({
+                    url: "@Url.Action("BuscarDatosTabla")",
+                    //dataType: "json",
+                    type: "POST",
+                    data: {
+                        CatalogoId: vCatalagoId,
+                        Idregistro: vIdregistro
+                    },
+                    success: function (data) {
+                        if (data.Hecho) {
+                            $("#tmpCatalogoId").val(vCatalagoId);
+                            $("#tmpNombreCatalogo").val(data.Mensaje);
+                            $("#modalDatosList").html(data.Partial);
+                            $("#modalTitleCatalogoList").html(data.Mensaje);
+                            $("#ModalTablaList").modal();
+
+                        } else {
+                            Swal.fire('Error1', data.Mensaje, 'error');
+                        }
+                        HideLoading();
+                    },
+                    error: function (error) {
+                        Swal.fire('Error', 'Ocurrio un error al momento de eliminar el campo - ' + error.responseText, 'error');
+                        HideLoading();
+                    }
+                });
+            });
+
+            $("#btnSaveTabla").click(function () {
+                var Validar = $("#frmCrearCatalogo").valid();
+                if (Validar) {
+                    ShowLoading();
+                    //guardamos los datos
+                    var formElement = document.getElementById("frmCrearCatalogo");
+                    var form = new FormData(formElement);
+                    var vTablaFisicaId = $("#TablaFisicaId").val();
+                    var vCatalogoId = $("#tmpCatalogoId").val();
+                    form.append("Idregistro",vTablaFisicaId);
+                    form.append("iId", vCatalogoId);
+
+                    $.ajax({
+                        url: "@Url.Action("CreateDynamicForTabla","Catalogos")",
+                        dataType: "json",
+                        type: "POST",
+                        data: form,
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        success: function (data) {
+                            console.log(data.Hecho);
+                            if (data.Hecho) {
+                                consultarLista(vTablaFisicaId, vCatalogoId);
+                                $("#ModalTabla").modal("hide");
+                                $("#tableDatosTabla").trigger('update');
+                                //necesitamos refrescar la consulta
+                            } else {
+                                Swal.fire('Error', data.Mensaje, 'error');
+                                HideLoading();
+                            }
+
+                        },
+                        error: function (error) {
+                            Swal.fire('Error', 'Ocurrio un error al momento de eliminar el campo - ' + error.responseText, 'error');
+                            HideLoading();
+                        }
+                    });
+
+                }
+            });
+            function consultarLista(vIdregistro, vCatalagoId) {
+                 //ShowLoading();
+                 $.ajax({
+                    url: "@Url.Action("BuscarDatosTabla")",
+                    //dataType: "json",
+                    type: "POST",
+                    data: {
+                        CatalogoId: vCatalagoId,
+                        Idregistro: vIdregistro
+                    },
+                    success: function (data) {
+                        if (data.Hecho) {
+                            $("#modalDatosList").html(data.Partial);
+                        } else {
+                            Swal.fire('Error', data.Mensaje, 'error');
+                        }
+                        HideLoading();
+                    },
+                    error: function (error) {
+                        Swal.fire('Error', 'Ocurrio un error al momento de eliminar el campo - ' + error.responseText, 'error');
+                        HideLoading();
+                    }
+                });
+            }
+            //Editar
+            $("#btnEditTable").click(function () {
+                var Validar = $("#frmCrearCatalogo").valid();
+
+                if (Validar) {
+                    ShowLoading();
+                    var trId = $("#custom_tr_id").val();
+                     //guardamos los datos
+                    var formElement = document.getElementById("frmCrearCatalogo");
+                    var form = new FormData(formElement);
+                    var vTablaFisicaId = $("#tmp_TablaFisicaId").val();
+                    var vCatalogoId = $("#tmpCatalogoId").val();
+                    form.append("TablaFisicaId",vTablaFisicaId);
+                    form.append("CatalogoId", vCatalogoId);
+
+                    $.ajax({
+                        url: "@Url.Action("EditDynamicForTabla","Catalogos")",
+                        dataType: "json",
+                        type: "POST",
+                        data: form,
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        success: function (data) {
+                            console.log(data.Hecho);
+                            if (data.Hecho) {
+                                consultarLista($("#TablaFisicaId").val(), vCatalogoId);
+                                $("#ModalTabla").modal("hide");
+                                //necesitamos refrescar la consulta
+                            } else {
+                                Swal.fire('Error', data.Mensaje, 'error');
+                                HideLoading();
+                            }
+
+                        },
+                        error: function (error) {
+                            Swal.fire('Error', 'Ocurrio un error al momento de eliminar el campo - ' + error.responseText, 'error');
+                            HideLoading();
+                        }
+                    });
+                }
+            });
+
+            //verificar si hay valores
+            @*$('#ModalTablaList').on('hidden.bs.modal', function () {
+                ShowLoading();
+                var vTablaFisicaId = $("#TablaFisicaId").val();
+                var vCatalogoId = $("#tmpCatalogoId").val();
+                $.ajax({
+                    url: "@Url.Action("CheckIfHaveRows","Plantillas")",
+                    //dataType: "json",
+                    type: "POST",
+                    data: {
+                        CatalogoId: vCatalogoId,
+                        Idregistro: vTablaFisicaId
+                    },
+                    success: function (data) {
+                        console.log(data.Hecho);
+                        if (data.Hecho) {
+                            console.log(data.Mensaje);
+                        } else {
+                            Swal.fire('Error', data.Mensaje, 'error');
+                            HideLoading();
+                        }
+
+                    },
+                    error: function (error) {
+                        Swal.fire('Error', 'Ocurrio un error al momento de checar la tabla - ' + error.responseText, 'error');
+                        HideLoading();
+                    }
+                });
+            });*@
+
+       
+            
+        });
+
+        function btnEditar(vCatalogoId, vIdregistro) {
+            $("#btnSaveTabla").hide();
+            $("#btnEditTable").show();
+
+            ShowLoading();
+            $.ajax({
+                url: "@Url.Action("GetEditDynamicPartial","Catalogos")",
+                //dataType: "JSON",
+                type: "POST",
+                data: {
+                    CatalogoId: vCatalogoId,
+                    TablaFisicaId: vIdregistro
+                },
+                success: function (data) {
+
+                    if (data.Hecho) {
+                        $("#modalDatos").html(data.Partial);
+                        $("#modalTitleCatalogo").html(data.Mensaje);
+                        $("#ModalTabla").modal();
+                        $("#tmp_TablaFisicaId").val(vIdregistro);
+                        //utilizaremos para saber que tr es en la edicion
+
+
+                    } else {
+                        Swal.fire('Error1', data.Mensaje, 'error');
+                    }
+
+                    HideLoading();
+                }, error: function (error) {
+                    Swal.fire('Error', 'Ocurrio un error al momento de eliminar el campo - s' + error.responseText, 'error');
+                    HideLoading();
+                }
+            });
+        }
+    </script>
+
+}
+
+

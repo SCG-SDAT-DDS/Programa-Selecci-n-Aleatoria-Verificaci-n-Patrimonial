@@ -1,0 +1,80 @@
+﻿@model Transparencia.Models.vmResultPdf
+@{
+    Layout = null;
+    ViewBag.Title = "Reporte de detalle";
+}
+
+
+<!doctype html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
+
+    <title>Reporte de Selección</title>
+
+    <link href="@Url.Content("~/Content/style-for-pdf.css")" rel="stylesheet" type="text/css" />
+</head>
+<body>
+    <div class="box">
+
+
+        <div class="row">
+            <div class="column">
+                <img src="~/content/images/PROVEP3x-black.png" height="130" alt="Gobierno del Estado de Sonora">
+            </div>
+            <div class="column">
+                <h2>Reporte de detalle de Servidores Publico</h2>
+            </div>
+            <div class="column" >
+                <h4>@ViewBag.textPlantilla</h4>
+            </div>
+        </div>
+    </div>  
+
+    @using (Html.BeginForm("BuscarDynamic", "Plantillas", FormMethod.Post, htmlAttributes: new { enctype = "multipart/form-data", @id = "frmCrear" }))
+    {
+
+        <div class="wrapper wrapper-content animated fadeInRight ecommerce">
+
+
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="ibox">
+                        <div class="ibox-content">
+                            <div class="form-group row">
+                                <div class="col-md-12 col-sm-12 col-xs-12" id="Listado">
+                                    @Html.Partial("PdfRowDetail/_Pdf", Model)
+                                    @Html.Hidden("sOrder")
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        @Html.Hidden("id", ViewBag.iId as string)
+        @Html.Hidden("PlantillaHistoryId", ViewBag.PlantillaHistoryId as string)
+    }
+    @section Styles {
+        @Styles.Render("~/plugins/TimePickerStyle")
+        @Styles.Render("~/stepCss")
+        @Styles.Render("~/plugins/footableStyles")
+    }
+
+    @section Scripts {
+        <script src="~/Scripts/PaginadorOrder.js"></script>
+        @Scripts.Render("~/plugins/footable")
+
+        @Scripts.Render("~/plugins/TimePickerJs")
+        @Scripts.Render("~/stepJs")
+        @Scripts.Render("~/bundles/jqueryval")
+        @Scripts.Render("~/bundles/jqueryUI")
+
+        <script src="~/Scripts/DatePickerReady.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.13.4/jquery.mask.min.js"></script>
+
+    }
+</body>
+</html>

@@ -1,0 +1,145 @@
+﻿@model PagedList<Transparencia.Models.ImportacionMasivo>
+
+@{
+    FiltrosImpMasivo filtros = ViewBag.Filtros != null ? ViewBag.Filtros as FiltrosImpMasivo : new FiltrosImpMasivo();
+}
+
+
+
+    <div id="lista">
+        <p>
+            @Html.ActionLink("Subir nuevo documento", "Create", new { PlantillaId = ViewBag.PlantillaId }, new { @class = "btn btn-w-m btn-primary" })
+        </p>
+
+        <table class="table table-striped ">
+            <thead>
+                <tr>
+                    <th>
+                        <label onclick="OrderBy(this)" order="@ViewBag.OrderPais"> Fecha <i class="fa fa-sort"></i> </label>
+                    </th>
+                    <th>
+                        <label onclick="OrderBy(this)" order="@ViewBag.OrderEstado">  Ejercicio <i class="fa fa-sort"></i> </label>
+                    </th>
+                    <th>
+                        <label onclick="OrderBy(this)" order="@ViewBag.OrderNombre">  Frecuencia <i class="fa fa-sort"></i> </label>
+                    </th>
+                    <th>
+                        <label onclick="OrderBy(this)" order="@ViewBag.OrderActivo"> Num. Frecuencia <i class="fa fa-sort"></i> </label>
+                    </th>
+                    <th>
+                        <label onclick="OrderBy(this)" order="@ViewBag.OrderActivo"> Estatus <i class="fa fa-sort"></i> </label>
+                    </th>
+                    <th>
+                        Acciones
+                    </th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var item in Model)
+                {
+                <tr>
+                    <td>
+                        @item.fechaFromated
+                       
+                    </td>
+                    <td>
+                        @{ 
+                           var Periodo =  ((IEnumerable<SelectListItem>)ViewBag.AllPeriodos).Where(x => x.Value == item.PeriodoId.ToString()).FirstOrDefault();
+                        }
+                        @Periodo.Text
+                    </td>
+                    <td>
+                        @{
+                            var sysFecuecia = ((IEnumerable<SelectListItem>)ViewBag.AllFrecuencias).Where(x => x.Value == item.sysFrecuencia.ToString()).FirstOrDefault();
+                        }
+                        @sysFecuecia.Text
+                    </td>
+                    <td>
+                        @{
+                            var sysNumFrecuencia = ((IEnumerable<SelectListItem>)ViewBag.AllSubFrecuencia).Where(x => x.Value == item.sysNumFrecuencia.ToString()).FirstOrDefault();
+                        }
+                        @sysNumFrecuencia.Text
+                    </td>
+                    <td>
+                        @switch (item.status)
+                        {
+                            case Transparencia.Models.EstatusImportacio.Pendiente:
+                                <span class="label label-secondary BadgeStatus">Pendiente</span>
+                                break;
+                            case Transparencia.Models.EstatusImportacio.Procesando:
+                                <span class="label label-warning BadgeStatus">Procesando</span>
+                                break;
+                            case Transparencia.Models.EstatusImportacio.Terminado:
+                                <span class="label label-primary BadgeStatus">Terminado</span>
+                                break;
+                            case Transparencia.Models.EstatusImportacio.Error:
+                                <span class="label label-danger BadgeStatus">Error</span>
+                                break;
+                            default:
+                                <span class="label label-secondary BadgeStatus">INDEFINIDO</span>
+                                break;
+                        }
+                    </td>
+                    <td>
+                        @if (item.status == Transparencia.Models.EstatusImportacio.Error)
+                        {
+                            <a href="@Url.Action("GetAttachmentAsignado", "ImportacionMasivo", new { ImportacionMasivoId = item.ImportacionMasivoId })"><i class="fa fa-paperclip"></i> descargar observaciones </a>
+                        }
+                    </td>
+                </tr>
+                }
+            </tbody>
+            <tfoot>
+                <tr>
+                    <td>
+                        <div class="form-group row">
+                            <div class="col-md-12 col-sm-12 col-xs-12">
+                                <label>
+                                    Mostrar
+                                    <select class="input-sm filtrar" name="PerPage" id="mostrar">
+                                        <option value="10">10</option>
+                                        <option value="25">25</option>
+                                        <option value="50">50</option>
+                                        <option value="100">100</option>
+                                    </select>
+                                    Registros
+                                </label>
+                            </div>
+                        </div>
+                    </td>
+                    <td colspan="7">
+                        <div class="pagination float-right">
+                            <label style="padding: 5px 10px;">@(Model.LastItemOnPage > 0 ? Model.FirstItemOnPage : 0) - @Model.LastItemOnPage de @Model.TotalItemCount Registros</label>
+                            <br />
+                            <div id="pagedList" class="pagedList" data-otf-target="#listaOrganismos">
+
+                                @Html.PagedListPager(Model, iPagina => Url.Action("Index", new
+                                {
+                                    iPagina,
+                                    PerPage = ViewBag.PerPage,
+                                    sOrder = ViewBag.Order,
+                        Nombre = filtros.Nombre,
+                                    Activo = filtros.Activo
+                                }),
+                        PagedList.Mvc.PagedListRenderOptions.EnableUnobtrusiveAjaxReplacing(PagedListRenderOptions.ClassicPlusFirstAndLast,
+                        new AjaxOptions
+                        {
+                            HttpMethod = "get",
+                            InsertionMode = InsertionMode.Replace,
+                            UpdateTargetId = "listaCiudades",
+                            OnBegin = "BeginClient",
+                            OnComplete = "CompleteClient"
+                        }))
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+            </tfoot>
+        </table>
+    </div>
+
+
+
+
+
+

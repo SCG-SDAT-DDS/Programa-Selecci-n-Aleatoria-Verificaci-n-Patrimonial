@@ -1,0 +1,682 @@
+﻿@using Transparencia.Models
+@using Transparencia
+@model List<Campo>
+@{
+    ViewBag.Title = "Configurar Campos de la plantilla: ";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    var plantillaId = (int)ViewBag.PlantillaId;
+    //var lstCampos = Model ?? new List<Transparencia.Models.CampoViewModel>();
+}
+
+<div class="row wrapper border-bottom white-bg page-heading">
+    <div class="col-lg-10">
+        <h2>Plantillas</h2>
+        <ol class="breadcrumb">
+            <li class="breadcrumb-item">
+                <a href="@Url.Action("Index", "Home")">Inicio</a>
+            </li>
+            <li class="breadcrumb-item">
+                <a href="@Url.Action("AgregarCampos", "Plantillas")">Plantillas</a>
+            </li>
+            <li class="active breadcrumb-item">
+                <strong>@ViewBag.Title <b>@ViewBag.Plantilla_name</b></strong>
+            </li>
+        </ol>
+    </div>
+</div>
+<br />
+
+<div class="wrapper wrapper-content animated fadeInRight ecommerce">
+    <div class="ibox-title">
+        <p>
+            <h2>@ViewBag.Title <b>@ViewBag.Plantilla_name</b></h2>
+        </p>
+    </div>
+    @using (Html.BeginForm("CreateCampos", "Plantillas", FormMethod.Post, htmlAttributes: new { @id = "frmTablero" }))
+    {
+        @Html.AntiForgeryToken()
+        @Html.Hidden("iId", plantillaId)
+        <div hidden id="dCamposTableroDinamico">
+
+        </div>
+
+    }
+    @*@using (Html.BeginForm("AgregarCampo", "Plantillas", FormMethod.Post, htmlAttributes: new { @id = "frmAgregarCampo" }))
+        {*@
+    @using (Ajax.BeginForm("AgregarCampo", "Plantillas", null, new AjaxOptions
+    {
+        InsertionMode = InsertionMode.Replace,
+        UpdateTargetId = "Lista",
+        OnBegin = "GuardarCampoBegin",
+        OnSuccess = "CargarTablaCampos"
+    }, htmlAttributes: new
+    {
+        @id = "frmAgregarCampo"
+    }))
+    {
+
+        @Html.AntiForgeryToken()
+
+        var tipos = HMTLHelperExtensions.GetTipoCampoDropDown();
+        var ordenSeleccion = HMTLHelperExtensions.GetOrdenSeccionPublico();
+        List<ListaSeleccion> grupos = (List<ListaSeleccion>)ViewBag.GrupoExtension;
+        List<ListaSeleccion> catalogosList = (List<ListaSeleccion>)ViewBag.listaCatalogos;
+        var tipoFechas = HMTLHelperExtensions.GetTipoFechaDropDown();
+
+        @Html.Hidden("iIdA", plantillaId)
+        @Html.Hidden("iEliminar")
+        @Html.Hidden("CampoId");
+        @Html.Hidden("yaLoValido");
+        <div class="ibox-content m-b-sm border-bottom">
+            @if (ViewData["error"] != null)
+            {
+                <div class="alert alert-danger" role="alert">
+                    @ViewData["error"]
+                </div>
+            }
+            @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        <div class="form-row">
+            <div class="form-group col-md-4" id="divTipo">
+                <label for="AddTipoCampo">Tipo de Campo</label>
+                @Html.DropDownList("AddTipoCampo", new SelectList(tipos, "Value", "Text"), "Seleccionar...", new { @class = "form-control" })
+                @Html.ValidationMessage("AddTipoCampo", "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group col-md-4" id="divNombre">
+                <label for="AddNombre">Nombre del Campo</label>
+                @Html.Editor("AddNombre", new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessage("AddNombre", "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group col-md-4" id="divPorcentaje">
+                <label for="AddConDecimales">Con decimales</label>
+                <div class="i-checks">
+                    @Html.CheckBox("AddConDecimales", new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessage("AddConDecimales", "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group col-md-4" id="divEtiqueta">
+                <label for="AddEtiqueta">Etiqueta</label>
+                @Html.Editor("AddEtiqueta", new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessage("AddEtiqueta", "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group col-md-4" id="divLongitud">
+                <label for="AddLongitud">Longitud</label>
+                @Html.Editor("AddLongitud", new { htmlAttributes = new { @class = "form-control asaasa" } })
+                @Html.ValidationMessage("AddLongitud", "", new { @class = "text-danger" })
+            </div>
+
+            <div class="form-group col-md-4" id="divTipoFecha">
+                <label for="AddTipoFecha">Tipo de Fecha</label>
+                @Html.DropDownList("AddTipoFecha", new SelectList(tipoFechas, "Value", "Text"), "Seleccionar...", new { @class = "form-control" })
+                @Html.ValidationMessage("AddTipoFecha", "", new { @class = "text-danger" })
+                <input type="hidden" id="ValidarFecha" name="ValidarFecha" value="">
+            </div>
+            <div class="form-group col-md-4" id="divGpoExtensiones">
+                <label for="AddGrupoExtensionId">Grupo de Extensiones</label>
+                @*@Html.DropDownList("AddGrupoExtensionId", new SelectList(grupos, "Value", "Text"), "Seleccionar...", new { @class = "form-control" })*@
+                <select id="AddGrupoExtensionId" name="AddGrupoExtensionId" class="form-control selectpicker" data-live-search="true" title="Seleccione..." data-size="5">
+                    @foreach (var item in grupos)
+                    {
+                        <option data-tokens="@item.Text" value="@item.Value">@item.Text</option>
+                    }
+
+                </select>
+
+                @Html.ValidationMessage("AddGrupoExtensionId", "", new { @class = "text-danger" })
+                <input type="hidden" id="ValidatExtension" name="ValidatExtension" value="">
+            </div>
+            <div class="form-group col-md-4" id="divSize">
+                <label for="AddSize">Tamaño en MB</label>
+                @Html.Editor("AddSize", new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessage("AddSize", "", new { @class = "text-danger" })
+                <input type="hidden" id="ValidarSize" name="ValidarSize" value="">
+            </div>
+            <div class="form-group col-md-4" id="divCatalogos">
+                <label for="AddCatalogoId">Catálogo</label>
+                @*@Html.DropDownList("AddCatalogoId", new SelectList(catalogosList, "Value", "Text"), "Seleccionar...", new { @class = "form-control" })*@
+
+                <select id="AddCatalogoId" name="AddCatalogoId" class="form-control selectpicker" data-live-search="true" title="Seleccione..." data-size="5">
+                    @foreach (var item in catalogosList)
+                    {
+                        <option data-tokens="@item.Text" value="@item.Value">@item.Text</option>
+                    }
+
+                </select>
+
+                @Html.ValidationMessage("AddCatalogoId", "", new { @class = "text-danger" })
+                <input type="hidden" id="ValidarCatalogos" name="ValidarCatalogos" value="">
+            </div>
+            <div class="form-group col-md-4" id="divAyuda">
+                <label for="AddAyuda">Ayuda</label>
+                @Html.Editor("AddAyuda", new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessage("AddAyuda", "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group col-md-2" id="divRequerido">
+                <label for="AddRequerido">Requerido</label>
+                <div class="i-checks">
+                    @Html.CheckBox("AddRequerido", new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessage("AddRequerido", "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group col-md-2" id="divRelevante">
+                <label for="AddRequerido">Relevante</label>
+                <div class="i-checks">
+                    @Html.CheckBox("AddRelevante", new { htmlAttributes = new { @class = "form-control" } })
+                    @Html.ValidationMessage("AddRelevante", "", new { @class = "text-danger" })
+                </div>
+            </div>
+            <div class="form-group col-md-4" id="divTipo">
+                <label for="AddTipoCampo">Orden de Seleccion Publica</label>
+                @Html.DropDownList("AddOrdenSeleccion", new SelectList(ordenSeleccion, "Value", "Text"), "Seleccionar...", new { @class = "form-control" })
+                @Html.ValidationMessage("AddOrdenSeleccion", "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group col-md-4" id="divCampoPNT">
+                <label for="AddCampoPNT">ID Campo PNT</label>
+                @Html.Editor("AddCampoPNT", new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessage("AddCampoPNT", "", new { @class = "text-danger" })
+            </div>
+            <div class="form-group col-md-4" id="divCampoPNT">
+                <label for="AddCampoPNT">ID Tipo Campo PNT</label>
+                @Html.Editor("AddTipoCampoPNT", new { htmlAttributes = new { @class = "form-control" } })
+                @Html.ValidationMessage("AddTipoCampoPNT", "", new { @class = "text-danger" })
+            </div>
+        </div>
+            <div class="form-row">
+                <div class="form-group col-md-12 text-right">
+                    <button id="btnLimpiar" type="button" class="btn btn-secondary" onclick="limpiar()">
+                        <i class="fa fa-trash"></i> Limpiar
+                    </button>
+
+                    <button id="btnAgregaCampo2" type="button" class="btn btn-success">
+                        <i class="fa fa-plus-square"></i> Agregar Campo
+                    </button>
+                    <button id="btnEditarCampo" type="button" class="btn btn-warning">
+                        <i class="fa fa-pencil-square"></i> Modificar Campo
+                    </button>
+                </div>
+            </div>
+        </div>
+    }
+    <div class="row">
+        <div class="col-lg-12">
+            <div class="ibox">
+                <div class="ibox-content">
+                    <div class="form-group row">
+                        <div class="col-md-12 col-sm-12 col-xs-12">
+                            <div id="Lista">
+                                @Html.Partial("_ListaCampos", Model)
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="col-md-offset-2 col-md-12 text-right">
+                            @Html.ActionLink("Regresar", "Index", null, new { @class = "btn btn-w-m btn-secondary" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+
+<!-- Modal -->
+<div class="modal fade" id="ModalCambioOrden" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Cambiar Orden del campo <b id="ModalCampoName">adssadas</b> </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div class="form-group col-md-3">
+                    <label for="ModalCampoOrden">Orden</label>
+                    <input type="number" id="ModalCampoOrden" value="0" class="form-control" />
+                    <input type="hidden" id="ModalCampoId" value="0" />
+
+                </div>
+                <div class="form-group col-md-12">
+                    <p>Por favor, escribe el nuevo número de orden que tendra este campo.</p>
+                </div>
+                
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Regresar</button>
+                <button type="button" id="btnGuardarModalOrden" class="btn btn-primary">Guardar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!--Modal para el campo -->
+<div class="modal fade bd-example-modal-lg" id="ModalDetail" tabindex="-1" role="dialog" aria-labelledby="exampleModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-lg" role="document">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title" id="exampleModalLabel">Detalle del campo <b id="ModalDetailCampo"></b> </h5>
+                <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                    <span aria-hidden="true">&times;</span>
+                </button>
+            </div>
+            <div class="modal-body">
+                <div id="ListaDetails">
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-dismiss="modal">Regresar</button>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+@section Styles {
+    @Styles.Render("~/Content/plugins/iCheck/iCheckStyles")
+    @Styles.Render("~/plugins/footableStyles")
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/css/bootstrap-select.css" />
+
+}
+
+@section scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/plugins/iCheck")
+    @Scripts.Render("~/plugins/footable")
+    <script type="text/javascript" src="~/Scripts/ConfigurarCampos.js"></script>
+    <script src="~/Scripts/PaginadorOrder.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-select/1.13.1/js/bootstrap-select.min.js"></script>
+
+    <script>
+
+
+        $(document).ready(function () {
+             limpiar();
+            $('.footable').footable();
+            $('.i-checks').iCheck({
+                checkboxClass: 'icheckbox_square-green',
+                radioClass: 'iradio_square-green',
+            });
+
+            //nuevas funciones
+            $("#btnAgregaCampo2").click(function () {
+                var Validar = $("#frmAgregarCampo").valid();
+                if (Validar) {
+                    ShowLoading();
+                    var form = $("#frmAgregarCampo");
+                     $.ajax({
+                                url: "@Url.Action("AjaxAgregarCampo")",
+                                dataType: "json",
+                                type: "POST",
+                                data: form.serialize(),
+                                cache: false,
+                         success: function (data) {
+                             console.log(data.Hecho);
+                             if (data.Hecho) {
+                                 $("#Lista").html(data.Partial);
+                                 limpiar();
+                             } else {
+                                 Swal.fire('Error', data.Mensaje, 'error');
+                             }
+                             HideLoading();
+                         },
+                         error: function (error) {
+                             Swal.fire('Error', 'Ocurrio un error al momento de eliminar el campo - ' + error.responseText, 'error');
+                             HideLoading();
+                         }
+                     });
+                }
+            });
+
+             //Guardar ORden
+            $("#btnGuardarModalOrden").click(function () {
+                ShowLoading();
+                $('#ModalCambioOrden').modal('hide');
+                var Orden = $('#ModalCampoOrden').val();
+                var CampoId = $('#ModalCampoId').val();
+                var PlantillaId = $('#iId').val();
+
+                $.ajax({
+                    url: "@Url.Action("AjaxCambiarOrden")",
+                    dataType: "json",
+                    type: "POST",
+                    data: {
+                        iCampoId: CampoId,
+                        iOrden: Orden,
+                        iPlantillaId: PlantillaId
+                    },
+                    cache: false,
+                     success: function (data) {
+                         if (data.Hecho) {
+                             $("#Lista").html(data.Partial);
+                         } else {
+                             Swal.fire('Error', data.Mensaje, 'error');
+                         }
+                        HideLoading();
+                    },
+                    error: function (error) {
+                        Swal.fire('Error', 'Ocurrio un error al momento de eliminar el campo - ' + error.responseText, 'error');
+                        HideLoading();
+                    }
+                });
+
+            });
+
+
+        });
+
+            var DeleteCampo = function (CampoId, Tr) {
+
+                Swal.fire({
+                 title: '¿Esta seguro que desea eliminar el campo de la plantilla?',
+                 text: 'Este campo de la plantilla se eliminara',
+                icon: 'warning',
+                showCancelButton: true,
+                 confirmButtonText: 'Eliminar',
+                cancelButtonText: 'Cancelar'
+            }).then((result) => {
+                if (result.value) {
+                    ShowLoading();
+                    $.ajax({
+                        url: "@Url.Action("AjaxEliminarCampo")",
+                        dataType: "json",
+                        type: "POST",
+                        data: {
+                            iCampoId: CampoId
+                        },
+                        cache: false,
+                        success: function (data) {
+                            if (data.Hecho) {
+                                 //Entro pero veamos si tiene Observaciónes
+                                if (data.Respuesta.length > 0) {
+
+                                    Swal.fire({
+                                        title: '¿Observaciones de la eliminación?',
+                                        text: data.Respuesta,
+                                        icon: 'warning',
+                                        showCancelButton: true,
+                                        confirmButtonText: 'Borrar datos y Continuar con la eliminación',
+                                        cancelButtonText: 'Cancelar'
+                                    }).then((result) => {
+                                        if (result.value) {
+                                            //$("#yaLoValido").val('true');
+                                            PostElimminar(CampoId,Tr);
+
+                                        }
+
+                                    });
+
+                                } else {
+                                   $(Tr).remove();
+                                }
+                                
+                            } else {
+                                Swal.fire('Error', data.Mensaje, 'error');
+                            }
+                            HideLoading();
+                        },
+                        error: function (error) {
+                            Swal.fire('Error', 'Ocurrio un error al momento de eliminar el campo - ' + error.responseText, 'error');
+                            HideLoading();
+
+                        }
+                    });
+
+                }
+            });
+
+        }
+
+        function PostElimminar(CampoId,Tr) {
+            //var form = $("#frmAgregarCampo");
+            ShowLoading();
+            $.ajax({
+                url: "@Url.Action("AjaxEliminarCampo")",
+                dataType: "json",
+                type: "POST",
+                data: {
+                    iCampoId: CampoId,
+                    yaLoValido: true
+                },
+                cache: false,
+                success: function (data) {
+                    if (data.Hecho) {
+                        $(Tr).remove();
+                    } else {
+                        Swal.fire('Error', data.Mensaje, 'error');
+                    }
+                    HideLoading();
+
+                },
+                error: function (error) {
+                    Swal.fire('Error', 'Ocurrio un error al momento de eliminar el campo - ' + error.responseText, 'error');
+                    HideLoading();
+
+                }
+            });
+        }
+
+         var CambioOrden = function (CampoId,NombreCampo,Orden) {
+
+             $('#ModalCampoOrden').val(Orden);
+             $('#ModalCampoId').val(CampoId);
+             $('#ModalCampoName').html(NombreCampo);
+             $('#ModalCambioOrden').modal('show');
+        }
+
+         //modificartCampos
+        function ModificarCampo(iCampoId) {
+            ShowLoading();
+            $.ajax({
+                url: "@Url.Action("GetCampoById")",
+                dataType: "json",
+                type: "POST",
+                data: {
+                    iId: iCampoId
+                },
+                cache: false,
+                success: function (data) {
+                    console.log(data);
+                    if (data.Hecho) {
+                        UpdatePhase(data.Campo);
+                    } else {
+                        Swal.fire('Error', data.Mensaje, 'error');
+                    }
+                    HideLoading();
+                },
+                error: function (error) {
+                    Swal.fire('Error', 'Ocurrio un error al momento de eliminar el campo - ' + error.responseText, 'error');
+                    HideLoading();
+                }
+            });
+        }
+        function UpdatePhase(mCampo) {
+
+
+            try {
+                limpiar();
+                $("#AddTipoCampo").val(mCampo.TipoCampo).trigger('change');
+                //campos
+                $("#AddNombre").val(mCampo.Nombre);
+                $("#AddEtiqueta").val(mCampo.Etiqueta);
+                $("#AddLongitud").val(mCampo.Longitud);
+                $("#AddAyuda").val(mCampo.Ayuda);
+                $("#AddRequerido").iCheck(mCampo.Requerido == true ? 'check' : 'uncheck');
+                $("#AddRelevante").iCheck( mCampo.relevantes == true ? 'check' : 'uncheck');
+                $("#AddPrincipal").iCheck(  mCampo.Principal == true ? 'check' : 'uncheck');
+                $("#AddConDecimales").iCheck( mCampo._ConDecimales == true ? 'check' : 'uncheck');
+                $("#AddTipoFecha").val(mCampo._TipoFecha);
+                $("#AddGrupoExtensionId").val(mCampo._GrupoExtensionId);
+                $("#AddSize").val(mCampo._Size);
+                $("#AddCatalogoId").val(mCampo.CatalogoId);
+                $("#AddCampoPNT").val(mCampo.IdCampoPNT);
+                $("#AddTipoCampoPNT").val(mCampo.IdTipoCampoPNT);
+                $('.selectpicker').selectpicker('refresh');
+                $("#CampoId").val(mCampo.CampoId);
+                $('html,body').animate({
+                    scrollTop: $("html").offset().top
+                }, 'slow');
+                $("#btnAgregaCampo2").hide();
+                $("#btnEditarCampo").show();
+
+
+            }
+            catch (error) {
+                limpiar();
+                Swal.fire('Error', 'Ocurrio un error al momento posicionar el campo - ' + error.responseText, 'error');
+            }
+
+        }
+
+
+
+
+        $("#btnEditarCampo").click(function () {
+            var Validar = $("#frmAgregarCampo").valid();
+             $("#yaLoValido").val('false');
+                if (Validar) {
+                    ShowLoading();
+                    var form = $("#frmAgregarCampo");
+                     $.ajax({
+                                url: "@Url.Action("AjaxModificarCampo")",
+                                dataType: "json",
+                                type: "POST",
+                                data: form.serialize(),
+                                cache: false,
+                         success: function (data) {
+
+                             if (data.Hecho) {
+                                 //Entro pero veamos si tiene Observaciónes
+                                 if (data.Respuesta.length > 0) {
+
+                                     Swal.fire({
+                                         title: '¿Observaciones de la modificación?',
+                                         text: data.Respuesta,
+                                         icon: 'warning',
+                                         showCancelButton: true,
+                                         confirmButtonText: 'Borrar y continuar con la modificación',
+                                         cancelButtonText: 'Cancelar'
+                                     }).then((result) => {
+                                         if (result.value) {
+                                              $("#yaLoValido").val('true');
+                                             PostModificar(result);
+                                         }
+
+                                     });
+
+                                 } else {
+                                     $("#Lista").html(data.Partial);
+                                      limpiar();
+                                 }
+
+
+                             } else {
+                                 Swal.fire('Error', data.Mensaje, 'error');
+                             }
+                             HideLoading();
+                         },
+                         error: function (error) {
+                             Swal.fire('Error', 'Ocurrio un error al momento de eliminar el campo - ' + error.responseText, 'error');
+                             HideLoading();
+                         }
+                     });
+                }
+        });
+
+        function PostModificar() {
+            var form = $("#frmAgregarCampo");
+                ShowLoading();
+                $.ajax({
+                    url: "@Url.Action("AjaxModificarCampo")",
+                    dataType: "json",
+                    type: "POST",
+                    data: form.serialize(),
+                    cache: false,
+                    success: function (data) {
+                        console.log(data);
+                        if (data.Hecho) {
+                            $("#Lista").html(data.Partial);
+                            limpiar();
+                        } else {
+                            Swal.fire('Error', data.Mensaje, 'error');
+                        }
+                        HideLoading();
+
+                    },
+                    error: function (error) {
+                        Swal.fire('Error', 'Ocurrio un error al momento de eliminar el campo - ' + error.responseText, 'error');
+                        HideLoading();
+
+                    }
+                });
+        }
+
+
+
+
+         function DetallesCampo(iCampoId) {
+            ShowLoading();
+            $.ajax({
+                url: "@Url.Action("GetDetailCapo")",
+                dataType: "json",
+                type: "POST",
+                data: {
+                    iId: iCampoId
+                },
+                cache: false,
+                success: function (data) {
+                    if (data.Hecho) {
+                        $("#ListaDetails").html(data.Partial);
+                         $('#ModalDetail').modal('show');
+                    } else {
+                        Swal.fire('Error', data.Mensaje, 'error');
+                    }
+                    HideLoading();
+                },
+                error: function (error) {
+                    Swal.fire('Error', 'Ocurrio un error al momento de eliminar el campo - ' + error.responseText, 'error');
+                    HideLoading();
+                }
+            });
+        }
+
+
+        //limpiar
+
+
+        //function limpiar() {
+        //    ShowLoading();
+        //    $("#btnAgregaCampo2").show();
+        //    $("#btnEditarCampo").hide();
+        //    $('#frmAgregarCampo')[0].reset();
+        //    //$('input:checkbox').removeAttr('checked');
+        //    $('.icheckbox_square-green').removeClass('checked');
+        //    $("#yaLoValido").val('false');
+        //    HideLoading();
+        //}
+        function limpiar() {
+            ShowLoading();
+            $('#frmAgregarCampo')[0].reset();
+            //$('input:checkbox').removeAttr('checked');
+            $('.icheckbox_square-green').removeClass('checked');
+            $("#AddCatalogoId").val('default');
+            $("#AddCatalogoId").selectpicker("refresh");
+            $("#AddGrupoExtensionId").val('default');
+            $("#AddGrupoExtensionId").selectpicker("refresh");
+            $("#divCatalogos").hide();
+            $("#divGpoExtensiones").hide();
+            $("#divSize").hide();
+            $("#divTipoFecha").hide();
+            $("#divLongitud").show();
+            $("#btnEditarCampo").hide();
+            $("#btnAgregaCampo2").show();
+            $("#yaLoValido").val('false');
+            HideLoading();
+        }
+            
+
+    </script>
+}

@@ -1,0 +1,213 @@
+﻿@model Transparencia.Models.vmResultadoDatos2
+@{ 
+    //FiltrosCatalogos filtros = ViewBag.Filtros != null ? ViewBag.Filtros as FiltrosCatalogos : new FiltrosCatalogos();
+
+    var Titulos = ViewBag.Titles as List<Transparencia.Helpers.AuxTitlePlantillas>;
+    var Relevante = ViewBag.Relevantes as List<Transparencia.Models.Campo>;
+    string NombreTabla = "";
+    int PlantillaId = 0;
+}
+
+<div id="lista" class="table-responsive">
+    <hr />
+    <table class="table table-bordered">
+        <thead>
+            <tr>
+                @if (Titulos != null)
+                {
+                    foreach (var item in Titulos)
+                    {
+                        <th>
+                            <label> @item.LbNombre </label>
+                        </th>
+                    }
+                }
+                <th>
+                    Activo
+                </th>
+                <th>
+                    Acciones
+                </th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.datos != null)
+            {
+                int contar = 0;
+                NombreTabla = Model.NombreTabla;
+                PlantillaId = Model.PlantillaId;
+                foreach (var item in Model.datos)
+                {
+                    int TablaFisicaId = item.TablaFisicaId;
+                    string nameBadgeStatus = "BadgeStatus" + contar;
+                    contar++;
+                    //bool Activo = item.Activo;
+
+
+            <tr>
+
+                @foreach (var dato in item.campos)
+                {
+                   
+                    switch (dato.TipoCampo)
+                    {
+
+                        //case Transparencia.Models.TipoCampo.Texto:
+                        //    break;
+                        //case Transparencia.Models.TipoCampo.AreaTexto:
+                        //    break;
+                        //case Transparencia.Models.TipoCampo.Numerico:
+                        //    break;
+                        //case Transparencia.Models.TipoCampo.Alfanumerico:
+                        //    break;
+                        //case Transparencia.Models.TipoCampo.Dinero:
+                        //    break;
+                        //case Transparencia.Models.TipoCampo.Porcentaje:
+                        //    break;
+                        //case Transparencia.Models.TipoCampo.Decimal:
+                        //    break;
+                        //case Transparencia.Models.TipoCampo.Fecha:
+                        //    break;
+                        //case Transparencia.Models.TipoCampo.Hora:
+                        //    break;
+                        case Transparencia.Models.TipoCampo.Hipervinculo:
+                            if(dato.Valor.Length > 0)
+                            {
+                                <td> <a href="@dato.Valor" target="_blank" title="@dato.Valor">Ir al Sitio</a> </td>
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+                            break;
+                        //case Transparencia.Models.TipoCampo.email:
+                        //    break;
+                        //case Transparencia.Models.TipoCampo.Telefono:
+                        //    break;
+                        case Transparencia.Models.TipoCampo.ArchivoAdjunto:
+                            <td> <a href="@dato.Valor"><i class="fa fa-paperclip"></i> Descargar archivo</a> </td>
+                            break;
+                        case Transparencia.Models.TipoCampo.Catalogo:
+                            if (dato.EsTabla)
+                            {
+                                <td> <a class="text-info" onclick="MostrarTablaDatos(@TablaFisicaId,@dato.Valor)"><i class="fa fa-table"></i> Ver información</a> </td>
+                            }
+                            else
+                            {
+                                <td> @dato.Valor </td>
+                            }
+                            break;
+                        //case Transparencia.Models.TipoCampo.CasillaVerificacion:
+                        //    break;
+                        default:
+                            <td> @dato.Valor </td>
+                            break;
+                    }
+                }
+                <td>
+                    @if (item.Activo == true)
+                    {
+                        <span id="@nameBadgeStatus" class="label label-primary BadgeStatus" onclick="changeStatusDynamic(this,'@Url.Action("changeStatusDynamic", "Catalogos")',@TablaFisicaId,'@NombreTabla')">Activo</span>
+                    }
+                    else
+                    {
+                        <span id="@nameBadgeStatus" class="label label-danger BadgeStatus" onclick="changeStatusDynamic(this,'@Url.Action("changeStatusDynamic", "Catalogos")',@TablaFisicaId,'@NombreTabla')">Inactivo</span>
+                    }
+                </td>
+                <td>
+                    <div class="btn-group">
+
+                        <a href="@Url.Action("EditDynamic", new { id = TablaFisicaId, iPlantilldaId = PlantillaId, TablaNombre = NombreTabla })" class="btn btn-warning btn-circle" title="Editar"><i class="fa fa-pencil-square"></i></a>
+                        <a class="btn btn-info btn-circle text-white" title="Detalles" onclick="DetailsDynamics(@TablaFisicaId,@PlantillaId,'@NombreTabla')"><i class="fa fa-info-circle"></i></a>
+                        <a class="btn btn-danger btn-circle text-white" title="Eliminar" onclick="document.getElementById('@nameBadgeStatus').click()"><i class="fa fa-trash"></i></a>
+                        <a class="btn btn-secondary btn-circle text-white" title="Detalles" href="@Url.Action("PDFDynamicRecord", new {tablaFisicaId = TablaFisicaId,plantilldaId = PlantillaId })"><i class="fa fa-file-pdf-o"></i></a>
+
+                    </div>
+                </td>
+            </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>
+<div class="row mt-5">
+    <div class="col-sm-4">
+        <div class="form-group row">
+            <div class="col-md-12 col-sm-12 col-xs-12">
+                <label>
+                    Mostrar
+                    <select class="input-sm filtrar" name="PerPage" id="mostrar">
+                        <option value="10">10</option>
+                        <option value="25">25</option>
+                        <option value="50">50</option>
+                        <option value="100">100</option>
+                    </select>
+                    Registros
+                </label>
+            </div>
+        </div>
+    </div>
+    <div class="col-sm-8">
+        <div class="pagination float-right">
+            <label style="padding: 5px 10px;">@Model.totalRegistros Registros</label>
+            <br />
+            <nav aria-label="...">
+                <ul class="pagination">
+
+                    @{
+                        var Anterior = Model.paginaActual > 1 ? Model.paginaActual - 1 : 1;
+                        var Siguiente = Model.paginaActual < Model.totalPaginas ? Model.paginaActual + 1 : Model.paginaActual;
+                        var iLimitador = Model.paginaActual > 5 ? Model.paginaActual - 4 : 1;
+                        var totalPaginas = Model.totalPaginas;
+                        var limit = 8 + iLimitador;
+                        var paginasImpresas = 0;
+                    }
+                    <li class="page-item">
+                        <a class="page-link" href="@Anterior">Anterior</a>
+                    </li>
+                    @if ((Anterior - 4) > 0)
+                    {
+                        <li class="page-item"><a class="page-link" href="1">1</a></li>
+                        <li class="page-item disabled"><a class="page-link">...</a></li>
+                    }
+                    @for (int i = iLimitador; i < Model.totalRegistros && i < limit && i <= totalPaginas; i++)
+                    {
+                        if (Model.paginaActual == i)
+                        {
+                            <li class="page-item active">
+                                <span class="page-link">
+                                    @i
+                                    <input type="hidden" id="hiddenPage" name="hiddenPage" value="@i" />
+                                    <span class="sr-only">(current)</span>
+                                </span>
+                            </li>
+                        }
+                        else
+                        {
+                            <li class="page-item"><a class="page-link" href="@i">@i.ToString("#,##0")</a></li>
+                        }
+                        paginasImpresas = i;
+
+                    }
+                    @if (paginasImpresas < totalPaginas)
+                    {
+                        if (totalPaginas > 1)
+                        {
+                            <li class="page-item disabled"><a class="page-link">...</a></li>
+                        }
+
+                        <li class="page-item"><a class="page-link" href="@totalPaginas">@totalPaginas.ToString("#,##0")</a></li>
+                    }
+
+
+
+                    @*<li class="page-item"><a class="page-link" href="#">3</a></li>*@
+                    <li class="page-item">
+                        <a class="page-link" href="@Siguiente">Siguiente</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+</div>
+

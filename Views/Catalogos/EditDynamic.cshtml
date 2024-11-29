@@ -1,0 +1,158 @@
+﻿@model List<Transparencia.Models.CampoCatalogo>
+
+
+@{
+    ViewBag.Title = "Catalogo: ";
+}
+
+
+<input type="hidden" id="error" value="@ViewBag.Error" />
+
+
+@using (Html.BeginForm("CreateDynamic", "Plantillas", FormMethod.Post, htmlAttributes: new { enctype="multipart/form-data", @id = "frmCrear" }))
+{
+    <input type="hidden" id="CatalogoId" name="CatalogoId" value="@ViewBag.CatalogoId" />
+    @Html.AntiForgeryToken()
+
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-lg-10">
+            <h2>@ViewBag.Title </h2>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="@Url.Action("Index", "Home")">Inicio</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="@Url.Action("Index", "Catalogos")">Catalogos</a>
+                </li>
+                <li class="active breadcrumb-item">
+                    <strong>@ViewBag.Title</strong>
+                </li>
+            </ol>
+        </div>
+    </div>
+    <br />
+
+    <div class="col-lg-12">
+        <div class="ibox">
+            <div class="ibox-title">
+                <p>
+                    <h2>@ViewBag.Title</h2>
+                </p>
+            </div>
+
+            <div class="ibox-content">
+                @Html.Partial("_CamposEdit", Model)
+                @Html.Hidden("TablaFisicaId",ViewBag.TablaFisicaId as string)
+
+                <div class="form-row">
+
+                    <div class="col-md-offset-2 col-md-12 text-right">
+                        @Html.ActionLink("Regresar", "IndexDatosCatalogos", new { Id = ViewBag.CatalogoId }, new { @class = "btn btn-w-m btn-secondary" })
+                        @*<button id="btnSave" type="button" class="btn btn-primary">
+                            <i class="fa fa-save"></i> Guardar
+                        </button>*@
+                        <button id="btnSave" type="button" class="btn btn-primary">
+                            <i class="fa fa-save"></i> Guardar
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    </div>
+    <br />
+}
+
+
+
+
+@section AddToTop {
+    @Styles.Render("~/plugins/TimePickerStyle")
+    @Styles.Render("~/stepCss")
+    @*@Styles.Render("~/Content/jqueryUI")*@
+
+
+
+}
+
+@section scripts {
+    @*<script src="~/Scripts/steps/jquery-3.1.1.min.js"></script>
+        <script src="~/Scripts/steps/jquery.metisMenu.js"></script>
+        <script src="~/Scripts/steps/jquery.slimscroll.min.js"></script>
+        <script src="~/Scripts/steps/jquery.flot.tooltip.min.js"></script>*@
+
+    @*<script src="https://ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>*@
+
+    @Scripts.Render("~/plugins/TimePickerJs")
+    @Scripts.Render("~/stepJs")
+    @Scripts.Render("~/bundles/jqueryval")
+    @Scripts.Render("~/bundles/jqueryUI")
+
+    <script src="~/Scripts/DatePickerReady.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery.mask/1.13.4/jquery.mask.min.js"></script>
+
+
+
+    <script>
+
+        $(function () {
+            if ($("#error").val().length > 0) {
+                Swal.fire(
+                    'Aviso',
+                    $("#error").val(),
+                    'error'
+                );
+            }
+            $("#frmCrear").submit(function () {
+                var vSubmit = $(this).valid();
+                if (vSubmit) {
+                    $('button[type=submit], input[type=submit]').prop('disabled', true);
+                    ShowLoading();
+                }
+                return vSubmit;
+            });
+
+            @Html.Raw(ViewBag.Validation )
+
+            $("#btnSave").click(function () {
+                var Validar = $("#frmCrear").valid();
+                if (Validar) {
+                    ShowLoading();
+                    var formElement = document.getElementById("frmCrear");
+                    $.ajax({
+                        url: "@Url.Action("EditDynamic")",
+                        dataType: "json",
+                        type: "POST",
+                         data: new FormData(formElement),
+                        cache: false,
+                        contentType: false,
+                        processData: false,
+                        success: function (data) {
+                            console.log(data.Hecho);
+                            if (data.Hecho) {
+                                window.location.href = '@Url.Action("IndexDatosCatalogos", "Catalogos",new { Id = ViewBag.CatalogoId })';
+                                limpiar();
+                            } else {
+                                Swal.fire('Error', data.Mensaje, 'error');
+                            }
+                            HideLoading();
+                        },
+                        error: function (error) {
+                            Swal.fire('Error', 'Ocurrio un error al momento de eliminar el campo - ' + error.responseText, 'error');
+                            HideLoading();
+                        }
+                    });
+                }
+            });
+
+          
+
+           
+        });
+
+         
+    </script>
+
+}
+
+

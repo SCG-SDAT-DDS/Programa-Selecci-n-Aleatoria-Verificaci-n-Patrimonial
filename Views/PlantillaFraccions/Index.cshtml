@@ -1,0 +1,110 @@
+﻿@model IEnumerable<Transparencia.Models.PlantillaFraccion>
+
+@{
+    ViewBag.Title = "Listado de relaciones entre Plantillas, fracciones y Organismos";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    FiltrosPlantillaFraccion filtros = ViewBag.Filtros != null ? ViewBag.Filtros as FiltrosPlantillaFraccion : new FiltrosPlantillaFraccion();
+}
+
+
+@using (Ajax.BeginForm(
+                    new AjaxOptions
+                    {
+                        HttpMethod = "get",
+                        InsertionMode = InsertionMode.Replace,
+                        UpdateTargetId = "lista",
+                        OnBegin = "BeginClient",
+                        OnComplete = "CompleteClient"
+                    }))
+{
+
+    <div class="row wrapper border-bottom white-bg page-heading">
+        <div class="col-lg-10">
+            <h2>Relacionar Plantillas</h2>
+            <ol class="breadcrumb">
+                <li class="breadcrumb-item">
+                    <a href="@Url.Action("Index", "Home")">Inicio</a>
+                </li>
+                <li class="breadcrumb-item">
+                    <a href="@Url.Action("Index", "PlantillaFraccions")">Relacionar Plantillas</a>
+                </li>
+                <li class="active breadcrumb-item">
+                    <strong>@ViewBag.Title</strong>
+                </li>
+            </ol>
+        </div>
+    </div>
+    <br />
+
+    <div class="col-lg-12">
+        <div class="ibox">
+            <div class="ibox-title">
+                <p>
+                    @Html.ActionLink("Gestionar una Plantilla", "Create", null, new { @class = "btn btn-w-m btn-primary" })
+                </p>
+            </div>
+
+            <div class="ibox-content">
+                <div class="form-group row">
+
+                    <div class="col-md-4 col-sm-12 col-xs-12">
+                        <label class="col-form-label">Fracciones</label>
+                        <div class="input-group m-b">
+                            @Html.DropDownListFor(model => filtros.Fracciones, new SelectList(ViewBag.CmbFracciones, "Value", "Text"), "Seleccione...", new { @class = "form-control m-b" })
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-12 col-xs-12">
+                        <label class="col-form-label">Organismos</label>
+                        <div class="input-group m-b">
+                            @Html.DropDownListFor(model => filtros.Organismos, new SelectList(ViewBag.CmbOrganismos, "Value", "Text"), "Seleccione...", new { @class = "form-control m-b" })
+                        </div>
+                    </div>
+                    <div class="col-md-4 col-sm-12 col-xs-12">
+                        <label class="col-form-label">Plantillas</label>
+                        <div class="input-group m-b">
+                            @Html.DropDownListFor(model => filtros.Plantillas, new SelectList(ViewBag.CmbPlantillas, "Value", "Text"), "Seleccione...", new { @class = "form-control m-b" })
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-md-6 col-sm-6 col-xs-12">
+                        <a class="btn btn-w-m btn-secondary"  href="@Url.Action("Index")">Limpiar</a>
+                        <button class="btn btn-w-m btn-success" type="submit" >Buscar</button>
+                    </div>
+                </div>
+                <br />
+
+                <div class="form-group row">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        <label>
+                            Mostrar
+                            <select class="input-sm filtrar" name="PerPage">
+                                <option value="10">10</option>
+                                <option value="25">25</option>
+                                <option value="50">50</option>
+                                <option value="100">100</option>
+                            </select>
+                            Registros
+                        </label>
+                    </div>
+                </div>
+
+                <div class="form-group row">
+                    <div class="col-md-12 col-sm-12 col-xs-12">
+                        @Html.Partial("_lista", Model)
+                        @Html.Hidden("sOrder")
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </div>
+    <br />
+}
+
+
+@section Scripts {
+    <script src="~/Scripts/PaginadorOrder.js"></script>
+}
+

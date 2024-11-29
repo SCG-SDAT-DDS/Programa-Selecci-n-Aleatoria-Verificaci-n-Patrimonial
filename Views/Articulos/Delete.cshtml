@@ -1,0 +1,64 @@
+﻿@model Transparencia.Models.Articulo
+
+@{
+    ViewBag.Title = "Eliminar Sub Módulo";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<h2>@ViewBag.Title</h2>
+
+<h3>¿Está seguro de querer eliminar este Sub Módulo?</h3>
+<div>
+    <hr />
+    <dl class="dl-horizontal">
+        <dt>
+            @Html.DisplayNameFor(model => model.Nombre)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Nombre)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.LeyId)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Leyes.Nombre) (@Html.DisplayFor(model => model.Leyes.TipoLeyes.Nombre))
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Ayuda)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Ayuda)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Orden)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Orden)
+        </dd>
+
+        <dt>
+            @Html.DisplayNameFor(model => model.Activo)
+        </dt>
+
+        <dd>
+            @Html.DisplayFor(model => model.Activo)
+        </dd>
+
+    </dl>
+
+    @using (Html.BeginForm()) {
+        @Html.AntiForgeryToken()
+
+    <div class="form-actions no-color">
+        <input type="submit" value="Eliminar" class="btn btn-danger" />
+        @Html.ActionLink("Regresar", "Index", null, new { @class = "btn btn-secondary" })
+    </div>
+    }
+</div>

@@ -1,0 +1,105 @@
+﻿@model Transparencia.Models.vmResultadoDatos2
+@{ 
+    var Titulos = ViewBag.Titles as List<Transparencia.Helpers.AuxTitlePlantillas>;
+    var Relevante = ViewBag.Relevantes as List<Transparencia.Models.Campo>;
+    string NombreTabla = "";
+    int PlantillaId = 0;
+}
+
+<div id="lista" class="table">
+    <hr />
+    <table class="styled-table">
+        <thead>
+            <tr>
+                <th>#</th>
+                @if (Titulos != null)
+                {
+                    foreach (var item in Titulos)
+                    {
+                        <th>
+                            <label> @item.LbNombre </label>
+                        </th>
+                    }
+                }
+            </tr>
+        </thead>
+        <tbody>
+            @if (Model != null && Model.datos != null)
+            {
+                int contar = 0;
+                NombreTabla = Model.NombreTabla;
+                PlantillaId = Model.PlantillaId;
+                foreach (var item in Model.datos)
+                {
+                    int TablaFisicaId = item.TablaFisicaId;
+                    string nameBadgeStatus = "BadgeStatus" + contar;
+                    contar++;
+                    //bool Activo = item.Activo;
+
+
+            <tr>
+                <td>@contar</td>
+                @foreach (var dato in item.campos)
+                {
+                   
+                    switch (dato.TipoCampo)
+                    {
+
+                        //case Transparencia.Models.TipoCampo.Texto:
+                        //    break;
+                        //case Transparencia.Models.TipoCampo.AreaTexto:
+                        //    break;
+                        //case Transparencia.Models.TipoCampo.Numerico:
+                        //    break;
+                        //case Transparencia.Models.TipoCampo.Alfanumerico:
+                        //    break;
+                        //case Transparencia.Models.TipoCampo.Dinero:
+                        //    break;
+                        //case Transparencia.Models.TipoCampo.Porcentaje:
+                        //    break;
+                        //case Transparencia.Models.TipoCampo.Decimal:
+                        //    break;
+                        //case Transparencia.Models.TipoCampo.Fecha:
+                        //    break;
+                        //case Transparencia.Models.TipoCampo.Hora:
+                        //    break;
+                        case Transparencia.Models.TipoCampo.Hipervinculo:
+                            if(dato.Valor.Length > 0)
+                            {
+                                <td> <a href="@dato.Valor" target="_blank" title="@dato.Valor">Ir al Sitio</a> </td>
+                            }
+                            else
+                            {
+                                <td></td>
+                            }
+                            break;
+                        //case Transparencia.Models.TipoCampo.email:
+                        //    break;
+                        //case Transparencia.Models.TipoCampo.Telefono:
+                        //    break;
+                        case Transparencia.Models.TipoCampo.ArchivoAdjunto:
+                            <td> <a href="@dato.Valor"><i class="fa fa-paperclip"></i> Descargar archivo</a> </td>
+                            break;
+                        case Transparencia.Models.TipoCampo.Catalogo:
+                            if (dato.EsTabla)
+                            {
+                                <td> <a class="text-info" onclick="MostrarTablaDatos(@TablaFisicaId,@dato.Valor)"><i class="fa fa-table"></i> Ver información</a> </td>
+                            }
+                            else
+                            {
+                                <td> @dato.Valor </td>
+                            }
+                            break;
+                        //case Transparencia.Models.TipoCampo.CasillaVerificacion:
+                        //    break;
+                        default:
+                            <td> @dato.Valor </td>
+                            break;
+                    }
+                }
+            </tr>
+                }
+            }
+        </tbody>
+    </table>
+</div>

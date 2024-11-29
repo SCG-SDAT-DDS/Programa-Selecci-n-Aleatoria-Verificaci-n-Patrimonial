@@ -1,0 +1,58 @@
+﻿@model Transparencia.Helpers.AuxCatalogoTablas
+
+@{ 
+//var sTabla = "";
+////hacemos los script para tabla
+//if (Model!= null && Model.fromCreate)
+//{
+
+//}
+}
+    <div id="Campos">
+        <input type="hidden" id="TablaCatalogoId" name="TablaCatalogoId" value="@Model.CatalogoId" />
+        <div class="form-group col-md-12">
+            <div class="alert alert-info" role="alert">
+                <h4><i class="fa fa-info-circle"></i> Por favor llene los datos correspondientes, para continuar.</h4>
+            </div>
+        </div>
+        @*@if (Model != null && Model.campos.Count() > 0)
+        {
+            <div class="form-row">
+                @foreach (var item in Model.campos)
+                {
+
+                    @Html.Raw(item.InputHtml)
+                }
+            </div>
+        }*@
+        <div class="form-row">
+           @Html.Raw(Model.camposString)
+        </div>
+    </div>
+<script type="text/javascript">
+    @*console.log(@Model.Validation);w*@
+
+    $.datepicker.regional['es'] =
+    {
+        closeText: 'Cerrar',
+        prevText: 'Previo',
+        nextText: 'Próximo',
+
+        monthNames: ['Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio',
+            'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'],
+        monthNamesShort: ['Ene', 'Feb', 'Mar', 'Abr', 'May', 'Jun',
+            'Jul', 'Ago', 'Sep', 'Oct', 'Nov', 'Dic'],
+        monthStatus: 'Ver otro mes', yearStatus: 'Ver otro año',
+        dayNames: ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'],
+        dayNamesShort: ['Dom', 'Lun', 'Mar', 'Mie', 'Jue', 'Vie', 'Sáb'],
+        dayNamesMin: ['Do', 'Lu', 'Ma', 'Mi', 'Ju', 'Vi', 'Sa'],
+        dateFormat: 'dd/mm/yy', firstDay: 0,
+        initStatus: 'Selecciona la fecha', isRTL: false
+    };
+    $(".datefield").datepicker($.datepicker.regional["es"]);
+    //$('#frmCrearCatalogo').rules('remove'); 
+    $('#frmCrearCatalogo').removeData('validator');
+
+      @Html.Raw(Model.Validation)
+ </script>
+

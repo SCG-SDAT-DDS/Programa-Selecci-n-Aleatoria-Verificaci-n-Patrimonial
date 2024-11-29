@@ -1,0 +1,49 @@
+﻿            <li class="@Html.IsSelected(controller: "Home")">
+                <a href="@Url.Action("Index", "Home")"><i class="fa fa-home"></i> <span class="nav-label" data-i18n="nav.Inicio">Inicio</span> </a>
+            </li>
+            <li class="@Html.IsSelected(controller: "Configuracion")">
+                <a href="#"><i class="fa fa-sliders"></i> <span class="nav-label" data-i18n="nav.organismos">Configuración</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level collapse @Html.IsSelected(controller: "Configuracion", cssClass: "in")">
+                    @*<li class="@Html.IsSelected(action: "Index")"><a href="@Url.Action("Index", "TipoOtraInformacion")">Tipo Otra Información</a></li>
+                    <li class="@Html.IsSelected(action: "Index")"><a href="@Url.Action("Index", "OtraInformacion")">Otra Información</a></li>*@
+                    <li class="@Html.IsSelected(action: "Index")"><a href="@Url.Action("Index", "TipoOrganismos")">Tipo de Organismos</a></li>
+                    <li class="@Html.IsSelected(action: "Index")"><a href="@Url.Action("Index", "Organismos")">Organismos</a></li>
+                    <li class="@Html.IsSelected(action: "Index")"><a href="@Url.Action("Index", "UnidadesAdministrativas")">Unidades Administrativas</a></li>
+                    <li class="@Html.IsSelected(action: "Index")"><a href="@Url.Action("Index", "Representantes")">Representantes</a></li>
+                    @*<li class="@Html.IsSelected(action: "AsignarEstructura")"><a href="@Url.Action("AsignarEstructura", "Organismos")">Asignar Estructura a Organismos</a></li>*@
+                    <li class="@Html.IsSelected(action: "Index")"><a href="@Url.Action("Index", "GrupoExtensiones")">Grupo de Extensiones</a></li>
+                    <li class="@Html.IsSelected(action: "Index")"><a href="@Url.Action("Index", "Extensiones")">Extensiones</a></li>
+                    <li class="@Html.IsSelected(action: "Index")"><a href="@Url.Action("Index", "Paises")">Países</a></li>
+                    <li class="@Html.IsSelected(action: "Index")"><a href="@Url.Action("Index", "Estados")">Estados</a></li>
+                    <li class="@Html.IsSelected(action: "Index")"><a href="@Url.Action("Index", "Ciudades")">Municipio</a></li>
+                    <li class="@Html.IsSelected(action: "Index")"><a href="@Url.Action("Index", "GrupoTags")">Grupo de Tags</a></li>
+                    <li class="@Html.IsSelected(action: "Index")"><a href="@Url.Action("Index", "Tags")">Tags</a></li>
+                    <li class="@Html.IsSelected(action: "Index")"><a href="@Url.Action("Index", "Periodos")">Periodos</a></li>
+                    <li class="@Html.IsSelected(action: "Index")"><a href="@Url.Action("ListaUsuarios", "UsuariosAdmin")">Usuarios</a></li>
+                    @*<li class="@Html.IsSelected(action: "Index")"><a href="@Url.Action("ListaRoles", "RolesAdmin")">Roles</a></li>*@
+
+                </ul>
+            </li>
+
+            <li class="@Html.IsSelected(controller: "Estructura")">
+                <a href="#"><i class="fa fa-list-ul"></i> <span class="nav-label" data-i18n="nav.organismos">Estructura</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level collapse @Html.IsSelected(controller: "Estructura", cssClass: "in")">
+                    @*<li class="@Html.IsSelected(action: "Index")"><a href="@Url.Action("Index", "TipoLeyes")">Tipo de módulos</a></li>*@
+                    @*<li class="@Html.IsSelected(action: "Index")"><a href="@Url.Action("Index", "Leyes")">Módulos</a></li>*@
+                    @*<li class="@Html.IsSelected(action: "Index")"><a href="@Url.Action("Index", "Articulos")">Sub Módulos</a></li>*@
+                    @*<li class="@Html.IsSelected(action: "Index")"><a href="@Url.Action("Index", "Fracciones")">Actividades sustantibles</a></li>*@
+                    <li class="@Html.IsSelected(action: "Index")"><a href="@Url.Action("Index", "Plantillas")">Plantillas</a></li>
+                    <li class="@Html.IsSelected(action: "Index")"><a href="@Url.Action("Index", "Catalogos")">Catálogos</a></li>
+                    <li class="@Html.IsSelected(action: "AsignarObligacionesPorDependencia")"><a href="@Url.Action("AsignarObligacionesPorDependencia", "Plantillas")">Asignación de plantillas</a></li>
+                </ul>
+            </li>
+
+            <li class="@Html.IsSelected(controller: "Bitacoras")">
+                <a href="#"><i class="fa fa-clipboard"></i> <span class="nav-label" data-i18n="nav.organismos">Bitácora</span><span class="fa arrow"></span></a>
+                <ul class="nav nav-second-level collapse @Html.IsSelected(controller: "Bitacoras", cssClass: "in")">
+                    @*<li class="@Html.IsSelected(action: "Index")"><a href="@Url.Action("Index", "TipoBitacoras")">Tipo de bitácora</a></li>*@
+                    <li class="@Html.IsSelected(action: "Index")"><a href="@Url.Action("Index", "BitIniSesion")">Inicio de sesión</a></li>
+                    <li class="@Html.IsSelected(action: "Index")"><a href="@Url.Action("Index", "Bitacora")">Movimientos</a></li>
+                </ul>
+            </li>
+

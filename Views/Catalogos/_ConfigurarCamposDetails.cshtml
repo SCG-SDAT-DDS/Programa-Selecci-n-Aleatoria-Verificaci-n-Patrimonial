@@ -1,0 +1,261 @@
+﻿@model Transparencia.Models.CampoCatalogo
+@{
+    var hProcentaje = false;
+    var hLongitud = false;
+    var hTipoFecha = false;
+    var hGrupoExtensiones = false;
+    var hCatalagos = false;
+    if(Model != null)
+    {
+        hProcentaje = Model.TipoCampo != Transparencia.Models.TipoCampo.Porcentaje ? false : true ;
+        hLongitud = Model.TipoCampo == Transparencia.Models.TipoCampo.Fecha
+        || Model.TipoCampo == Transparencia.Models.TipoCampo.Hora
+        || Model.TipoCampo == Transparencia.Models.TipoCampo.Catalogo
+        || Model.TipoCampo == Transparencia.Models.TipoCampo.CasillaVerificacion
+        ? false : true ;
+        hTipoFecha =  Model.TipoCampo != Transparencia.Models.TipoCampo.Fecha ? false : true ;
+        hGrupoExtensiones = Model.TipoCampo != Transparencia.Models.TipoCampo.ArchivoAdjunto ? false : true ; 
+        hCatalagos = Model.TipoCampo != Transparencia.Models.TipoCampo.Catalogo ? false : true ;
+    }
+
+}
+
+
+
+
+
+    <div class="form-row">
+
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label class="control-label font-weight-bold mb-0">Tipo de campo</label>
+                <label class="form-text">@Html.DisplayFor(m => m.getNombreTipoCampo, new { @class = "control-label col-md-2" })</label>
+            </div>
+        </div>
+
+
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label class="control-label font-weight-bold mb-0">Orden</label>
+                <label class="form-text">@Html.DisplayFor(m => m.Orden)</label>
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label class="control-label font-weight-bold mb-0">Nombre del Campo</label>
+                <label class="form-text">@Html.DisplayFor(m => m.Nombre)</label>
+            </div>
+        </div>
+        @if (hProcentaje)
+        {
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label class="control-label font-weight-bold mb-0">Decimales</label>
+                    <label class="form-text">
+                        @if (Model != null && Model._ConDecimales == true)
+                        {
+                            <span class="label label-primary">Con Decimales</span>
+                        }
+                        else
+                        {
+                            <span class="label label-secondary">Sin decimales</span>
+                        }
+                    </label>
+                </div>
+            </div>
+        }
+
+
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label class="control-label font-weight-bold mb-0">Etiqueta</label>
+                <label class="form-text">@Html.DisplayFor(m => m.Etiqueta)</label>
+            </div>
+        </div>
+
+        @if (hLongitud)
+        {
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label class="control-label font-weight-bold mb-0">Longitud</label>
+                    <label class="form-text">@Html.DisplayFor(m => m.Longitud)</label>
+                </div>
+            </div>
+        }
+
+        @if (hTipoFecha)
+        {
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label class="control-label font-weight-bold mb-0">Tipo de Fecha</label>
+                    <label class="form-text">@Html.DisplayFor(m => m.NombreTipoFecha)</label>
+                </div>
+            </div>
+        }
+
+
+        @if (hGrupoExtensiones)
+        {
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label class="control-label font-weight-bold mb-0">Grupo de Extensiones</label>
+                    <label class="form-text">@Html.DisplayFor(m => m._GrupoExtensionId)</label>
+                </div>
+            </div>
+
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label class="control-label font-weight-bold mb-0">Tamaño en MB</label>
+                    <label class="form-text">@Html.DisplayFor(m => m._Size)</label>
+                </div>
+            </div>
+
+        }
+
+        @if (hCatalagos)
+        {
+            <div class="col-sm-4">
+                <div class="form-group">
+                    <label class="control-label font-weight-bold mb-0">Catálogo</label>
+                    <label class="form-text">@Html.DisplayFor(m => m.NombreCatalago)</label>
+                </div>
+            </div>
+        }
+
+
+
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label class="control-label font-weight-bold mb-0">Ayuda</label>
+                <label class="form-text">@Html.DisplayFor(m => m.Ayuda)</label>
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label class="control-label font-weight-bold mb-0">Requerido</label>
+                <label class="form-text">
+                    @if (Model != null && Model.Requerido)
+                    {
+                        <span class="label label-primary">Requerido</span>
+                    }
+                    else
+                    {
+                        <span class="label label-secondary">No Requerido</span>
+                    }
+                </label>
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label class="control-label font-weight-bold mb-0">Principal</label>
+                <label class="form-text">
+                    @if (Model != null && Model.Principal)
+                    {
+                        <span class="label label-primary">Principal</span>
+                    }
+                    else
+                    {
+                        <span class="label label-secondary">Secundario</span>
+                    }
+                </label>
+            </div>
+        </div>
+
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label class="control-label font-weight-bold mb-0">ID Campo de PNT</label>
+                <label class="form-text">@Html.DisplayFor(m => m.IdCampoPNT)</label>
+            </div>
+        </div>
+        <div class="col-sm-4">
+            <div class="form-group">
+                <label class="control-label font-weight-bold mb-0">ID Tipo Campo de PNT</label>
+                <label class="form-text">@Html.DisplayFor(m => m.IdTipoCampoPNT)</label>
+            </div>
+        </div>
+
+
+        @*<div class="form-group col-md-4" id="divTipo">
+            <label for="AddTipoCampo"></label>
+
+        </div>*@
+        @*<div class="form-group col-md-4" id="divOrden">
+            <label for="Orden">Orden</label>
+
+        </div>*@
+        @*<div class="form-group col-md-4" id="divNombre">
+            <label for="AddNombre">Nombre del Campo</label>
+            @Html.DisplayFor(m => m.Nombre)
+        </div>*@
+
+        @*<div class="form-group col-md-4" id="divPorcentaje" @hProcentaje>
+            <label for="AddConDecimales">Con decimales</label>
+            @if (Model != null && Model._ConDecimales == true)
+            {
+                <span class="label label-primary">Con Decimales</span>
+            }
+            else
+            {
+                <span class="label label-secondary">Sin decimales</span>
+            }
+        </div>*@
+        @*<div class="form-group col-md-4" id="divEtiqueta">
+            <label for="AddEtiqueta"></label>
+
+        </div>*@
+
+        @* <div class="form-group col-md-4" id="divLongitud" @hLongitud>
+            <label for="AddLongitud">Longitud</label>
+            @Html.DisplayFor(m => m.Longitud)
+        </div>*@
+
+        @*<div class="form-group col-md-4" id="divTipoFecha" @hTipoFecha>
+            <label for="AddTipoFecha">Tipo de Fecha</label>
+            @Html.DisplayFor(m => m.NombreTipoFecha)
+        </div>*@
+        @*<div class="form-group col-md-4" id="divGpoExtensiones" @hGrupoExtensiones>
+            <label for="AddGrupoExtensionId">Grupo de Extensiones</label>
+            @Html.DisplayFor(m => m._GrupoExtensionId)
+        </div>*@
+        @*<div class="form-group col-md-4" id="divSize" @hGrupoExtensiones>
+            <label for="AddSize">Tamaño en MB</label>
+            @Html.DisplayFor(m => m._Size)
+        </div>*@
+        @*<div class="form-group col-md-4" id="divCatalogos" @hCatalagos>
+            <label for="AddCatalogoId">Catálogo</label>
+            @Html.DisplayFor(m => m.NombreCatalago)
+        </div>*@
+        @*<div class="form-group col-md-4" id="divAyuda">
+            <label for="AddAyuda">Ayuda</label>
+            @Html.DisplayFor(m => m.Ayuda)
+        </div>*@
+        @*<div class="form-group col-md-2" id="divRequerido">
+            <label for="AddRequerido">Requerido</label>
+            @if (Model != null && Model.Requerido == true)
+            {
+                <span class="label label-primary">Requerido</span>
+            }
+            else
+            {
+                <span class="label label-secondary">No Requerido</span>
+            }
+        </div>*@
+
+        @*<div class="form-group col-md-2" id="divPrincipal">
+            <label for="AddPrincipal">Principal</label>
+            @if (Model != null && Model.Requerido == true)
+            {
+                <span class="label label-primary">Principal</span>
+            }
+            else
+            {
+                <span class="label label-secondary">Secundario</span>
+            }
+        </div>*@
+
+
+    </div>
+   

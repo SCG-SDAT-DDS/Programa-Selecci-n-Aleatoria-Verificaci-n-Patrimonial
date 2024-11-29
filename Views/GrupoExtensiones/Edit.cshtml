@@ -1,0 +1,117 @@
+﻿@model Transparencia.Models.GrupoExtensionesViewModel
+
+@{
+    ViewBag.Title = "Modificar " + @Html.DisplayFor(model => model.GrupoExtension.Nombre);
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+
+@using (Html.BeginForm())
+{
+    @Html.AntiForgeryToken()
+
+    <div class="form-horizontal">
+        <hr />
+        @Html.ValidationSummary(true, "", new { @class = "text-danger" })
+        @Html.HiddenFor(model => model.GrupoExtension.GrupoExtensionId)
+
+        <div class="row wrapper border-bottom white-bg page-heading">
+            <div class="col-lg-10">
+                <h2>@ViewBag.Title</h2>
+                <ol class="breadcrumb">
+                    <li class="breadcrumb-item">
+                        <a href="@Url.Action("Index", "Home")">Inicio</a>
+                    </li>
+                    <li class="breadcrumb-item">
+                        <a href="@Url.Action("Index", "GrupoExtensiones")">Grupo de Extensiones</a>
+                    </li>
+                    <li class="active breadcrumb-item">
+                        <strong>@ViewBag.Title</strong>
+                    </li>
+                </ol>
+            </div>
+        </div>
+        <br />
+
+
+        <div class="ibox">
+            <div class="ibox-title">
+                <p>
+                    <h2>@ViewBag.Title</h2>
+                </p>
+            </div>
+
+            <div class="ibox-content">
+                <div class="form-group">
+                    @Html.LabelFor(model => model.GrupoExtension.Nombre, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.GrupoExtension.Nombre, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.GrupoExtension.Nombre, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.GrupoExtension.Descripcion, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        @Html.EditorFor(model => model.GrupoExtension.Descripcion, new { htmlAttributes = new { @class = "form-control" } })
+                        @Html.ValidationMessageFor(model => model.GrupoExtension.Descripcion, "", new { @class = "text-danger" })
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.GrupoExtension.Extensiones, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        <div class="checkbox">
+                            @Html.ListBoxFor(m => m.SelectedExtensions, Model.AllExtensions, new { @class = "selectpicker selectPickerClas form-control", multiple = "multiple", title = "Seleccione...", data_live_search = "true" })
+                            @*@Html.ListBoxFor(m => m.SelectedExtensions, Model.AllExtensions, new { @class = "form-control" })*@
+                            @Html.ValidationMessageFor(model => model.GrupoExtension.Extensiones, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+
+
+                <div class="form-group">
+                    @Html.LabelFor(model => model.GrupoExtension.Activo, htmlAttributes: new { @class = "control-label col-md-2" })
+                    <div class="col-md-10">
+                        <div class="i-checks">
+                            @Html.EditorFor(model => model.GrupoExtension.Activo)
+                            @Html.ValidationMessageFor(model => model.GrupoExtension.Activo, "", new { @class = "text-danger" })
+                        </div>
+                    </div>
+                </div>
+                <br />
+
+                <div class="form-group text-right">
+                    <div class="col-md-offset-2 col-md-12">
+                        @Html.ActionLink("Regresar", "Index", null, new { @class = "btn btn-w-m btn-secondary" })
+                        <input type="submit" value="Guardar" class="btn btn-w-m btn-primary" />
+
+                    </div>
+                </div>
+                <br />
+
+            </div>
+        </div>
+
+    </div>
+}
+
+@section Styles {
+    @Styles.Render("~/Content/plugins/iCheck/iCheckStyles")
+    @Styles.Render("~/selectForListCss")
+}
+
+@section scripts {
+    @Scripts.Render("~/plugins/iCheck")
+    @Scripts.Render("~/selectForListCssJs")
+
+
+    <script>
+        $(document).ready(function () {
+            $('.i-checks').iCheck({
+                checkboxClass: 'icheckbox_square-green',
+                radioClass: 'iradio_square-green',
+            });
+        });
+    </script>
+}
